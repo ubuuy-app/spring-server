@@ -29,11 +29,24 @@ public record UserSeed(UserService userService) {
             "deyanova"
     );
 
+    private static List<String> PASSWORDS = List.of(
+            "111111",
+            "222222"
+    );
+
+
 
     public void seedUsers() {
         USER_EMAILS
                 .stream()
-                .map((email) -> new UserEntity("todo", "todo", "todo", email))
+                .map((email) -> {
+                    int currentIndex = USER_EMAILS.indexOf(email);
+                    return new UserEntity(
+                            FIRST_NAMES.get(currentIndex),
+                            LAST_NAMES.get(currentIndex),
+                            PASSWORDS.get(currentIndex),
+                            email);
+                })
                 .forEach(userEntity -> {
                     try{
                         UserEntity savedEntity = userService.saveOne(userEntity);
