@@ -39,14 +39,14 @@ public class UserController {
                     .exceptionally(e -> {
                         logger.log(Level.INFO, USERS_GET_ALL_FAIL);
                         return dr.setResult(ResponseEntity
-                                .notFound()
+                                .notFound() //todo - revise message or implement ErrorBuilder via method or interceptor
                                 .build());
                     });
             return dr;
         } catch (Exception e) {
             logger.log(Level.INFO, USERS_GET_ALL_FAIL);
             dr.setResult(ResponseEntity
-                    .notFound()
+                    .notFound() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .build());
             return dr;
         }
