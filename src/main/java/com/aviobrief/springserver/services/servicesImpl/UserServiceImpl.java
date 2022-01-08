@@ -26,11 +26,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> getAll() {
+    public List<UserEntity> getAll() throws Exception {
         try {
             return this.userRepository.findAll();
         } catch (Exception e) {
-            return null;
+            throw new Exception(e.getMessage()); //todo - change exception
         }
     }
 }

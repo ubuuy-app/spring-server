@@ -7,5 +7,5 @@ public interface UserService {
 
     UserEntity saveOne(UserEntity userEntity); //todo -> use UserServiceModel and ModelMapper
 
-    List<UserEntity> getAll();
+    List<UserEntity> getAll() throws Exception;
 }
