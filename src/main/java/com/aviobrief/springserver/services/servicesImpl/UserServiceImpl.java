@@ -5,6 +5,8 @@ import com.aviobrief.springserver.repositories.UserRepository;
 import com.aviobrief.springserver.services.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -18,7 +20,16 @@ public class UserServiceImpl implements UserService {
     public UserEntity saveOne(UserEntity userEntity) {
         try {
             return this.userRepository.save(userEntity);
-        } catch (Exception e){
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<UserEntity> getAll() {
+        try {
+            return this.userRepository.findAll();
+        } catch (Exception e) {
             return null;
         }
     }

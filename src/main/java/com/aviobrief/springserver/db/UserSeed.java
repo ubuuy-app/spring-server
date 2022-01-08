@@ -48,7 +48,7 @@ public record UserSeed(UserService userService) {
                 })
                 .forEach(userEntity -> {
                     try {
-                        UserEntity savedEntity = userService.saveOne(userEntity);                        
+                        UserEntity savedEntity = userService.saveOne(userEntity);
                         logger.log(Level.INFO, String.format("%d", savedEntity != null ? savedEntity.getId() : -1));
                     } catch (Exception e) {
                         logger.log(Level.INFO, e::getMessage);
