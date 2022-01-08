@@ -13,4 +13,16 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByEmail(String email);
 
+//    @Override
+//    default List<UserEntity> findAll() {
+//        int count = 0;
+//        System.out.println("here");
+//        while (count < 2_000_000) {
+//            count++;
+//            System.out.println(count);
+//
+//        }
+//        System.out.println("done");
+//        return null;
+//    }
 }

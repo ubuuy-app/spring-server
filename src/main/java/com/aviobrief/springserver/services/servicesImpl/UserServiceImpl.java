@@ -3,9 +3,12 @@ package com.aviobrief.springserver.services.servicesImpl;
 import com.aviobrief.springserver.models.entity.UserEntity;
 import com.aviobrief.springserver.repositories.UserRepository;
 import com.aviobrief.springserver.services.UserService;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,9 +29,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> getAll() throws Exception {
+    @Async
+    public CompletableFuture<List<UserEntity>> getAll() throws Exception {
         try {
-            return this.userRepository.findAll();
+            return CompletableFuture
+                    .supplyAsync(userRepository::findAll)
+                    .orTimeout(30, TimeUnit.SECONDS);
         } catch (Exception e) {
             throw new Exception(e.getMessage()); //todo - change exception
         }
