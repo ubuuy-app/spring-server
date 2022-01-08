@@ -16,6 +16,14 @@ public class UserEntity extends BaseEntity {
     public UserEntity() {
     }
 
+    /* For initial seed direct UserEntity creation */
+    public UserEntity(String firstName, String lastName, String password, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+    }
+
     @Column(name = "first_name", unique = false, nullable = false)
     public String getFirstName() {
         return firstName;
