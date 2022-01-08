@@ -19,4 +19,8 @@ spring:
     init:
       continue-on-error: true
 
+#Change server port
+server:
+  port: 8000
+
 
