@@ -5,7 +5,6 @@ import com.aviobrief.springserver.services.UserService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,26 +13,25 @@ public record UserSeed(UserService userService) {
 
     private static final Logger logger = Logger.getLogger("UserSeed");
 
-    private static List<String> USER_EMAILS = List.of(
+    private static final List<String> USER_EMAILS = List.of(
             "petar.petkov@mailinator.com",
             "eli.deyanova@mailinator.com"
     );
 
-    private static List<String> FIRST_NAMES = List.of(
+    private static final List<String> FIRST_NAMES = List.of(
             "petar",
             "eli"
     );
 
-    private static List<String> LAST_NAMES = List.of(
+    private static final List<String> LAST_NAMES = List.of(
             "petkov",
             "deyanova"
     );
 
-    private static List<String> PASSWORDS = List.of(
+    private static final List<String> PASSWORDS = List.of(
             "111111",
             "222222"
     );
-
 
 
     public void seedUsers() {
@@ -42,16 +40,17 @@ public record UserSeed(UserService userService) {
                 .map((email) -> {
                     int currentIndex = USER_EMAILS.indexOf(email);
                     return new UserEntity(
+                            email,
                             FIRST_NAMES.get(currentIndex),
                             LAST_NAMES.get(currentIndex),
-                            PASSWORDS.get(currentIndex),
-                            email);
+                            PASSWORDS.get(currentIndex)
+                    );
                 })
                 .forEach(userEntity -> {
-                    try{
-                        UserEntity savedEntity = userService.saveOne(userEntity);
-                        logger.log(Level.INFO, String.format("%d", savedEntity.getId()));
-                    } catch (Exception e){
+                    try {
+                        UserEntity savedEntity = userService.saveOne(userEntity);                        
+                        logger.log(Level.INFO, String.format("%d", savedEntity != null ? savedEntity.getId() : -1));
+                    } catch (Exception e) {
                         logger.log(Level.INFO, e::getMessage);
                     }
                 });

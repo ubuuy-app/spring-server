@@ -8,19 +8,28 @@ import javax.persistence.*;
 @Access(AccessType.PROPERTY)
 public class UserEntity extends BaseEntity {
 
+    private String email;
     private String firstName;
     private String lastName;
     private String password;
-    private String email;
 
     public UserEntity() {
     }
 
     /* For initial seed direct UserEntity creation */
-    public UserEntity(String firstName, String lastName, String password, String email) {
+    public UserEntity(String email, String firstName, String lastName, String password ) {
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+    }
+
+    @Column(name = "email", unique = true, nullable = true)//todo - email must not be empty, set like this for dev process
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -54,12 +63,5 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    @Column(name = "email", unique = true, nullable = true)//todo - email must not be empty, set like this for dev process
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
