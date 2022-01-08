@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.models.entities;
+package com.aviobrief.springserver.models.entity;
 
 import javax.persistence.*;
 

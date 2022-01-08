@@ -1,4 +1,4 @@
-package com.aviobrief.springserver;
+package com.aviobrief.springserver.models;
 
 public class Greeting {
 
