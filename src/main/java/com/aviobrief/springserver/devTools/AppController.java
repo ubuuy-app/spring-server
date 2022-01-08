@@ -22,3 +22,10 @@ public class AppController implements CommandLineRunner {
         logger.log(Level.INFO, String.format(SERVER_RUNNING_OK_TEMPLATE,environment.getProperty("local.server.port")));
     }
 }
+
+/*
+    LIBRARY:
+      local.server.port reading:  https://m.editcode.net/forum.php?mod=viewthread&tid=236028&extra=page%3D1&mobile=1
+
+ */
+
