@@ -7,12 +7,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "roles")
 @Access(AccessType.PROPERTY)
-public class UserRoleEntity extends BaseEntity {
+public class RoleEntity extends BaseEntity {
 
-    public UserRoleEntity() {
+    public RoleEntity() {
     }
 
-    public UserRoleEntity(UserRole role) {
+    public RoleEntity(UserRole role) {
         this.role = role;
     }
 
@@ -23,7 +23,7 @@ public class UserRoleEntity extends BaseEntity {
         return role;
     }
 
-    public UserRoleEntity setRole(UserRole role) {
+    public RoleEntity setRole(UserRole role) {
         this.role = role;
         return this;
     }
