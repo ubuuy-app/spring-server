@@ -2,6 +2,9 @@ package com.aviobrief.springserver.db;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,6 +14,7 @@ import java.util.logging.Logger;
 @Component
 public record UserSeed(UserService userService) {
 
+    private static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private static final Logger logger = Logger.getLogger("UserSeed");
 
     private static final List<String> USER_EMAILS = List.of(
@@ -43,7 +47,7 @@ public record UserSeed(UserService userService) {
                             email,
                             FIRST_NAMES.get(currentIndex),
                             LAST_NAMES.get(currentIndex),
-                            PASSWORDS.get(currentIndex)
+                            passwordEncoder.encode(PASSWORDS.get(currentIndex))
                     );
                 })
                 .forEach(userEntity -> {
