@@ -3,9 +3,11 @@ package com.aviobrief.springserver.config;
 
 import com.aviobrief.springserver.services.servicesImpl.SpringUserService;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
@@ -13,9 +15,11 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SpringUserService springUserService;
+    private final PasswordEncoder passwordEncoder;
 
-    public SpringSecurityConfig(SpringUserService springUserService) {
+    public SpringSecurityConfig(SpringUserService springUserService, PasswordEncoder passwordEncoder) {
         this.springUserService = springUserService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -31,9 +35,19 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/js/**", "/css/**", "/img/**").permitAll()
                 .antMatchers("/", "/users/login", "/users/register").permitAll()
-                .antMatchers("/**").permitAll() // todo - ApplicationSecurityConfiguration - set .authenticated()
+                .antMatchers("/**").authenticated() // todo - ApplicationSecurityConfiguration - set .authenticated()
                 .and()
-                .formLogin();
+                .formLogin()
+                .defaultSuccessUrl("/users", true)
+        ;
 
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(springUserService)
+//                .passwordEncoder(passwordEncoder)
+        ;
     }
 }
