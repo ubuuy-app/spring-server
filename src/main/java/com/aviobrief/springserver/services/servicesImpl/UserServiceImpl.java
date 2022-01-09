@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import static com.aviobrief.springserver.config.ServerConfig.COMPLETABLE_AWAIT_TIME_SEC;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService {
         try {
             return CompletableFuture
                     .supplyAsync(() -> mapper.toModel(userRepo.findAll(), UserViewModel.class))
-                    .orTimeout(30, TimeUnit.SECONDS);
+                    .orTimeout(COMPLETABLE_AWAIT_TIME_SEC, TimeUnit.SECONDS);
         } catch (Exception e) {
             throw new Exception(e.getMessage()); //todo - change exception
         }
