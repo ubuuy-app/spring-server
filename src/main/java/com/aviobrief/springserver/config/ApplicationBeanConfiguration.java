@@ -1,6 +1,8 @@
 package com.aviobrief.springserver.config;
 
 
+import com.aviobrief.springserver.utils.mapper.Mapper;
+import com.aviobrief.springserver.utils.mapper.MapperImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +37,11 @@ public class ApplicationBeanConfiguration {
 //        return new ValidationUtilImpl() {
 //        };
 //    }
+
+    @Bean
+    public Mapper mapper() {
+        return new MapperImpl();
+    }
 
 
 }
