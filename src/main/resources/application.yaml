@@ -1,0 +1,26 @@
+#Data Source Properties
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/aviobrief_sql?serverTimezone=UTC&characterEncoding=UTF-8&sslMode=DISABLED&createDatabaseIfNotExist=true"
+    username: "root"
+    password: "3871"
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    hikari:
+      connection-test-query: SELECT 1
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+      continue-on-error: true
+
+#Change server port
+server:
+  port: 8000
+
+

@@ -1,5 +1,6 @@
-package com.aviobrief.springserver;
+package com.aviobrief.springserver.webControllers;
 
+import com.aviobrief.springserver.models.Greeting;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
