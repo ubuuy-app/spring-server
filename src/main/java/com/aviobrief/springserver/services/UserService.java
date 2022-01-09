@@ -1,5 +1,5 @@
 package com.aviobrief.springserver.services;
-import com.aviobrief.springserver.models.entity.UserEntity;
+import com.aviobrief.springserver.models.entities.UserEntity;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

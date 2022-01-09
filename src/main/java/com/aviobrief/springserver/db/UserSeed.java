@@ -1,6 +1,6 @@
 package com.aviobrief.springserver.db;
 
-import com.aviobrief.springserver.models.entity.UserEntity;
+import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.services.UserService;
 import org.springframework.stereotype.Component;
 

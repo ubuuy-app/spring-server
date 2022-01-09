@@ -1,6 +1,6 @@
 package com.aviobrief.springserver.webControllers;
 
-import com.aviobrief.springserver.models.entity.UserEntity;
+import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
 package com.aviobrief.springserver.services.servicesImpl;
 
-import com.aviobrief.springserver.models.entity.UserEntity;
+import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.repositories.UserRepository;
 import com.aviobrief.springserver.services.UserService;
 import org.springframework.scheduling.annotation.Async;

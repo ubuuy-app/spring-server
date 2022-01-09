@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.models.service;
+package com.aviobrief.springserver.models.services;
 
 public class UserServiceModel extends BaseServiceModel{
 
