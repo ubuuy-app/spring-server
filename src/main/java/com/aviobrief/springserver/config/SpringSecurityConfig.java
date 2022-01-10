@@ -3,6 +3,7 @@ package com.aviobrief.springserver.config;
 
 import com.aviobrief.springserver.services.servicesImpl.SpringUserService;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,12 +38,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/js/**", "/css/**", "/img/**").permitAll()
-                .antMatchers("/", "/users/login", "/users/register").permitAll()
+                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+//                .antMatchers("/js/**", "/css/**", "/img/**").permitAll()
+//                .antMatchers("/", "/users/login", "/users/register").permitAll()
                 .antMatchers("/**").authenticated() // todo - ApplicationSecurityConfiguration - set .authenticated()
                 .and()
                 .formLogin()
-                .defaultSuccessUrl("/users", true)
+//                .defaultSuccessUrl("/users", true)
         ;
 
     }
