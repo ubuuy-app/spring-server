@@ -1,6 +1,6 @@
 package com.aviobrief.springserver.webControllers;
 
-import com.aviobrief.springserver.models.entity.UserEntity;
+import com.aviobrief.springserver.models.views.UserViewModel;
 import com.aviobrief.springserver.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public DeferredResult<ResponseEntity<List<UserEntity>>> getAll() {
-        DeferredResult<ResponseEntity<List<UserEntity>>> dr = new DeferredResult<>();
+    public DeferredResult<ResponseEntity<List<UserViewModel>>> getAll() {
+        DeferredResult<ResponseEntity<List<UserViewModel>>> dr = new DeferredResult<>();
 
         try {
             userService

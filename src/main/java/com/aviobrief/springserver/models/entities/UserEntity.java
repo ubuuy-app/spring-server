@@ -1,7 +1,9 @@
-package com.aviobrief.springserver.models.entity;
+package com.aviobrief.springserver.models.entities;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -12,6 +14,8 @@ public class UserEntity extends BaseEntity {
     private String firstName;
     private String lastName;
     private String password;
+    private List<RoleEntity> roles = new ArrayList<>();
+
 
     public UserEntity() {
     }
@@ -61,6 +65,15 @@ public class UserEntity extends BaseEntity {
     public UserEntity setPassword(String password) {
         this.password = password;
         return this;
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    public List<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleEntity> roles) {
+        this.roles = roles;
     }
 
 

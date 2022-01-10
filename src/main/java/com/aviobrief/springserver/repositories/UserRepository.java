@@ -1,11 +1,10 @@
 package com.aviobrief.springserver.repositories;
 
 
-import com.aviobrief.springserver.models.entity.UserEntity;
+import com.aviobrief.springserver.models.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
