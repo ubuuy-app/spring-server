@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.services.servicesImpl;
+package com.aviobrief.springserver.config.springSecurity;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.repositories.UserRepository;

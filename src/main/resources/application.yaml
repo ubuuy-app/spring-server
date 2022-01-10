@@ -23,4 +23,9 @@ spring:
 server:
   port: 8000
 
+## App Properties
+app:
+  jwtSecret: "mySuperSecret"
+  jwtExpirationInMs: 604800000
+
 
