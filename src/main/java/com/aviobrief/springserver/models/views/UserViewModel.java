@@ -9,7 +9,7 @@ public class UserViewModel {
     public UserViewModel() {
     }
 
-    public String email() {
+    public String getEmail() {
         return email;
     }
 
@@ -17,7 +17,7 @@ public class UserViewModel {
         this.email = email;
     }
 
-    public String firstName() {
+    public String getFirstName() {
         return firstName;
     }
 
@@ -25,7 +25,7 @@ public class UserViewModel {
         this.firstName = firstName;
     }
 
-    public String lastName() {
+    public String getLastName() {
         return lastName;
     }
 
