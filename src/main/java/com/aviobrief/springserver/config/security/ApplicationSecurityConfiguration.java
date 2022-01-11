@@ -49,9 +49,6 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-//        CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
-//        cookieCsrfTokenRepository.setCookieHttpOnly(false);
-
         http
                 .cors()
                 .and()
