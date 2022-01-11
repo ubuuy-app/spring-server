@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import static com.aviobrief.springserver.config.ServerConfig.COMPLETABLE_AWAIT_TIME_SEC;
+import static com.aviobrief.springserver.config.Constants.COMPLETABLE_AWAIT_TIME_SEC;
+import static com.aviobrief.springserver.config.messages.ExceptionMessages.USER_NOT_FOUND_IN_DATABASE_BY_EMAIL;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
                     .supplyAsync(() -> mapper.toModel(userRepo.findAll(), UserViewModel.class))
                     .orTimeout(COMPLETABLE_AWAIT_TIME_SEC, TimeUnit.SECONDS);
         } catch (Exception e) {
-            throw new Exception(e.getMessage()); //todo - change exception
+            throw new Exception(e.getMessage()); //todo - change exception and message
         }
     }
 
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity =
                 userRepo.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Article not found in DB"));
+                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_IN_DATABASE_BY_EMAIL));
 
         return mapper.toModel(userEntity, UserViewModel.class);
 

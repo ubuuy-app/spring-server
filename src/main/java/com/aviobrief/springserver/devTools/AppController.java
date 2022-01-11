@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.aviobrief.springserver.utils.logger.LoggerMessages.SERVER_RUNNING_OK_TEMPLATE;
+import static com.aviobrief.springserver.config.messages.LoggerMessages.SERVER_RUNNING_OK_TEMPLATE;
 
 @Component
 public class AppController implements CommandLineRunner {
