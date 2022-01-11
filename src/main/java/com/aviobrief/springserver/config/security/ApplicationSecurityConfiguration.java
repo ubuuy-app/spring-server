@@ -89,21 +89,25 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         auth.userDetailsService(springSecurityUserDetailsService).passwordEncoder(passwordEncoder);
     }
 
-    /* Cors config */
+    /*
+    Cors config:
+
+    setAllowCredentials(true) is important, otherwise:
+        The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*'
+        when the request's credentials mode is 'include'.
+
+    setAllowedHeaders() is important! Without it, OPTIONS preflight request will fail with 403 Invalid CORS request
+    */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        /* Build and set up configuration */
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST"));
-
-        // setAllowCredentials(true) is important, otherwise:
-        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*'
-        // when the request's credentials mode is 'include'.
         configuration.setAllowCredentials(true);
-        // setAllowedHeaders is important! Without it, OPTIONS preflight request
-        // will fail with 403 Invalid CORS request
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
 
+        /* Build and return configurationSource that uses the above configuration. */
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
