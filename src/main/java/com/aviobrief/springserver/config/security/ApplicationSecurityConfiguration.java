@@ -80,8 +80,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authenticated()
         ;
 
+        /* Filters application */
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
     }
 
     @Override
@@ -89,12 +89,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         auth.userDetailsService(springSecurityUserDetailsService).passwordEncoder(passwordEncoder);
     }
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
+    /* Cors config */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -114,5 +109,11 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         return source;
     }
 
+    /* Bean to export default authenticationManagerBean (returns WebSecurityConfigurerAdapter), injected in AuthController */
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
 }
