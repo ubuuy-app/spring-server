@@ -1,9 +1,9 @@
-package com.aviobrief.springserver.config;
+package com.aviobrief.springserver.config.security;
 
 
-import com.aviobrief.springserver.config.springSecurity.JwtAuthenticationEntryPoint;
-import com.aviobrief.springserver.config.springSecurity.JwtAuthenticationFilter;
-import com.aviobrief.springserver.config.springSecurity.UserDetailsService;
+import com.aviobrief.springserver.config.security.filters.jwt.JwtAuthenticationEntryPoint;
+import com.aviobrief.springserver.config.security.filters.jwt.JwtAuthenticationFilter;
+import com.aviobrief.springserver.config.security.services.SpringSecurityUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,14 +31,19 @@ import java.util.List;
 )
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationEntryPoint jwtUnauthorizedHandler;
+    private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
     private final PasswordEncoder passwordEncoder;
-    private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
-    public ApplicationSecurityConfiguration(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, JwtAuthenticationEntryPoint unauthorizedHandler) {
-        this.userDetailsService = userDetailsService;
+    public ApplicationSecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
+                                            SpringSecurityUserDetailsService springSecurityUserDetailsService,
+                                            PasswordEncoder passwordEncoder,
+                                            JwtAuthenticationEntryPoint jwtUnauthorizedHandler) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.springSecurityUserDetailsService = springSecurityUserDetailsService;
         this.passwordEncoder = passwordEncoder;
-        this.unauthorizedHandler = unauthorizedHandler;
+        this.jwtUnauthorizedHandler = jwtUnauthorizedHandler;
     }
 
     @Override
@@ -53,7 +58,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .csrf()
                 .disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
+                .authenticationEntryPoint(jwtUnauthorizedHandler)
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -75,16 +80,13 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authenticated()
         ;
 
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder)
-        ;
+        auth.userDetailsService(springSecurityUserDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -94,7 +96,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST"));
@@ -112,9 +114,5 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         return source;
     }
 
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
 
 }

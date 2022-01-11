@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.config.springSecurity;
+package com.aviobrief.springserver.config.security.filters.jwt;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

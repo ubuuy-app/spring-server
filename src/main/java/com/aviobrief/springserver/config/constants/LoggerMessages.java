@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.config.messages;
+package com.aviobrief.springserver.config.constants;
 
 public record LoggerMessages() {
 

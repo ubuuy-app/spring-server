@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.aviobrief.springserver.config.messages.LoggerMessages.USERS_GET_ALL_FAIL;
-import static com.aviobrief.springserver.config.messages.LoggerMessages.USERS_GET_ALL_OK;
+import static com.aviobrief.springserver.config.constants.LoggerMessages.USERS_GET_ALL_FAIL;
+import static com.aviobrief.springserver.config.constants.LoggerMessages.USERS_GET_ALL_OK;
 
 
 @RestController

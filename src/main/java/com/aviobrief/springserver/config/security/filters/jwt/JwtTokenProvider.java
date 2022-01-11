@@ -1,5 +1,6 @@
-package com.aviobrief.springserver.config.springSecurity;
+package com.aviobrief.springserver.config.security.filters.jwt;
 
+import com.aviobrief.springserver.config.security.services.SpringSecurityUserDetailsService;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
-    private final UserDetailsService userDetailsService;
+    private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
 
     @Value("${app.jwt-secret}")
     private String jwtSecretKey;
@@ -22,13 +23,13 @@ public class JwtTokenProvider {
     @Value("${app.jwt-expiration-mills}")
     private int jwtExpirationInMs;
 
-    public JwtTokenProvider(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public JwtTokenProvider(SpringSecurityUserDetailsService springSecurityUserDetailsService) {
+        this.springSecurityUserDetailsService = springSecurityUserDetailsService;
     }
 
     public String generateToken(String email) {
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = springSecurityUserDetailsService.loadUserByUsername(email);
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);

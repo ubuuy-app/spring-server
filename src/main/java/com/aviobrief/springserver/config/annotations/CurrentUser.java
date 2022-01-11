@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.config.springSecurity;
+package com.aviobrief.springserver.config.annotations;
 
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

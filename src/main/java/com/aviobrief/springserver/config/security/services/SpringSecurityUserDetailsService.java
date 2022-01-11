@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.config.springSecurity;
+package com.aviobrief.springserver.config.security.services;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.repositories.UserRepository;
@@ -12,21 +12,23 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.aviobrief.springserver.config.constants.ExceptionMessages.USER_NOT_FOUND_IN_DATABASE_BY_EMAIL;
+
 @Component
-public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+public class SpringSecurityUserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserRepository userRepo;
 
-    public UserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public SpringSecurityUserDetailsService(UserRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        UserEntity userEntity = this.userRepository.findByEmail(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User with username: <" + username + "> not found!"));// todo - extract message
+        UserEntity userEntity = this.userRepo
+                .findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND_IN_DATABASE_BY_EMAIL));
 
         return mapToUserDetails(userEntity);
     }
