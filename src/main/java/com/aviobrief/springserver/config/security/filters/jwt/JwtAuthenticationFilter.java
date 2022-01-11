@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.aviobrief.springserver.config.constants.LoggerMessages.JWT_VERIFY_FAIL;
+
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -54,7 +56,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 /* (2) manually authenticate (set in Security Context) the authentication token */
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthToken);
+            } else {
+                logger.error(JWT_VERIFY_FAIL);
             }
+
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
         }
