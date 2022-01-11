@@ -20,4 +20,9 @@ public class MapperImpl implements Mapper {
                 .map(e -> (M) modelMapper.map(e, destinationType))
                 .toList();
     }
+
+    @Override
+    public <E, M> M toModel(E entity, Class<M> destinationType) {
+        return (M) modelMapper.map(entity, destinationType);
+    }
 }

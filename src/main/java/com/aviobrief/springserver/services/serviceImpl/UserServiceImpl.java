@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.services.servicesImpl;
+package com.aviobrief.springserver.services.serviceImpl;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.models.views.UserViewModel;
@@ -45,5 +45,16 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new Exception(e.getMessage()); //todo - change exception
         }
+    }
+
+    @Override
+    public UserViewModel getByEmail(String email) throws IllegalArgumentException{
+
+        UserEntity userEntity =
+                userRepo.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Article not found in DB"));
+
+        return mapper.toModel(userEntity, UserViewModel.class);
+
     }
 }

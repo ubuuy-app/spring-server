@@ -1,6 +1,9 @@
-package com.aviobrief.springserver.config.springSecurity;
+package com.aviobrief.springserver.config;
 
 
+import com.aviobrief.springserver.config.springSecurity.JwtAuthenticationEntryPoint;
+import com.aviobrief.springserver.config.springSecurity.JwtAuthenticationFilter;
+import com.aviobrief.springserver.config.springSecurity.UserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,12 +31,12 @@ import java.util.List;
 )
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final SpringUserService springUserService;
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
-    public SpringSecurityConfig(SpringUserService springUserService, PasswordEncoder passwordEncoder, JwtAuthenticationEntryPoint unauthorizedHandler) {
-        this.springUserService = springUserService;
+    public SpringSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, JwtAuthenticationEntryPoint unauthorizedHandler) {
+        this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.unauthorizedHandler = unauthorizedHandler;
     }
@@ -70,20 +73,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest()
                 .authenticated()
-
-
-
         ;
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
 
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(springUserService)
+                .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder)
         ;
     }

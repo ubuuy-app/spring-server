@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.webControllers.responses;
+package com.aviobrief.springserver.models.responses;
 
 
 public class ApiOkTrueOrFalse {

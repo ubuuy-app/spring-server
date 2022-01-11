@@ -22,30 +22,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenProvider tokenProvider;
     @Autowired
-    private SpringUserService springUserService;
+    private UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter() {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IOException {
-        try {
-            String jwt = getJwtFromRequest(request);
+    protected void doFilterInternal(HttpServletRequest httpServletRequest,
+                                    HttpServletResponse httpServletResponse,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
+        try {
+            String jwt = getJwtFromRequest(httpServletRequest);
+
+            /* Check Jwt has some text in it and verify validity */
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+
+                /* extract email from jwt */
                 String userEmail = tokenProvider.getUserEmailFromJWT(jwt);
 
-                UserDetails userDetails = springUserService.loadUserByUsername(userEmail);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                /* Load Spring user details */
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                /* The next two steps do the magic of signing in into Spring Security, when the token is valid */
+                /* (1) generate internal username and password auth token */
+                UsernamePasswordAuthenticationToken usernamePasswordAuthToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+
+                /* (2) manually authenticate (set in Security Context) the authentication token */
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthToken);
             }
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
 

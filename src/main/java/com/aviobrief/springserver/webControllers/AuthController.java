@@ -2,9 +2,9 @@ package com.aviobrief.springserver.webControllers;
 
 
 import com.aviobrief.springserver.config.springSecurity.JwtTokenProvider;
-import com.aviobrief.springserver.webControllers.requests.LoginRequest;
-import com.aviobrief.springserver.webControllers.responses.ApiOkTrueOrFalse;
-import com.aviobrief.springserver.webControllers.responses.JwtAuthenticationResponse;
+import com.aviobrief.springserver.models.requests.LoginRequest;
+import com.aviobrief.springserver.models.responses.ApiOkTrueOrFalse;
+import com.aviobrief.springserver.models.responses.JwtAuthenticationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,19 +36,26 @@ public class AuthController {
     @PostMapping(path = "/api/auth")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.username(),
+                            loginRequest.password()
+                    )
+            );
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
-        );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.generateToken(loginRequest.username());
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
 
-        String jwt = tokenProvider.generateToken(loginRequest.getUsername());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
+                    .build();
+        }
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+
     }
 
     @GetMapping(path = "/auth-logout", produces = "application/json")
