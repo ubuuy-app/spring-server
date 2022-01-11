@@ -16,10 +16,10 @@ public class JwtTokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
     private final UserDetailsService userDetailsService;
 
-    @Value("${app.jwtSecret}")
+    @Value("${app.jwt-secret}")
     private String jwtSecretKey;
 
-    @Value("${app.jwtExpirationInMs}")
+    @Value("${app.jwt-expiration-mills}")
     private int jwtExpirationInMs;
 
     public JwtTokenProvider(UserDetailsService userDetailsService) {

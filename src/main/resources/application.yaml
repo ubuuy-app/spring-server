@@ -25,7 +25,8 @@ server:
 
 ## App Properties
 app:
-  jwtSecret: "mySuperSecret"
-  jwtExpirationInMs: 604800000
+  jwt-secret: "mySuperSecret"
+  jwt-expiration-mills: 604800000
+  completable-await-time-seconds: 30
 
 

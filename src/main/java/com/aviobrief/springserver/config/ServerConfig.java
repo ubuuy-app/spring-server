@@ -1,5 +1,10 @@
 package com.aviobrief.springserver.config;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public record ServerConfig() {
- public static final long COMPLETABLE_AWAIT_TIME_SEC = 30;
+
+ @Value("${app.completable-await-time-seconds}")
+ public static long COMPLETABLE_AWAIT_TIME_SEC;
+
 }
