@@ -1,11 +1,12 @@
 package com.aviobrief.springserver.services.serviceImpl;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
-import com.aviobrief.springserver.models.views.UserViewModel;
+import com.aviobrief.springserver.models.responses.UserViewModel;
 import com.aviobrief.springserver.repositories.UserRepository;
 import com.aviobrief.springserver.services.UserService;
 import com.aviobrief.springserver.utils.mapper.Mapper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,11 +49,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserViewModel getByEmail(String email) throws IllegalArgumentException{
+    public UserViewModel getByEmail(String email) throws UsernameNotFoundException {
 
         UserEntity userEntity =
                 userRepo.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND_IN_DATABASE_BY_EMAIL));
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND_IN_DATABASE_BY_EMAIL));
 
         return mapper.toModel(userEntity, UserViewModel.class);
 

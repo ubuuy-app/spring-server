@@ -1,11 +1,11 @@
-package com.aviobrief.springserver.models.responses;
+package com.aviobrief.springserver.utils.api_response_builder.response_models;
 
-public class JwtAuthToken {
+public class ApiJwtResponse {
 
     private String accessToken;
     private String type = "Bearer";
 
-    public JwtAuthToken(String accessToken) {
+    public ApiJwtResponse(String accessToken) {
         this.accessToken = accessToken;
     }
 

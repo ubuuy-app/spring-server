@@ -1,8 +1,8 @@
-package com.aviobrief.springserver.utils.error_response_builder.api_response_error_models;
+package com.aviobrief.springserver.utils.api_response_builder.response_models.error_models;
 
 import com.google.gson.annotations.Expose;
 
-public class ApiSingleResponseError {
+public class ApiSingleError {
 
     @Expose
     private String message;
@@ -13,23 +13,23 @@ public class ApiSingleResponseError {
     @Expose
     private String reason;
 
-    public ApiSingleResponseError(String message) {
+    public ApiSingleError(String message) {
         this.message = message;
     }
 
-    public ApiSingleResponseError(String message, String target) {
+    public ApiSingleError(String message, String target) {
         this.message = message;
         this.target = target;
     }
 
 
-    public ApiSingleResponseError(String message, String target, Object rejectedValue) {
+    public ApiSingleError(String message, String target, Object rejectedValue) {
         this.message = message;
         this.target = target;
         this.rejectedValue = rejectedValue;
     }
 
-    public ApiSingleResponseError(String message, String target, Object rejectedValue, String reason) {
+    public ApiSingleError(String message, String target, Object rejectedValue, String reason) {
         this.message = message;
         this.target = target;
         this.rejectedValue = rejectedValue;
@@ -40,7 +40,7 @@ public class ApiSingleResponseError {
         return reason;
     }
 
-    public ApiSingleResponseError setReason(String reason) {
+    public ApiSingleError setReason(String reason) {
         this.reason = reason;
         return this;
     }

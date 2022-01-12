@@ -3,7 +3,7 @@ package com.aviobrief.springserver.config.security;
 
 import com.aviobrief.springserver.config.security.filters.jwt.JwtAuthenticationEntryPoint;
 import com.aviobrief.springserver.config.security.filters.jwt.JwtAuthenticationFilter;
-import com.aviobrief.springserver.config.security.services.SpringSecurityUserDetailsService;
+import com.aviobrief.springserver.config.security.speing_security_user_service.SpringSecurityUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,6 +1,6 @@
 package com.aviobrief.springserver.config.security.filters.jwt;
 
-import com.aviobrief.springserver.config.security.services.SpringSecurityUserDetailsService;
+import com.aviobrief.springserver.config.security.speing_security_user_service.SpringSecurityUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.db;
+package com.aviobrief.springserver.db.seed;
 
 import com.aviobrief.springserver.models.entities.RoleEntity;
 import com.aviobrief.springserver.models.entities.UserEntity;

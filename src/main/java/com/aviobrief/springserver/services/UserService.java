@@ -1,7 +1,8 @@
 package com.aviobrief.springserver.services;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
-import com.aviobrief.springserver.models.views.UserViewModel;
+import com.aviobrief.springserver.models.responses.UserViewModel;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -12,6 +13,6 @@ public interface UserService {
 
     CompletableFuture<List<UserViewModel>> getAll() throws Exception;
 
-    UserViewModel getByEmail(String email) throws IllegalArgumentException;
+    UserViewModel getByEmail(String email) throws UsernameNotFoundException;
 
 }

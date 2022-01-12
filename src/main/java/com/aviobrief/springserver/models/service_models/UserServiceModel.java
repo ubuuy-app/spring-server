@@ -1,20 +1,12 @@
-package com.aviobrief.springserver.models.views;
+package com.aviobrief.springserver.models.service_models;
 
-public class UserViewModel {
+public class UserServiceModel extends BaseServiceModel{
 
-    private String email;
     private String firstName;
     private String lastName;
+    private String email;
 
-    public UserViewModel() {
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public UserServiceModel() {
     }
 
     public String getFirstName() {
@@ -31,5 +23,13 @@ public class UserViewModel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

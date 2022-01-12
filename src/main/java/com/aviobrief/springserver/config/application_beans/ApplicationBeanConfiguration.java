@@ -1,7 +1,7 @@
 package com.aviobrief.springserver.config.application_beans;
 
 
-import com.aviobrief.springserver.utils.error_response_builder.ResponseErrorBuilder;
+import com.aviobrief.springserver.utils.api_response_builder.ApiResponseBuilder;
 import com.aviobrief.springserver.utils.mapper.Mapper;
 import com.aviobrief.springserver.utils.mapper.MapperImpl;
 import com.google.gson.Gson;
@@ -33,8 +33,8 @@ public class ApplicationBeanConfiguration {
     }
 
     @Bean
-    public ResponseErrorBuilder responseErrorBuilder(){
-        return new ResponseErrorBuilder();
+    public ApiResponseBuilder responseErrorBuilder(){
+        return new ApiResponseBuilder();
     }
 
 
