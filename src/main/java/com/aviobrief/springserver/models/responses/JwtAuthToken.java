@@ -3,7 +3,7 @@ package com.aviobrief.springserver.models.responses;
 public class JwtAuthToken {
 
     private String accessToken;
-    private String tokenType = "Bearer";
+    private String type = "Bearer";
 
     public JwtAuthToken(String accessToken) {
         this.accessToken = accessToken;
@@ -18,10 +18,10 @@ public class JwtAuthToken {
     }
 
     public String getTokenType() {
-        return tokenType;
+        return type;
     }
 
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
+    public void setTokenType(String type) {
+        this.type = type;
     }
 }
