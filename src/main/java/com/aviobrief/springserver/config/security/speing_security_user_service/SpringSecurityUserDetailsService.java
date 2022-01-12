@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.config.security.services;
+package com.aviobrief.springserver.config.security.speing_security_user_service;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.repositories.UserRepository;

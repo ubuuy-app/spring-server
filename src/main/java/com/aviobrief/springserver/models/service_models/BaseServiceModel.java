@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.models.services;
+package com.aviobrief.springserver.models.service_models;
 
 public abstract class BaseServiceModel {
 
