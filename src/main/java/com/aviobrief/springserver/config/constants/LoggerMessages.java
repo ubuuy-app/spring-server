@@ -6,7 +6,9 @@ public record LoggerMessages() {
     public static final String SERVER_RUNNING_OK_TEMPLATE = "Server listening on port %s...";
 
     /* auth */
-    public static final String JWT_VERIFY_FAIL = "JWT invalid!";
+    public static final String JWT_VERIFICATION_FAIL = "JWT invalid!";
+    public static final String SECURITY_CONTEXT_SET_AUTH_TOKEN_FAIL = "Could not set user authentication in security context!";
+    public static final String JWT_UNAUTHORIZED_HANDLER_LOG_MESSAGE = "Unauthorised RES (401) error send";
 
 
     /* user controller */

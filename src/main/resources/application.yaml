@@ -22,6 +22,8 @@ spring:
 #Server config
 server:
   port: 8000
+  error:
+    include-message: always
 
 ## App Properties
 app:

@@ -4,7 +4,7 @@ package com.aviobrief.springserver.webControllers;
 import com.aviobrief.springserver.config.security.filters.jwt.JwtTokenProvider;
 import com.aviobrief.springserver.models.requests.LoginRequest;
 import com.aviobrief.springserver.models.responses.ApiOkTrueOrFalse;
-import com.aviobrief.springserver.models.responses.JwtAuthenticationResponse;
+import com.aviobrief.springserver.models.responses.JwtAuthToken;
 import com.aviobrief.springserver.models.views.UserViewModel;
 import com.aviobrief.springserver.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +53,7 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = tokenProvider.generateToken(loginRequest.username());
 
-            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+            return ResponseEntity.ok(new JwtAuthToken(jwt));
 
         }catch (IllegalArgumentException e) {
             return ResponseEntity
