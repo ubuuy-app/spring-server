@@ -22,5 +22,13 @@ spring:
 #Server config
 server:
   port: 8000
+  error:
+    include-message: always
+
+## App Properties
+app:
+  jwt-secret: "mySuperSecret"
+  jwt-expiration-mills: 604800000
+  completable-await-time-seconds: 30
 
 

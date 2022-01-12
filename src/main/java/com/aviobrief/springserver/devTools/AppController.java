@@ -4,10 +4,11 @@ import com.aviobrief.springserver.db.DatabaseInit;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static com.aviobrief.springserver.utils.log.LoggerMessages.*;
-import com.aviobrief.springserver.db.DatabaseInit;
+
+import static com.aviobrief.springserver.config.constants.LoggerMessages.SERVER_RUNNING_OK_TEMPLATE;
 
 @Component
 public class AppController implements CommandLineRunner {
