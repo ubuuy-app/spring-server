@@ -15,6 +15,7 @@ public class UserEntity extends BaseEntity {
     private String lastName;
     private String password;
     private List<RoleEntity> roles = new ArrayList<>();
+    private Meta meta;
 
 
     public UserEntity() {
@@ -76,5 +77,12 @@ public class UserEntity extends BaseEntity {
         this.roles = roles;
     }
 
+    @OneToOne(cascade = {CascadeType.ALL })
+    public Meta getMeta() {
+        return meta;
+    }
 
+    public void setMeta(Meta meta) {
+        this.meta = meta;
+    }
 }

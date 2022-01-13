@@ -12,10 +12,9 @@ import static com.aviobrief.springserver.config.constants.ApplicationConstants.A
 public abstract class ApplicationDateTimeConfiguration {
 
     private static final Logger logger = Logger.getLogger("ApplicationDateTimeConfiguration");
-    private static String applicationTimeZoneDefault;
 
     public static String getApplicationTimeZone() {
-        return applicationTimeZoneDefault;
+        return TimeZone.getDefault().getDisplayName();
     }
 
     public static void setApplicationTimeZoneDefault() {
@@ -28,14 +27,14 @@ public abstract class ApplicationDateTimeConfiguration {
             boolean hasMatchingTimeZone = Arrays.asList(TimeZone.getAvailableIDs()).contains(timeZoneDefault);
 
             if (hasMatchingTimeZone) {
-                ApplicationDateTimeConfiguration.applicationTimeZoneDefault = timeZoneDefault;
+                TimeZone.setDefault(TimeZone.getTimeZone(timeZoneDefault));
             } else {
-                ApplicationDateTimeConfiguration.applicationTimeZoneDefault = "Etc/UTC";
+                TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
                 logger.log(Level.WARNING, "Default timezone invalid. Setting 'Etc/UTC' instead!");
             }
 
         } else {
-            ApplicationDateTimeConfiguration.applicationTimeZoneDefault = "Etc/UTC";
+            TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
             logger.log(Level.WARNING, "Default timezone not provided. Setting 'Etc/UTC' instead!");
         }
     }

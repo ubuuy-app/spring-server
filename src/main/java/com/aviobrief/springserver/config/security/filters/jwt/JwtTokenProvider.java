@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.xml.bind.DatatypeConverter;
+import java.time.Instant;
 import java.util.Date;
 
 @Component
@@ -31,13 +32,13 @@ public class JwtTokenProvider {
 
         UserDetails userDetails = springSecurityUserDetailsService.loadUserByUsername(email);
 
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+        Instant now = Instant.now();
+        Instant expiryDate = Instant.now().plusMillis(jwtExpirationInMs);
 
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(expiryDate))
                 .signWith(SignatureAlgorithm.HS512, convertToBites(jwtSecretKey))
                 .compact();
     }

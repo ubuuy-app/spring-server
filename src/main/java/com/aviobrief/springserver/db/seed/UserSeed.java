@@ -1,5 +1,6 @@
 package com.aviobrief.springserver.db.seed;
 
+import com.aviobrief.springserver.models.entities.Meta;
 import com.aviobrief.springserver.models.entities.RoleEntity;
 import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.models.enums.UserRole;
@@ -8,12 +9,15 @@ import com.aviobrief.springserver.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Component
-public record UserSeed(UserService userService, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+public class UserSeed {
 
     private static final Logger logger = Logger.getLogger("UserSeed");
 
@@ -36,8 +40,17 @@ public record UserSeed(UserService userService, RoleRepository roleRepository, P
             "111111",
             "222222"
     );
+    private final UserService userService;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
+    public UserSeed(UserService userService, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
+    @Transactional
     public void seedUsers() {
         roleRepository().saveAll(List.of(adminRole, userRole));
         USER_EMAILS
@@ -51,6 +64,11 @@ public record UserSeed(UserService userService, RoleRepository roleRepository, P
                             passwordEncoder.encode(PASSWORDS.get(currentIndex))
                     );
                     userEntity.setRoles(currentIndex == 0 ? List.of(adminRole, userRole) : List.of(userRole));
+                    userEntity.setMeta(
+                            new Meta()
+                                    .setAddedAt(ZonedDateTime.now().toString())
+                                    .setAddedBy("test"));
+
                     return userEntity;
                 })
                 .forEach(userEntity -> {
@@ -62,4 +80,40 @@ public record UserSeed(UserService userService, RoleRepository roleRepository, P
                     }
                 });
     }
+
+    public UserService userService() {
+        return userService;
+    }
+
+    public RoleRepository roleRepository() {
+        return roleRepository;
+    }
+
+    public PasswordEncoder passwordEncoder() {
+        return passwordEncoder;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (UserSeed) obj;
+        return Objects.equals(this.userService, that.userService) &&
+                Objects.equals(this.roleRepository, that.roleRepository) &&
+                Objects.equals(this.passwordEncoder, that.passwordEncoder);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userService, roleRepository, passwordEncoder);
+    }
+
+    @Override
+    public String toString() {
+        return "UserSeed[" +
+                "userService=" + userService + ", " +
+                "roleRepository=" + roleRepository + ", " +
+                "passwordEncoder=" + passwordEncoder + ']';
+    }
+
 }
