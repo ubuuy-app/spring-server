@@ -27,7 +27,6 @@ server:
 
 ## App Properties
 app:
-  time-zone: "Etc/UTC"
   jwt-secret: "mySuperSecret"
   jwt-expiration-mills: 604800000
   completable-await-time-seconds: 30

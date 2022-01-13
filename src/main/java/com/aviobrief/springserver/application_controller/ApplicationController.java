@@ -6,8 +6,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +14,7 @@ import static com.aviobrief.springserver.config.constants.LoggerMessages.SERVER_
 @Component
 public class ApplicationController implements CommandLineRunner {
 
-    private final Logger logger = Logger.getLogger("AppController");
+    private final Logger logger = Logger.getLogger("ApplicationController");
     private final Environment environment;
     private final DatabaseInit databaseInit;
 
@@ -28,10 +26,15 @@ public class ApplicationController implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        logger.log(Level.INFO, String.format(SERVER_RUNNING_OK_TEMPLATE, environment.getProperty("local.server.port")));
+        ApplicationDateTimeConfiguration.setApplicationTimeZoneDefault();
+        logger.log(Level.INFO,
+                String.format(
+                        SERVER_RUNNING_OK_TEMPLATE,
+                        environment.getProperty("local.server.port"),
+                        ApplicationDateTimeConfiguration.getApplicationTimeZone())
+        );
+
         databaseInit.initDatabase();
-        System.out.println(ApplicationDateTimeConfiguration.getApplicationTimeZone());
-        Arrays.stream(TimeZone.getAvailableIDs()).forEach(System.out::println);
     }
 }
 
