@@ -3,7 +3,7 @@ package com.aviobrief.springserver.config.constants;
 public record LoggerMessages() {
 
     /* dev */
-    public static final String SERVER_RUNNING_OK_TEMPLATE = "Server listening on port %s...";
+    public static final String SERVER_RUNNING_OK_TEMPLATE = "Server listening on port %s [Timezone:%s]...";
 
     /* auth */
     public static final String JWT_VERIFICATION_FAIL = "JWT invalid!";

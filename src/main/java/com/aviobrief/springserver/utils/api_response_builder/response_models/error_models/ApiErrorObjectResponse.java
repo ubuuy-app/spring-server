@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class ApiErrorObjectResponse {
 
 
     public ApiErrorObjectResponse() {
-        this.timestamp = LocalDateTime.now().toString();
+        this.timestamp = ZonedDateTime.now().toString();
     }
 
     public HttpStatus getStatus() {
