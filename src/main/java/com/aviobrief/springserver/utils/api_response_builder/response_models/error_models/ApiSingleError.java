@@ -36,11 +36,7 @@ public class ApiSingleError {
         this.reason = reason;
     }
 
-    public String getReason() {
-        return reason;
-    }
-
-    public ApiSingleError setReason(String reason) {
+      public ApiSingleError setReason(String reason) {
         this.reason = reason;
         return this;
     }

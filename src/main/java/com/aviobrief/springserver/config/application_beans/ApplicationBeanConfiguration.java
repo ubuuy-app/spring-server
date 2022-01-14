@@ -11,9 +11,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @Configuration
 public class ApplicationBeanConfiguration {
+
+    private final HttpServletRequest httpServletRequest;
+
+    public ApplicationBeanConfiguration(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -34,7 +42,7 @@ public class ApplicationBeanConfiguration {
 
     @Bean
     public ApiResponseBuilder responseErrorBuilder(){
-        return new ApiResponseBuilder();
+        return new ApiResponseBuilder(httpServletRequest);
     }
 
 

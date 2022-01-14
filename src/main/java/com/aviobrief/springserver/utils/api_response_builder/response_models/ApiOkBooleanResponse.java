@@ -8,12 +8,4 @@ public class ApiOkBooleanResponse {
     public ApiOkBooleanResponse(boolean ok) {
         this.ok = ok;
     }
-
-    public boolean getOk() {
-        return ok;
-    }
-
-    public void setOk(boolean ok) {
-        this.ok = ok;
-    }
 }
