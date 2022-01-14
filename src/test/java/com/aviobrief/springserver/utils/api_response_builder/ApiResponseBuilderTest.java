@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ApiResponseBuilderTest {
@@ -56,8 +57,38 @@ class ApiResponseBuilderTest {
         String timeStampNowNoMillis = ZonedDateTime.now().toString().split("\\.")[0];
 
         assertThat(apiErrorObjectResponse).isInstanceOf(ApiErrorObjectResponse.class);
+        assertThat(apiErrorObjectResponse).hasAllNullFieldsOrPropertiesExcept("timestamp", "errors");
         assertThat(resultTimeStampNoMillis).isEqualTo(timeStampNowNoMillis);
         assertThat(apiErrorObjectResponse.getErrors()).size().isEqualTo(0);
+    }
+
+    @Test
+    void buildErrorObject_works_ok_with_autoGetPah_true_and_with_query_string(){
+        ApplicationDateTimeConfiguration.setApplicationTimeZoneDefault();
+        when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer("http://fake-url"));
+        when(httpServletRequest.getQueryString()).thenReturn("fake-qs");
+
+        ApiErrorObjectResponse apiErrorObjectResponse = apiResponseBuilder.buildErrorObject(true);
+        assertThat(apiErrorObjectResponse.getPath()).isEqualTo("http://fake-url?fake-qs");
+
+    }
+
+    @Test
+    void buildErrorObject_works_ok_with_autoGetPah_true_and_no_query_string(){
+        ApplicationDateTimeConfiguration.setApplicationTimeZoneDefault();
+        when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer("http://fake-url"));
+        when(httpServletRequest.getQueryString()).thenReturn(null);
+
+        ApiErrorObjectResponse apiErrorObjectResponse = apiResponseBuilder.buildErrorObject(true);
+        assertThat(apiErrorObjectResponse.getPath()).isEqualTo("http://fake-url");
+    }
+
+    @Test
+    void buildErrorObject_works_ok_with_autoGetPah_false(){
+        ApplicationDateTimeConfiguration.setApplicationTimeZoneDefault();
+
+        ApiErrorObjectResponse apiErrorObjectResponse = apiResponseBuilder.buildErrorObject(false);
+        assertThat(apiErrorObjectResponse).hasFieldOrPropertyWithValue("path", null);
     }
 
 

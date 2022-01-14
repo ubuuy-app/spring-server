@@ -27,8 +27,8 @@ public class ApiResponseBuilder {
         return new ApiErrorObjectResponse();
     }
 
-    public ApiErrorObjectResponse buildErrorObject(boolean getPath) {
-        if (getPath) {
+    public ApiErrorObjectResponse buildErrorObject(boolean autoGetPath) {
+        if (autoGetPath) {
             return new ApiErrorObjectResponse().setPath(getRequestPath(httpServletRequest));
         }
 
