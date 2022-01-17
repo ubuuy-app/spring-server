@@ -16,15 +16,20 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+
+    private final String jwtSecretKey;
+    private final int jwtExpirationInMs;
     private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
 
-    @Value("${app.jwt-secret}")
-    private String jwtSecretKey;
 
-    @Value("${app.jwt-expiration-mills}")
-    private int jwtExpirationInMs;
-
-    public JwtTokenProvider(SpringSecurityUserDetailsService springSecurityUserDetailsService) {
+    public JwtTokenProvider(
+            @Value("${app.jwt-secret}")
+                    String jwtSecretKey,
+            @Value("${app.jwt-expiration-mills}")
+                    int jwtExpirationInMs,
+            SpringSecurityUserDetailsService springSecurityUserDetailsService) {
+        this.jwtSecretKey = jwtSecretKey;
+        this.jwtExpirationInMs = jwtExpirationInMs;
         this.springSecurityUserDetailsService = springSecurityUserDetailsService;
     }
 
