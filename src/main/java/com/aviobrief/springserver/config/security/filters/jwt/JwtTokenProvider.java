@@ -1,9 +1,8 @@
 package com.aviobrief.springserver.config.security.filters.jwt;
 
 import com.aviobrief.springserver.config.security.speing_security_user_service.SpringSecurityUserDetailsService;
+import com.aviobrief.springserver.utils.logger.ServerLogger;
 import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -15,19 +14,19 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
-
+    private final ServerLogger serverLogger;
     private final String jwtSecretKey;
     private final int jwtExpirationInMs;
     private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
 
 
     public JwtTokenProvider(
-            @Value("${app.jwt-secret}")
-                    String jwtSecretKey,
+            ServerLogger serverLogger, @Value("${app.jwt-secret}")
+            String jwtSecretKey,
             @Value("${app.jwt-expiration-mills}")
                     int jwtExpirationInMs,
             SpringSecurityUserDetailsService springSecurityUserDetailsService) {
+        this.serverLogger = serverLogger;
         this.jwtSecretKey = jwtSecretKey;
         this.jwtExpirationInMs = jwtExpirationInMs;
         this.springSecurityUserDetailsService = springSecurityUserDetailsService;
@@ -68,15 +67,15 @@ public class JwtTokenProvider {
             return true;
 
         } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
+                serverLogger.error("JwtTokenProvider","Invalid JWT signature");
         } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
+            serverLogger.error("JwtTokenProvider","Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
+            serverLogger.error("JwtTokenProvider","Expired JWT token");
         } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
+            serverLogger.error("JwtTokenProvider","Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
+            serverLogger.error("JwtTokenProvider","JWT claims string is empty");
         }
 
         return false;

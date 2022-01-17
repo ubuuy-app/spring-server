@@ -2,6 +2,7 @@ package com.aviobrief.springserver.config.application_beans;
 
 
 import com.aviobrief.springserver.utils.api_response_builder.ApiResponseBuilder;
+import com.aviobrief.springserver.utils.logger.ServerLogger;
 import com.aviobrief.springserver.utils.mapper.Mapper;
 import com.aviobrief.springserver.utils.mapper.MapperImpl;
 import com.google.gson.Gson;
@@ -43,6 +44,11 @@ public class ApplicationBeanConfiguration {
     @Bean
     public ApiResponseBuilder responseErrorBuilder(){
         return new ApiResponseBuilder(httpServletRequest);
+    }
+
+    @Bean
+    public ServerLogger appLogger(){
+        return new ServerLogger();
     }
 
 
