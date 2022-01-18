@@ -47,11 +47,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         SingleError singleError =
                 responseBuilder
-                        .buildSingleError(
-                                "JWT",
-                                JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE,
-                                jwtTokenProvider.getJwtFromRequest(httpServletRequest),
-                                authException.getMessage());
+                        .buildSingleError()
+                        .setTarget("jwt")
+                        .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
+                        .setRejectedValue(jwtTokenProvider.getJwtFromRequest(httpServletRequest))
+                        .setReason(authException.getMessage());
+
 
         ErrorResponseObject errorResponseObject =
                 responseBuilder
@@ -67,3 +68,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     }
 }
+
+/* this implementation hides the setters, and they are just useful to read :) */
+//                        .buildSingleError(
+//                                "JWT",
+//                                JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE,
+//                                jwtTokenProvider.getJwtFromRequest(httpServletRequest),
+//                                authException.getMessage());
+
+//        return new SingleError().setTarget(target).setMessage(message).setRejectedValue(rejectedValue).setReason(reason);

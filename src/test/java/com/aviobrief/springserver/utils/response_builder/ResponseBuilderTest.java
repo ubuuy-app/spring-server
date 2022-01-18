@@ -30,24 +30,25 @@ class ResponseBuilderTest {
     }
 
     @Test
-    void ok_method_returns_true(){
+    void ok_method_returns_true() {
         OkResponse ok = responseBuilder.ok(true);
         assertThat(ok).hasFieldOrPropertyWithValue("ok", true);
     }
 
     @Test
-    void ok_method_returns_false(){
+    void ok_method_returns_false() {
         OkResponse ok = responseBuilder.ok(false);
         assertThat(ok).hasFieldOrPropertyWithValue("ok", false);
     }
 
     @Test
-    void buildSingleError_works_ok(){
-        SingleError singleError = responseBuilder.buildSingleError(
-                "test_target",
-                "test_message",
-                "test_object",
-                "test_reason");
+    void buildSingleError_works_ok() {
+        SingleError singleError = responseBuilder
+                .buildSingleError()
+                .setTarget("test_target")
+                .setMessage("test_message")
+                .setRejectedValue("test_object")
+                .setReason("test_reason");
         assertThat(singleError).hasFieldOrPropertyWithValue("target", "test_target");
         assertThat(singleError).hasFieldOrPropertyWithValue("message", "test_message");
         assertThat(singleError).hasFieldOrPropertyWithValue("rejectedValue", "test_object");
@@ -55,7 +56,7 @@ class ResponseBuilderTest {
     }
 
     @Test
-    void buildErrorObject_works_ok(){
+    void buildErrorObject_works_ok() {
         ApplicationDateTimeConfiguration.setApplicationTimeZoneDefault();
         ErrorResponseObject errorResponseObject = responseBuilder.buildErrorObject();
 
@@ -69,7 +70,7 @@ class ResponseBuilderTest {
     }
 
     @Test
-    void buildErrorObject_works_ok_with_autoGetPah_true_and_with_query_string(){
+    void buildErrorObject_works_ok_with_autoGetPah_true_and_with_query_string() {
         ApplicationDateTimeConfiguration.setApplicationTimeZoneDefault();
         when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer("http://fake-url"));
         when(httpServletRequest.getQueryString()).thenReturn("fake-qs");
@@ -80,7 +81,7 @@ class ResponseBuilderTest {
     }
 
     @Test
-    void buildErrorObject_works_ok_with_autoGetPah_true_and_no_query_string(){
+    void buildErrorObject_works_ok_with_autoGetPah_true_and_no_query_string() {
         ApplicationDateTimeConfiguration.setApplicationTimeZoneDefault();
         when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer("http://fake-url"));
         when(httpServletRequest.getQueryString()).thenReturn(null);
@@ -90,7 +91,7 @@ class ResponseBuilderTest {
     }
 
     @Test
-    void buildErrorObject_works_ok_with_autoGetPah_false(){
+    void buildErrorObject_works_ok_with_autoGetPah_false() {
         ApplicationDateTimeConfiguration.setApplicationTimeZoneDefault();
 
         ErrorResponseObject errorResponseObject = responseBuilder.buildErrorObject(false);

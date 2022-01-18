@@ -21,8 +21,8 @@ public class ResponseBuilderImpl implements ResponseBuilder{
     }
 
     @Override
-    public SingleError buildSingleError(String target, String message, Object rejectedValue, String reason){
-        return new SingleError().setTarget(target).setMessage(message).setRejectedValue(rejectedValue).setReason(reason);
+    public SingleError buildSingleError(){
+        return new SingleError();
     }
 
     @Override
@@ -51,3 +51,10 @@ public class ResponseBuilderImpl implements ResponseBuilder{
         return requestURL.append('?').append(queryString).toString();
     }
 }
+
+/* implementing it like this makes using the building process not so explicit */
+
+//    @Override
+//    public SingleError buildSingleError(String target, String message, Object rejectedValue, String reason){
+//        return new SingleError().setTarget(target).setMessage(message).setRejectedValue(rejectedValue).setReason(reason);
+//    }

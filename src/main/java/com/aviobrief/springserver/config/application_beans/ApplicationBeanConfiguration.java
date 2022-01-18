@@ -1,6 +1,8 @@
 package com.aviobrief.springserver.config.application_beans;
 
 
+import com.aviobrief.springserver.utils.json.JsonUtil;
+import com.aviobrief.springserver.utils.json.JsonUtilImpl;
 import com.aviobrief.springserver.utils.logger.ServerLogger;
 import com.aviobrief.springserver.utils.logger.ServerLoggerImpl;
 import com.aviobrief.springserver.utils.mapper.Mapper;
@@ -52,6 +54,10 @@ public class ApplicationBeanConfiguration {
     public ServerLogger appLogger(){
         return new ServerLoggerImpl();
     }
+
+    @Bean
+    public JsonUtil jsonUtil(){return new JsonUtilImpl();}
+
 
 
 }

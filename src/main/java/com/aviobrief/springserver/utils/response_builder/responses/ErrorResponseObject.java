@@ -8,9 +8,13 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.Type;
+
 @Component
 public class ErrorResponseObject {
 
+    @Expose
+    private Type type;
     @Expose
     private HttpStatus status;
     @Expose
@@ -25,6 +29,15 @@ public class ErrorResponseObject {
 
     public ErrorResponseObject() {
         this.timestamp = ZonedDateTime.now().toString();
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public ErrorResponseObject setType(Type type) {
+        this.type = type;
+        return this;
     }
 
     public HttpStatus getStatus() {

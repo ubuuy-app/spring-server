@@ -9,11 +9,21 @@ import javax.servlet.http.HttpServletRequest;
 public interface ResponseBuilder {
     OkResponse ok(boolean ok);
 
-    SingleError buildSingleError(String target, String message, Object rejectedValue, String reason);
+    SingleError buildSingleError();
 
     ErrorResponseObject buildErrorObject();
 
     ErrorResponseObject buildErrorObject(boolean autoGetPath);
 
     String getRequestPath(HttpServletRequest httpServletRequest);
+
+    public static enum Type{
+        AUTH("Auth");
+
+        public final String detailedType;
+
+        private Type(String detailedType){
+            this.detailedType = detailedType;
+        }
+    }
 }
