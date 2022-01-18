@@ -21,8 +21,9 @@ public class JwtTokenProvider {
 
 
     public JwtTokenProvider(
-            ServerLogger serverLogger, @Value("${app.jwt-secret}")
-            String jwtSecretKey,
+            ServerLogger serverLogger,
+            @Value("${app.jwt-secret}")
+                    String jwtSecretKey,
             @Value("${app.jwt-expiration-mills}")
                     int jwtExpirationInMs,
             SpringSecurityUserDetailsService springSecurityUserDetailsService) {
@@ -67,15 +68,15 @@ public class JwtTokenProvider {
             return true;
 
         } catch (SignatureException ex) {
-                serverLogger.error("JwtTokenProvider","Invalid JWT signature");
+            serverLogger.error("JwtTokenProvider", "Invalid JWT signature");
         } catch (MalformedJwtException ex) {
-            serverLogger.error("JwtTokenProvider","Invalid JWT token");
+            serverLogger.error("JwtTokenProvider", "Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-            serverLogger.error("JwtTokenProvider","Expired JWT token");
+            serverLogger.error("JwtTokenProvider", "Expired JWT token");
         } catch (UnsupportedJwtException ex) {
-            serverLogger.error("JwtTokenProvider","Unsupported JWT token");
+            serverLogger.error("JwtTokenProvider", "Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-            serverLogger.error("JwtTokenProvider","JWT claims string is empty");
+            serverLogger.error("JwtTokenProvider", "JWT claims string is empty");
         }
 
         return false;
