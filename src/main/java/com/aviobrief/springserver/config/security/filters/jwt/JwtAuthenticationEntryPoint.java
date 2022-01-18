@@ -1,8 +1,8 @@
 package com.aviobrief.springserver.config.security.filters.jwt;
 
-import com.aviobrief.springserver.utils.api_response_builder.ApiResponseBuilder;
-import com.aviobrief.springserver.utils.api_response_builder.response_models.error_models.ApiErrorObjectResponse;
-import com.aviobrief.springserver.utils.api_response_builder.response_models.error_models.ApiSingleError;
+import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
+import com.aviobrief.springserver.utils.response_builder.responses.ErrorResponseObject;
+import com.aviobrief.springserver.utils.response_builder.responses.SingleError;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +25,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
     private final Gson gson;
-    private final ApiResponseBuilder apiResponseBuilder;
+    private final ResponseBuilder responseBuilder;
 
-    public JwtAuthenticationEntryPoint(Gson gson, ApiResponseBuilder apiResponseBuilder) {
+    public JwtAuthenticationEntryPoint(Gson gson, ResponseBuilder responseBuilder) {
         this.gson = gson;
-        this.apiResponseBuilder = apiResponseBuilder;
+        this.responseBuilder = responseBuilder;
     }
 
 
@@ -41,24 +41,24 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         logger.error(String.format("%s - '%s'", JWT_UNAUTHORIZED_HANDLER_LOG_MESSAGE, authException.getMessage()));
 
         /* Build error */
-        String requestPath = apiResponseBuilder.getRequestPath(httpServletRequest);
+        String requestPath = responseBuilder.getRequestPath(httpServletRequest);
 
-        ApiSingleError apiSingleError =
-                apiResponseBuilder
+        SingleError singleError =
+                responseBuilder
                         .buildSingleError(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
                         .setReason(authException.getMessage());
 
-        ApiErrorObjectResponse apiErrorObjectResponse =
-                apiResponseBuilder
+        ErrorResponseObject errorResponseObject =
+                responseBuilder
                         .buildErrorObject()
                         .setStatus(HttpStatus.UNAUTHORIZED)
                         .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
-                        .setErrors(List.of(apiSingleError))
+                        .setErrors(List.of(singleError))
                         .setPath(requestPath);
 
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        httpServletResponse.getWriter().println(gson.toJson(apiErrorObjectResponse));
+        httpServletResponse.getWriter().println(gson.toJson(errorResponseObject));
 
     }
 }
