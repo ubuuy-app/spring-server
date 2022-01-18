@@ -6,43 +6,14 @@ import com.aviobrief.springserver.utils.response_builder.responses.SingleError;
 
 import javax.servlet.http.HttpServletRequest;
 
+public interface ResponseBuilder {
+    OkResponse ok(boolean ok);
 
-public class ResponseBuilder {
+    SingleError buildSingleError(String target, String message, Object rejectedValue, String reason);
 
-    private final HttpServletRequest httpServletRequest;
+    ErrorResponseObject buildErrorObject();
 
-    public ResponseBuilder(HttpServletRequest httpServletRequest) {
-        this.httpServletRequest = httpServletRequest;
-    }
+    ErrorResponseObject buildErrorObject(boolean autoGetPath);
 
-    public OkResponse ok(boolean ok) {
-        return new OkResponse().setOk(ok);
-    }
-
-    public SingleError buildSingleError(String message){
-        return new SingleError().setMessage(message);
-    }
-
-    public ErrorResponseObject buildErrorObject(){
-        return new ErrorResponseObject();
-    }
-
-    public ErrorResponseObject buildErrorObject(boolean autoGetPath) {
-        if (autoGetPath) {
-            return new ErrorResponseObject().setPath(getRequestPath(httpServletRequest));
-        }
-
-        return new ErrorResponseObject();
-    }
-
-    public String getRequestPath(HttpServletRequest httpServletRequest){
-        StringBuffer requestURL = httpServletRequest.getRequestURL();
-        String queryString = httpServletRequest.getQueryString();
-
-        if (queryString == null){
-            return requestURL.toString();
-        }
-
-        return requestURL.append('?').append(queryString).toString();
-    }
+    String getRequestPath(HttpServletRequest httpServletRequest);
 }

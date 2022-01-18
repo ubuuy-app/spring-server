@@ -24,10 +24,12 @@ import static com.aviobrief.springserver.config.constants.ResponseMessages.JWT_U
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
+    private final JwtTokenProvider jwtTokenProvider;
     private final Gson gson;
     private final ResponseBuilder responseBuilder;
 
-    public JwtAuthenticationEntryPoint(Gson gson, ResponseBuilder responseBuilder) {
+    public JwtAuthenticationEntryPoint(JwtTokenProvider jwtTokenProvider, Gson gson, ResponseBuilder responseBuilder) {
+        this.jwtTokenProvider = jwtTokenProvider;
         this.gson = gson;
         this.responseBuilder = responseBuilder;
     }
@@ -45,8 +47,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         SingleError singleError =
                 responseBuilder
-                        .buildSingleError(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
-                        .setReason(authException.getMessage());
+                        .buildSingleError(
+                                "JWT",
+                                JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE,
+                                jwtTokenProvider.getJwtFromRequest(httpServletRequest),
+                                authException.getMessage());
 
         ErrorResponseObject errorResponseObject =
                 responseBuilder

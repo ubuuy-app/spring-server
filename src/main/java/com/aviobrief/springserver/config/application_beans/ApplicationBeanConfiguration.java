@@ -1,10 +1,12 @@
 package com.aviobrief.springserver.config.application_beans;
 
 
+import com.aviobrief.springserver.utils.logger.ServerLogger;
 import com.aviobrief.springserver.utils.logger.ServerLoggerImpl;
 import com.aviobrief.springserver.utils.mapper.Mapper;
 import com.aviobrief.springserver.utils.mapper.MapperImpl;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
+import com.aviobrief.springserver.utils.response_builder.ResponseBuilderImpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.context.annotation.Bean;
@@ -42,12 +44,12 @@ public class ApplicationBeanConfiguration {
     }
 
     @Bean
-    public ResponseBuilder responseErrorBuilder(){
-        return new ResponseBuilder(httpServletRequest);
+    public ResponseBuilder responseBuilder(){
+        return new ResponseBuilderImpl(httpServletRequest);
     }
 
     @Bean
-    public ServerLoggerImpl appLogger(){
+    public ServerLogger appLogger(){
         return new ServerLoggerImpl();
     }
 

@@ -5,7 +5,7 @@ import com.aviobrief.springserver.config.security.filters.jwt.JwtTokenProvider;
 import com.aviobrief.springserver.models.requests.LoginRequest;
 import com.aviobrief.springserver.models.responses.UserViewModel;
 import com.aviobrief.springserver.services.UserService;
-import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
+import com.aviobrief.springserver.utils.response_builder.ResponseBuilderImpl;
 import com.aviobrief.springserver.utils.response_builder.responses.JwtResponse;
 import com.aviobrief.springserver.utils.response_builder.responses.OkResponse;
 import org.springframework.http.HttpStatus;
@@ -27,17 +27,17 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
-    private final ResponseBuilder responseBuilder;
+    private final ResponseBuilderImpl responseBuilderImpl;
 
 
     public AuthController(UserService userService,
                           AuthenticationManager authenticationManager,
                           JwtTokenProvider tokenProvider,
-                          ResponseBuilder responseBuilder) {
+                          ResponseBuilderImpl responseBuilderImpl) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
-        this.responseBuilder = responseBuilder;
+        this.responseBuilderImpl = responseBuilderImpl;
     }
 
 
@@ -68,7 +68,7 @@ public class AuthController {
         } catch (UsernameNotFoundException e) {
             return ResponseEntity
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
-                    .body(responseBuilder
+                    .body(responseBuilderImpl
                             .buildErrorObject(true)
                             .setStatus(HttpStatus.BAD_REQUEST)
                             .setMessage(BAD_CREDENTIALS));
@@ -85,7 +85,7 @@ public class AuthController {
     @GetMapping(path = "/auth-logout", produces = "application/json")
     public ResponseEntity<OkResponse> logout() {
         //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
-        return ResponseEntity.ok().body(responseBuilder.ok(true));
+        return ResponseEntity.ok().body(responseBuilderImpl.ok(true));
     }
 
 

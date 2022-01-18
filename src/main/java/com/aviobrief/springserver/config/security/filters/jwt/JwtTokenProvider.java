@@ -6,10 +6,15 @@ import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.time.Instant;
 import java.util.Date;
+
+import static com.aviobrief.springserver.config.constants.ApplicationConstants.HTTP_REQ_AUTH_HEADER;
+import static com.aviobrief.springserver.config.constants.ApplicationConstants.HTTP_REQ_AUTH_TOKEN_PREFIX;
 
 @Component
 public class JwtTokenProvider {
@@ -80,6 +85,14 @@ public class JwtTokenProvider {
         }
 
         return false;
+    }
+
+    public String getJwtFromRequest(HttpServletRequest httpServletRequest) {
+        String bearerToken = httpServletRequest.getHeader(HTTP_REQ_AUTH_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HTTP_REQ_AUTH_TOKEN_PREFIX)) {
+            return bearerToken.substring(7, bearerToken.length());
+        }
+        return null;
     }
 
     private byte[] convertToBites(String key) {

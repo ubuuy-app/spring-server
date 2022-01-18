@@ -26,7 +26,7 @@ class ResponseBuilderTest {
 
     @BeforeEach
     private void initApiResponseBuilder() {
-        responseBuilder = new ResponseBuilder(httpServletRequest);
+        responseBuilder = new ResponseBuilderImpl(httpServletRequest);
     }
 
     @Test
@@ -43,9 +43,15 @@ class ResponseBuilderTest {
 
     @Test
     void buildSingleError_works_ok(){
-        SingleError singleError = responseBuilder.buildSingleError("test message");
-        assertThat(singleError).hasAllNullFieldsOrPropertiesExcept("message");
-        assertThat(singleError).hasFieldOrPropertyWithValue("message", "test message");
+        SingleError singleError = responseBuilder.buildSingleError(
+                "test_target",
+                "test_message",
+                "test_object",
+                "test_reason");
+        assertThat(singleError).hasFieldOrPropertyWithValue("target", "test_target");
+        assertThat(singleError).hasFieldOrPropertyWithValue("message", "test_message");
+        assertThat(singleError).hasFieldOrPropertyWithValue("rejectedValue", "test_object");
+        assertThat(singleError).hasFieldOrPropertyWithValue("reason", "test_reason");
     }
 
     @Test
