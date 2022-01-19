@@ -29,7 +29,7 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        <!--   JSON RELATED     -->
+        <!--   JSON_PAIR RELATED     -->
         <dependency>
             <groupId>javax.json</groupId>
             <artifactId>javax.json-api</artifactId>

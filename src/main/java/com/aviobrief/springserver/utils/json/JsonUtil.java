@@ -3,12 +3,8 @@ package com.aviobrief.springserver.utils.json;
 
 public interface JsonUtil {
 
-  String toJsonJackson(String... props);
+  JsonString toJsonString(JsonPair... jsonPairs);
 
-  String toJsonGson(String... props);
-
-//  JsonObject toJsonJavaxJson(String... props);
-
-//  JsonObject toJsonJavaxJson(String... props);
+  JsonPair fromStringPair(String key, String value);
 
 }
