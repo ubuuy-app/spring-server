@@ -84,10 +84,10 @@ public class AuthController {
                                             .buildSingleError()
                                             .setTarget("credentials")
                                             .setMessage(BAD_CREDENTIALS)
-                                            .setRejectedValue(
-                                                    jsonUtil.toJsonGson(
-                                                            "email:" + loginRequest.username(),
-                                                            "password:hidden"))
+                                            .setRejectedValue(jsonUtil.toJsonString(
+                                                    jsonUtil.fromStringPair("email", loginRequest.username()),
+                                                    jsonUtil.fromStringPair("password", "hidden")
+                                            ))
                                             .setReason(BAD_CREDENTIALS)
                             )));
 

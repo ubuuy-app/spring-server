@@ -1,6 +1,8 @@
 package com.aviobrief.springserver.utils.response_builder;
 
 import com.aviobrief.springserver.config.date_time.ApplicationDateTimeConfiguration;
+import com.aviobrief.springserver.utils.json.JsonUtil;
+import com.aviobrief.springserver.utils.json.JsonUtilImpl;
 import com.aviobrief.springserver.utils.response_builder.responses.ErrorResponseObject;
 import com.aviobrief.springserver.utils.response_builder.responses.OkResponse;
 import com.aviobrief.springserver.utils.response_builder.responses.SingleError;
@@ -23,10 +25,12 @@ class ResponseBuilderTest {
     private HttpServletRequest httpServletRequest;
 
     private ResponseBuilder responseBuilder;
+    private JsonUtil jsonUtil;
 
     @BeforeEach
     private void initApiResponseBuilder() {
         responseBuilder = new ResponseBuilderImpl(httpServletRequest);
+        jsonUtil = new JsonUtilImpl();
     }
 
     @Test
@@ -47,11 +51,11 @@ class ResponseBuilderTest {
                 .buildSingleError()
                 .setTarget("test_target")
                 .setMessage("test_message")
-                .setRejectedValue("test_object")
+                .setRejectedValue(jsonUtil.toJsonString(jsonUtil.fromStringPair("test_key", "test_value")))
                 .setReason("test_reason");
         assertThat(singleError).hasFieldOrPropertyWithValue("target", "test_target");
         assertThat(singleError).hasFieldOrPropertyWithValue("message", "test_message");
-        assertThat(singleError).hasFieldOrPropertyWithValue("rejectedValue", "test_object");
+        assertThat(singleError.getRejectedValue()).isEqualTo("{\"test_key\":\"test_value\"}");
         assertThat(singleError).hasFieldOrPropertyWithValue("reason", "test_reason");
     }
 

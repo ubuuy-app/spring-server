@@ -1,5 +1,6 @@
 package com.aviobrief.springserver.utils.response_builder.responses;
 
+import com.aviobrief.springserver.utils.json.JsonString;
 import com.google.gson.annotations.Expose;
 
 public class SingleError {
@@ -9,7 +10,7 @@ public class SingleError {
     @Expose
     private String message;
     @Expose
-    private Object rejectedValue;
+    private String rejectedValue;
     @Expose
     private String reason;
 
@@ -34,12 +35,12 @@ public class SingleError {
         return this;
     }
 
-    public Object getRejectedValue() {
+    public String getRejectedValue() {
         return rejectedValue;
     }
 
-    public SingleError setRejectedValue(Object rejectedValue) {
-        this.rejectedValue = rejectedValue;
+    public SingleError setRejectedValue(JsonString jsonString) {
+        this.rejectedValue = jsonString.getValue();
         return this;
     }
 
@@ -51,4 +52,5 @@ public class SingleError {
         this.reason = reason;
         return this;
     }
+
 }
