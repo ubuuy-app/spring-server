@@ -34,8 +34,9 @@ public class UserEntity extends BaseEntity {
         return email;
     }
 
-    public void setEmail(String email) {
+    public UserEntity setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     @Column(name = "first_name", unique = false, nullable = false)

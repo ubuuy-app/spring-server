@@ -1,8 +1,8 @@
 package com.aviobrief.springserver.config.security.filters.jwt;
 
-import com.aviobrief.springserver.utils.api_response_builder.ApiResponseBuilder;
-import com.aviobrief.springserver.utils.api_response_builder.response_models.error_models.ApiErrorObjectResponse;
-import com.aviobrief.springserver.utils.api_response_builder.response_models.error_models.ApiSingleError;
+import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
+import com.aviobrief.springserver.utils.response_builder.responses.ErrorResponseObject;
+import com.aviobrief.springserver.utils.response_builder.responses.SingleError;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +24,14 @@ import static com.aviobrief.springserver.config.constants.ResponseMessages.JWT_U
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
+    private final JwtTokenProvider jwtTokenProvider;
     private final Gson gson;
-    private final ApiResponseBuilder apiResponseBuilder;
+    private final ResponseBuilder responseBuilder;
 
-    public JwtAuthenticationEntryPoint(Gson gson, ApiResponseBuilder apiResponseBuilder) {
+    public JwtAuthenticationEntryPoint(JwtTokenProvider jwtTokenProvider, Gson gson, ResponseBuilder responseBuilder) {
+        this.jwtTokenProvider = jwtTokenProvider;
         this.gson = gson;
-        this.apiResponseBuilder = apiResponseBuilder;
+        this.responseBuilder = responseBuilder;
     }
 
 
@@ -41,24 +43,37 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         logger.error(String.format("%s - '%s'", JWT_UNAUTHORIZED_HANDLER_LOG_MESSAGE, authException.getMessage()));
 
         /* Build error */
-        String requestPath = apiResponseBuilder.getRequestPath(httpServletRequest);
+        String requestPath = responseBuilder.getRequestPath(httpServletRequest);
 
-        ApiSingleError apiSingleError =
-                apiResponseBuilder
-                        .buildSingleError(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
+        SingleError singleError =
+                responseBuilder
+                        .buildSingleError()
+                        .setTarget("jwt")
+                        .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
+                        .setRejectedValue(jwtTokenProvider.getJwtFromRequest(httpServletRequest))
                         .setReason(authException.getMessage());
 
-        ApiErrorObjectResponse apiErrorObjectResponse =
-                apiResponseBuilder
+
+        ErrorResponseObject errorResponseObject =
+                responseBuilder
                         .buildErrorObject()
                         .setStatus(HttpStatus.UNAUTHORIZED)
                         .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
-                        .setErrors(List.of(apiSingleError))
+                        .setErrors(List.of(singleError))
                         .setPath(requestPath);
 
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        httpServletResponse.getWriter().println(gson.toJson(apiErrorObjectResponse));
+        httpServletResponse.getWriter().println(gson.toJson(errorResponseObject));
 
     }
 }
+
+/* this implementation hides the setters, and they are just useful to read :) */
+//                        .buildSingleError(
+//                                "JWT",
+//                                JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE,
+//                                jwtTokenProvider.getJwtFromRequest(httpServletRequest),
+//                                authException.getMessage());
+
+//        return new SingleError().setTarget(target).setMessage(message).setRejectedValue(rejectedValue).setReason(reason);

@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.utils.api_response_builder.response_models.error_models;
+package com.aviobrief.springserver.utils.response_builder.responses;
 
 import com.google.gson.annotations.Expose;
 import org.springframework.http.HttpStatus;
@@ -8,9 +8,13 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class ApiErrorObjectResponse {
+import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.Type;
 
+@Component
+public class ErrorResponseObject {
+
+    @Expose
+    private Type type;
     @Expose
     private HttpStatus status;
     @Expose
@@ -18,20 +22,29 @@ public class ApiErrorObjectResponse {
     @Expose
     private String message;
     @Expose
-    private List<ApiSingleError> errors = new ArrayList<>();
+    private List<SingleError> errors = new ArrayList<>();
     @Expose
     private String path;
 
 
-    public ApiErrorObjectResponse() {
+    public ErrorResponseObject() {
         this.timestamp = ZonedDateTime.now().toString();
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public ErrorResponseObject setType(Type type) {
+        this.type = type;
+        return this;
     }
 
     public HttpStatus getStatus() {
         return status;
     }
 
-    public ApiErrorObjectResponse setStatus(HttpStatus status) {
+    public ErrorResponseObject setStatus(HttpStatus status) {
         this.status = status;
         return this;
     }
@@ -40,7 +53,7 @@ public class ApiErrorObjectResponse {
         return timestamp;
     }
 
-    public ApiErrorObjectResponse setTimestamp(String timestamp) {
+    public ErrorResponseObject setTimestamp(String timestamp) {
         this.timestamp = timestamp;
         return this;
     }
@@ -49,16 +62,16 @@ public class ApiErrorObjectResponse {
         return message;
     }
 
-    public ApiErrorObjectResponse setMessage(String message) {
+    public ErrorResponseObject setMessage(String message) {
         this.message = message;
         return this;
     }
 
-    public List<ApiSingleError> getErrors() {
+    public List<SingleError> getErrors() {
         return errors;
     }
 
-    public ApiErrorObjectResponse setErrors(List<ApiSingleError> errors) {
+    public ErrorResponseObject setErrors(List<SingleError> errors) {
         this.errors = errors;
         return this;
     }
@@ -67,7 +80,7 @@ public class ApiErrorObjectResponse {
         return path;
     }
 
-    public ApiErrorObjectResponse setPath(String path) {
+    public ErrorResponseObject setPath(String path) {
         this.path = path;
         return this;
     }

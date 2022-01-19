@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.aviobrief.springserver.config.constants.ApplicationConstants.HTTP_REQ_AUTH_HEADER;
-import static com.aviobrief.springserver.config.constants.ApplicationConstants.HTTP_REQ_AUTH_TOKEN_PREFIX;
 import static com.aviobrief.springserver.config.constants.LoggerMessages.JWT_VERIFICATION_FAIL;
 import static com.aviobrief.springserver.config.constants.LoggerMessages.SECURITY_CONTEXT_SET_AUTH_TOKEN_FAIL;
 
@@ -41,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String jwt = getJwtFromRequest(httpServletRequest);
+            String jwt = tokenProvider.getJwtFromRequest(httpServletRequest);
 
             /* Check Jwt has some text in it and verify validity */
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
@@ -73,12 +71,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
-
-    private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader(HTTP_REQ_AUTH_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HTTP_REQ_AUTH_TOKEN_PREFIX)) {
-            return bearerToken.substring(7, bearerToken.length());
-        }
-        return null;
-    }
 }
