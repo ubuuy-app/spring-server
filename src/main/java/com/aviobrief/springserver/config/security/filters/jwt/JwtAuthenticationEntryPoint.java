@@ -1,5 +1,6 @@
 package com.aviobrief.springserver.config.security.filters.jwt;
 
+import com.aviobrief.springserver.utils.json.JsonUtil;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
 import com.aviobrief.springserver.utils.response_builder.responses.ErrorResponseObject;
 import com.aviobrief.springserver.utils.response_builder.responses.SingleError;
@@ -27,11 +28,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final JwtTokenProvider jwtTokenProvider;
     private final Gson gson;
     private final ResponseBuilder responseBuilder;
+    private final JsonUtil jsonUtil;
 
-    public JwtAuthenticationEntryPoint(JwtTokenProvider jwtTokenProvider, Gson gson, ResponseBuilder responseBuilder) {
+    public JwtAuthenticationEntryPoint(JwtTokenProvider jwtTokenProvider, Gson gson, ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.gson = gson;
         this.responseBuilder = responseBuilder;
+        this.jsonUtil = jsonUtil;
     }
 
 
@@ -50,7 +53,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                         .buildSingleError()
                         .setTarget("jwt")
                         .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
-                        .setRejectedValue(jwtTokenProvider.getJwtFromRequest(httpServletRequest))
+                        .setRejectedValue(jwtTokenProvider.getJwtFromRequest(httpServletRequest) == null
+                                ? jsonUtil.toJsonJackson("jwt:(empty)")
+                                : jsonUtil.toJsonJackson("jwt:" + jwtTokenProvider.getJwtFromRequest(httpServletRequest)))
                         .setReason(authException.getMessage());
 
 

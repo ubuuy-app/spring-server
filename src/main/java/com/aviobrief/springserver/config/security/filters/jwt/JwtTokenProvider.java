@@ -90,7 +90,8 @@ public class JwtTokenProvider {
     public String getJwtFromRequest(HttpServletRequest httpServletRequest) {
         String bearerToken = httpServletRequest.getHeader(HTTP_REQ_AUTH_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HTTP_REQ_AUTH_TOKEN_PREFIX)) {
-            return bearerToken.substring(7, bearerToken.length());
+            String jwt = bearerToken.substring(7, bearerToken.length());
+            return jwt.equals("null") ? null : jwt;
         }
         return null;
     }
