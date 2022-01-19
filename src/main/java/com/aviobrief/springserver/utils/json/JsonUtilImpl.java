@@ -4,9 +4,6 @@ package com.aviobrief.springserver.utils.json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,23 +24,23 @@ public class JsonUtilImpl implements JsonUtil {
     }
 
 
-    @Override
-    public JsonObject toJsonJavaxJson(String... props) {
-        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-
-        Arrays.stream(props).forEach(prop -> {
-            String[] values = prop.split(":");
-            objectBuilder.add(values[0], values[1]);
-        });
-
-        JsonObject jsonObject = objectBuilder.build();
-
-//        Writer writer = new StringWriter();
-//        Json.createWriter(writer).write(jsonObject);
-//        String jsonString = writer.toString();
-
-        return jsonObject;
-    }
+//    @Override
+//    public JsonObject toJsonJavaxJson(String... props) {
+//        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+//
+//        Arrays.stream(props).forEach(prop -> {
+//            String[] values = prop.split(":");
+//            objectBuilder.add(values[0], values[1]);
+//        });
+//
+//        JsonObject jsonObject = objectBuilder.build();
+//
+////        Writer writer = new StringWriter();
+////        Json.createWriter(writer).write(jsonObject);
+////        String jsonString = writer.toString();
+//
+//        return jsonObject;
+//    }
 
 }
 
