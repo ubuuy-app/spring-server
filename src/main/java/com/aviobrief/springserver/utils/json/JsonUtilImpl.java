@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -16,7 +15,7 @@ public class JsonUtilImpl implements JsonUtil {
     private final Gson gson = new GsonBuilder().create();
 
     @Override
-    public JSONObject toJsonJackson(String... props) {
+    public String toJsonJackson(String... props) {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode objectNode = mapper.createObjectNode();
@@ -27,10 +26,7 @@ public class JsonUtilImpl implements JsonUtil {
         });
 
 
-        String s = objectNode.toString();
-
-
-        return new JSONObject(objectNode.toString());
+        return objectNode.toString();
     }
 
     @Override
