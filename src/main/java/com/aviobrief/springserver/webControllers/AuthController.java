@@ -85,7 +85,7 @@ public class AuthController {
                                             .setTarget("credentials")
                                             .setMessage(BAD_CREDENTIALS)
                                             .setRejectedValue(
-                                                    jsonUtil.toJson(
+                                                    jsonUtil.toJsonGson(
                                                             "email:" + loginRequest.username(),
                                                             "password:hidden"))
                                             .setReason(BAD_CREDENTIALS)

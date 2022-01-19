@@ -1,7 +1,12 @@
 package com.aviobrief.springserver.utils.json;
 
 
+import javax.json.JsonObject;
+
 public interface JsonUtil {
 
-  String toJson(String... props);
+  String toJsonGson(String... props);
+
+  JsonObject toJsonJavaxJson(String... props);
+
 }
