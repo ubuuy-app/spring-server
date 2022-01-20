@@ -1,6 +1,6 @@
 package com.aviobrief.springserver.config.security.jwt;
 
-import com.aviobrief.springserver.config.security.spring_security_user_service.SpringSecurityUserDetailsService;
+import com.aviobrief.springserver.services.servicesImpl.UserDetailsSpringService;
 import com.aviobrief.springserver.utils.logger.ServerLogger;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ public class JwtTokenProvider {
     private final ServerLogger serverLogger;
     private final String jwtSecretKey;
     private final int jwtExpirationInMs;
-    private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
+    private final UserDetailsSpringService userDetailsSpringService;
 
 
     public JwtTokenProvider(
@@ -31,16 +31,16 @@ public class JwtTokenProvider {
                     String jwtSecretKey,
             @Value("${app.jwt-expiration-mills}")
                     int jwtExpirationInMs,
-            SpringSecurityUserDetailsService springSecurityUserDetailsService) {
+            UserDetailsSpringService userDetailsSpringService) {
         this.serverLogger = serverLogger;
         this.jwtSecretKey = jwtSecretKey;
         this.jwtExpirationInMs = jwtExpirationInMs;
-        this.springSecurityUserDetailsService = springSecurityUserDetailsService;
+        this.userDetailsSpringService = userDetailsSpringService;
     }
 
     public String generateToken(String email) {
 
-        UserDetails userDetails = springSecurityUserDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = userDetailsSpringService.loadUserByUsername(email);
 
         Instant now = Instant.now();
         Instant expiryDate = Instant.now().plusMillis(jwtExpirationInMs);

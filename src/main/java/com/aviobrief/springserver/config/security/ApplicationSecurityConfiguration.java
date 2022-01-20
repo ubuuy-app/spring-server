@@ -1,9 +1,10 @@
 package com.aviobrief.springserver.config.security;
 
 
-import com.aviobrief.springserver.config.security.csrf.DoubleCsrfFilter;
+import com.aviobrief.springserver.config.security.csrf.CsrfAuthenticationFilter;
+import com.aviobrief.springserver.config.security.jwt.JwtAuthenticationEntryPoint;
 import com.aviobrief.springserver.config.security.jwt.JwtAuthenticationFilter;
-import com.aviobrief.springserver.config.security.spring_security_user_service.SpringSecurityUserDetailsService;
+import com.aviobrief.springserver.services.servicesImpl.UserDetailsSpringService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,19 +32,19 @@ import java.util.List;
 )
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final DoubleCsrfFilter doubleCsrfFilter;
+    private final CsrfAuthenticationFilter csrfAuthenticationFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtUnauthorizedHandler;
-    private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
+    private final UserDetailsSpringService userDetailsSpringService;
     private final PasswordEncoder passwordEncoder;
 
-    public ApplicationSecurityConfiguration(DoubleCsrfFilter doubleCsrfFilter, JwtAuthenticationFilter jwtAuthenticationFilter,
-                                            SpringSecurityUserDetailsService springSecurityUserDetailsService,
+    public ApplicationSecurityConfiguration(CsrfAuthenticationFilter csrfAuthenticationFilter, JwtAuthenticationFilter jwtAuthenticationFilter,
+                                            UserDetailsSpringService userDetailsSpringService,
                                             PasswordEncoder passwordEncoder,
                                             JwtAuthenticationEntryPoint jwtUnauthorizedHandler) {
-        this.doubleCsrfFilter = doubleCsrfFilter;
+        this.csrfAuthenticationFilter = csrfAuthenticationFilter;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.springSecurityUserDetailsService = springSecurityUserDetailsService;
+        this.userDetailsSpringService = userDetailsSpringService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUnauthorizedHandler = jwtUnauthorizedHandler;
     }
@@ -58,7 +59,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
         /* Filters application */
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(doubleCsrfFilter, JwtAuthenticationFilter.class);
+        http.addFilterAfter(csrfAuthenticationFilter, JwtAuthenticationFilter.class);
 
         http
                 .exceptionHandling()
@@ -89,7 +90,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(springSecurityUserDetailsService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userDetailsSpringService).passwordEncoder(passwordEncoder);
     }
 
     /*

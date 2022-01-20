@@ -1,6 +1,5 @@
-package com.aviobrief.springserver.config.security;
+package com.aviobrief.springserver.config.security.jwt;
 
-import com.aviobrief.springserver.config.security.jwt.JwtTokenProvider;
 import com.aviobrief.springserver.utils.json.JsonUtil;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
 import com.aviobrief.springserver.utils.response_builder.responses.ErrorResponseObject;
@@ -21,6 +20,7 @@ import java.util.List;
 
 import static com.aviobrief.springserver.config.constants.LoggerMessages.JWT_UNAUTHORIZED_HANDLER_LOG_MESSAGE;
 import static com.aviobrief.springserver.config.constants.ResponseMessages.UNAUTHORIZED_HANDLER_RES_MESSAGE;
+import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.Type;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -63,6 +63,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         ErrorResponseObject errorResponseObject =
                 responseBuilder
                         .buildErrorObject()
+                        .setType(Type.AUTH)
                         .setStatus(HttpStatus.UNAUTHORIZED)
                         .setMessage(UNAUTHORIZED_HANDLER_RES_MESSAGE)
                         .setErrors(List.of(singleError))

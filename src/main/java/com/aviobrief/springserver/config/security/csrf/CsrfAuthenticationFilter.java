@@ -25,16 +25,17 @@ import java.util.Optional;
 import static com.aviobrief.springserver.config.constants.ApplicationConstants.CSRF_DISABLED_PATH;
 import static com.aviobrief.springserver.config.constants.ApplicationConstants.CSRF_TOKEN_SAFE_METHODS;
 import static com.aviobrief.springserver.config.constants.ResponseMessages.UNAUTHORIZED_HANDLER_RES_MESSAGE;
+import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.Type;
 
 @Component
-public class DoubleCsrfFilter extends OncePerRequestFilter {
+public class CsrfAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger("DoubleCsrfFilter");
+    private static final Logger logger = LoggerFactory.getLogger("CsrfAuthenticationFilter");
     private final Gson gson;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
-    public DoubleCsrfFilter(Gson gson, ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
+    public CsrfAuthenticationFilter(Gson gson, ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
         this.gson = gson;
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
@@ -66,7 +67,7 @@ public class DoubleCsrfFilter extends OncePerRequestFilter {
             }
 
             if (csrfCookieToken == null || !csrfCookieToken.equals(csrfHeaderToken)) {
-                logger.error("error");
+                logger.error("Csrf double authentication fail!");
                 sendCsrfErrorResponse(httpServletRequest,httpServletResponse, csrfCookieToken, csrfHeaderToken);
                 return;
             }
@@ -102,11 +103,13 @@ public class DoubleCsrfFilter extends OncePerRequestFilter {
         ErrorResponseObject errorResponseObject =
                 responseBuilder
                         .buildErrorObject()
+                        .setType(Type.AUTH)
                         .setStatus(HttpStatus.UNAUTHORIZED)
                         .setMessage(UNAUTHORIZED_HANDLER_RES_MESSAGE)
                         .setErrors(List.of(singleError))
                         .setPath(requestPath);
 
+        /* Send error */
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpServletResponse.getWriter().println(gson.toJson(errorResponseObject));

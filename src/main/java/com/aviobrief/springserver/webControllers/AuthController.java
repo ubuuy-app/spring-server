@@ -3,7 +3,7 @@ package com.aviobrief.springserver.webControllers;
 
 import com.aviobrief.springserver.config.security.jwt.JwtTokenProvider;
 import com.aviobrief.springserver.models.requests.LoginRequest;
-import com.aviobrief.springserver.models.responses.UserViewModel;
+import com.aviobrief.springserver.services.AuthService;
 import com.aviobrief.springserver.services.UserService;
 import com.aviobrief.springserver.utils.json.JsonUtil;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
@@ -12,8 +12,6 @@ import com.aviobrief.springserver.utils.response_builder.responses.OkResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,7 @@ import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.
 @RestController
 public class AuthController {
 
-
+    private final AuthService authService;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
@@ -35,10 +33,11 @@ public class AuthController {
     private final JsonUtil jsonUtil;
 
 
-    public AuthController(UserService userService,
+    public AuthController(AuthService authService, UserService userService,
                           AuthenticationManager authenticationManager,
                           JwtTokenProvider tokenProvider,
                           ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
+        this.authService = authService;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
@@ -57,16 +56,10 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
         try {
-            UserViewModel userViewModel = userService.getByEmail(loginRequest.username());
 
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.username(),
-                            loginRequest.password()
-                    )
-            );
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authService.getUsernamePasswordAuthToken(loginRequest.username()));
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = tokenProvider.generateToken(loginRequest.username());
 
             return ResponseEntity.ok(new JwtResponse(jwt));

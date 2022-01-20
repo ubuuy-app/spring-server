@@ -1,7 +1,7 @@
 package com.aviobrief.springserver.config.security.filters.jwt;
 
 import com.aviobrief.springserver.config.security.jwt.JwtTokenProvider;
-import com.aviobrief.springserver.config.security.spring_security_user_service.SpringSecurityUserDetailsService;
+import com.aviobrief.springserver.services.servicesImpl.UserDetailsSpringService;
 import com.aviobrief.springserver.utils.logger.ServerLogger;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -35,7 +35,7 @@ class JwtTokenProviderTest {
     @Mock
     private ServerLogger serverLogger;
     @Mock
-    private SpringSecurityUserDetailsService securityUserDetailsService;
+    private UserDetailsSpringService securityUserDetailsService;
 
     @BeforeEach
     private void initJwtTokenProvider() {

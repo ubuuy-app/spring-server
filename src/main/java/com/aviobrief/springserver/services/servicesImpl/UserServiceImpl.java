@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.services.serviceImpl;
+package com.aviobrief.springserver.services.servicesImpl;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.models.responses.UserViewModel;
