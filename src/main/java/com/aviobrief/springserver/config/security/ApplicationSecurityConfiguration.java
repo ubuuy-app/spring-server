@@ -1,9 +1,8 @@
 package com.aviobrief.springserver.config.security;
 
 
-import com.aviobrief.springserver.config.security.filters.jwt.JwtAuthenticationEntryPoint;
-import com.aviobrief.springserver.config.security.filters.jwt.JwtAuthenticationFilter;
-import com.aviobrief.springserver.config.security.speing_security_user_service.SpringSecurityUserDetailsService;
+import com.aviobrief.springserver.config.security.jwt.JwtAuthenticationFilter;
+import com.aviobrief.springserver.config.security.spring_security_user_service.SpringSecurityUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,14 +31,14 @@ import java.util.List;
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final JwtAuthenticationEntryPoint jwtUnauthorizedHandler;
+    private final RESTAuthenticationEntryPoint jwtUnauthorizedHandler;
     private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     public ApplicationSecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
                                             SpringSecurityUserDetailsService springSecurityUserDetailsService,
                                             PasswordEncoder passwordEncoder,
-                                            JwtAuthenticationEntryPoint jwtUnauthorizedHandler) {
+                                            RESTAuthenticationEntryPoint jwtUnauthorizedHandler) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.springSecurityUserDetailsService = springSecurityUserDetailsService;
         this.passwordEncoder = passwordEncoder;
@@ -52,8 +51,12 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         http
                 .cors()
                 .and()
-                .csrf()
-                .disable()
+                .csrf().disable();
+
+        /* Filters application */
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtUnauthorizedHandler)
                 .and()
@@ -77,8 +80,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authenticated()
         ;
 
-        /* Filters application */
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Override

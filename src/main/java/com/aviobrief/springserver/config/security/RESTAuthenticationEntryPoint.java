@@ -1,5 +1,6 @@
-package com.aviobrief.springserver.config.security.filters.jwt;
+package com.aviobrief.springserver.config.security;
 
+import com.aviobrief.springserver.config.security.jwt.JwtTokenProvider;
 import com.aviobrief.springserver.utils.json.JsonUtil;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
 import com.aviobrief.springserver.utils.response_builder.responses.ErrorResponseObject;
@@ -22,15 +23,15 @@ import static com.aviobrief.springserver.config.constants.LoggerMessages.JWT_UNA
 import static com.aviobrief.springserver.config.constants.ResponseMessages.JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE;
 
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
+    private static final Logger logger = LoggerFactory.getLogger(RESTAuthenticationEntryPoint.class);
     private final JwtTokenProvider jwtTokenProvider;
     private final Gson gson;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
-    public JwtAuthenticationEntryPoint(JwtTokenProvider jwtTokenProvider, Gson gson, ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
+    public RESTAuthenticationEntryPoint(JwtTokenProvider jwtTokenProvider, Gson gson, ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.gson = gson;
         this.responseBuilder = responseBuilder;
@@ -67,6 +68,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                         .setErrors(List.of(singleError))
                         .setPath(requestPath);
 
+        /* Send error */
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpServletResponse.getWriter().println(gson.toJson(errorResponseObject));
@@ -74,11 +76,3 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     }
 }
 
-/* this implementation hides the setters, and they are just useful to read :) */
-//                        .buildSingleError(
-//                                "JWT",
-//                                JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE,
-//                                jwtTokenProvider.getJwtFromRequest(httpServletRequest),
-//                                authException.getMessage());
-
-//        return new SingleError().setTarget(target).setMessage(message).setRejectedValue(rejectedValue).setReason(reason);

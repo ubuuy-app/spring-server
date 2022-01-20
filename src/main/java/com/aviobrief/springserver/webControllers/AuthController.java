@@ -1,7 +1,7 @@
 package com.aviobrief.springserver.webControllers;
 
 
-import com.aviobrief.springserver.config.security.filters.jwt.JwtTokenProvider;
+import com.aviobrief.springserver.config.security.jwt.JwtTokenProvider;
 import com.aviobrief.springserver.models.requests.LoginRequest;
 import com.aviobrief.springserver.models.responses.UserViewModel;
 import com.aviobrief.springserver.services.UserService;
