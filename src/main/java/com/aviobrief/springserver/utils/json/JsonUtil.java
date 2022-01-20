@@ -3,8 +3,8 @@ package com.aviobrief.springserver.utils.json;
 
 public interface JsonUtil {
 
-  JsonString toJsonString(JsonPair... jsonPairs);
+  JsonString toJson(JsonPair... jsonPairs);
 
-  JsonPair fromStringPair(String key, String value);
+  JsonPair pair(String key, String value);
 
 }

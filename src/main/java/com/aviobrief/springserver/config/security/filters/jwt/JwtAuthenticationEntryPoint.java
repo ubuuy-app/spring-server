@@ -54,8 +54,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                         .setTarget("jwt")
                         .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
                         .setRejectedValue(jwtTokenProvider.getJwtFromRequest(httpServletRequest) == null
-                                ? jsonUtil.toJsonString(jsonUtil.fromStringPair("jwt", "(empty string)"))
-                                : jsonUtil.toJsonString(jsonUtil.fromStringPair("jwt", jwtTokenProvider.getJwtFromRequest(httpServletRequest))))
+                                ? jsonUtil.toJson(jsonUtil.pair("jwt", "(empty string)"))
+                                : jsonUtil.toJson(jsonUtil.pair("jwt", jwtTokenProvider.getJwtFromRequest(httpServletRequest))))
                         .setReason(authException.getMessage());
 
 
