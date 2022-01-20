@@ -1,6 +1,7 @@
 package com.aviobrief.springserver.config.security;
 
 
+import com.aviobrief.springserver.config.security.csrf.DoubleCsrfFilter;
 import com.aviobrief.springserver.config.security.jwt.JwtAuthenticationFilter;
 import com.aviobrief.springserver.config.security.spring_security_user_service.SpringSecurityUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -30,15 +31,17 @@ import java.util.List;
 )
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private final DoubleCsrfFilter doubleCsrfFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final RESTAuthenticationEntryPoint jwtUnauthorizedHandler;
     private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    public ApplicationSecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
+    public ApplicationSecurityConfiguration(DoubleCsrfFilter doubleCsrfFilter, JwtAuthenticationFilter jwtAuthenticationFilter,
                                             SpringSecurityUserDetailsService springSecurityUserDetailsService,
                                             PasswordEncoder passwordEncoder,
                                             RESTAuthenticationEntryPoint jwtUnauthorizedHandler) {
+        this.doubleCsrfFilter = doubleCsrfFilter;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.springSecurityUserDetailsService = springSecurityUserDetailsService;
         this.passwordEncoder = passwordEncoder;
@@ -54,7 +57,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .csrf().disable();
 
         /* Filters application */
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(doubleCsrfFilter, CsrfFilter.class);
+//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http
                 .exceptionHandling()

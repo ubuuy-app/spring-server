@@ -3,6 +3,7 @@ package com.aviobrief.springserver.config.security.csrf;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -14,11 +15,19 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static com.aviobrief.springserver.config.constants.ApplicationConstants.CSRF_DISABLED_PATH;
 import static com.aviobrief.springserver.config.constants.ApplicationConstants.CSRF_TOKEN_SAFE_METHODS;
 
-public class CsrfFilter extends OncePerRequestFilter {
+@Component
+public class DoubleCsrfFilter extends OncePerRequestFilter {
 
     private final AccessDeniedHandler accessDeniedHandler = new AccessDeniedHandlerImpl();
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest httpServletRequest) throws ServletException {
+        String path = httpServletRequest.getRequestURI();
+        return CSRF_DISABLED_PATH.equals(path);
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest,

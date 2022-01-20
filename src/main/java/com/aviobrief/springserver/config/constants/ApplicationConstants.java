@@ -10,6 +10,7 @@ public record ApplicationConstants() {
 
 
  /* auth */
+ public static final String CSRF_DISABLED_PATH = "/api/auth";
  public static final Set<String> CSRF_TOKEN_SAFE_METHODS = new HashSet<>(Arrays.asList("GET", "HEAD", "TRACE", "OPTIONS"));
  public static final String HTTP_REQ_AUTH_HEADER = "Authorization";
  public static final String HTTP_REQ_AUTH_TOKEN_PREFIX = "Bearer ";
