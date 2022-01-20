@@ -20,18 +20,18 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.aviobrief.springserver.config.constants.LoggerMessages.JWT_UNAUTHORIZED_HANDLER_LOG_MESSAGE;
-import static com.aviobrief.springserver.config.constants.ResponseMessages.JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE;
+import static com.aviobrief.springserver.config.constants.ResponseMessages.UNAUTHORIZED_HANDLER_RES_MESSAGE;
 
 @Component
-public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private static final Logger logger = LoggerFactory.getLogger(RESTAuthenticationEntryPoint.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
     private final JwtTokenProvider jwtTokenProvider;
     private final Gson gson;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
-    public RESTAuthenticationEntryPoint(JwtTokenProvider jwtTokenProvider, Gson gson, ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
+    public JwtAuthenticationEntryPoint(JwtTokenProvider jwtTokenProvider, Gson gson, ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.gson = gson;
         this.responseBuilder = responseBuilder;
@@ -53,7 +53,7 @@ public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 responseBuilder
                         .buildSingleError()
                         .setTarget("jwt")
-                        .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
+                        .setMessage(UNAUTHORIZED_HANDLER_RES_MESSAGE)
                         .setRejectedValue(jwtTokenProvider.getJwtFromRequest(httpServletRequest) == null
                                 ? jsonUtil.toJson(jsonUtil.pair("jwt", "(empty string)"))
                                 : jsonUtil.toJson(jsonUtil.pair("jwt", jwtTokenProvider.getJwtFromRequest(httpServletRequest))))
@@ -64,7 +64,7 @@ public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 responseBuilder
                         .buildErrorObject()
                         .setStatus(HttpStatus.UNAUTHORIZED)
-                        .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
+                        .setMessage(UNAUTHORIZED_HANDLER_RES_MESSAGE)
                         .setErrors(List.of(singleError))
                         .setPath(requestPath);
 

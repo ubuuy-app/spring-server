@@ -15,7 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,14 +33,14 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
     private final DoubleCsrfFilter doubleCsrfFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final RESTAuthenticationEntryPoint jwtUnauthorizedHandler;
+    private final JwtAuthenticationEntryPoint jwtUnauthorizedHandler;
     private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     public ApplicationSecurityConfiguration(DoubleCsrfFilter doubleCsrfFilter, JwtAuthenticationFilter jwtAuthenticationFilter,
                                             SpringSecurityUserDetailsService springSecurityUserDetailsService,
                                             PasswordEncoder passwordEncoder,
-                                            RESTAuthenticationEntryPoint jwtUnauthorizedHandler) {
+                                            JwtAuthenticationEntryPoint jwtUnauthorizedHandler) {
         this.doubleCsrfFilter = doubleCsrfFilter;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.springSecurityUserDetailsService = springSecurityUserDetailsService;
@@ -57,8 +57,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .csrf().disable();
 
         /* Filters application */
-        http.addFilterBefore(doubleCsrfFilter, CsrfFilter.class);
-//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(doubleCsrfFilter, JwtAuthenticationFilter.class);
 
         http
                 .exceptionHandling()
