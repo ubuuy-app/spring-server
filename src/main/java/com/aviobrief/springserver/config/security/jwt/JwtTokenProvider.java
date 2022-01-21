@@ -25,13 +25,12 @@ public class JwtTokenProvider {
     private final UserDetailsSpringService userDetailsSpringService;
 
 
-    public JwtTokenProvider(
-            ServerLogger serverLogger,
-            @Value("${app.jwt-secret}")
-                    String jwtSecretKey,
-            @Value("${app.jwt-expiration-mills}")
-                    int jwtExpirationInMs,
-            UserDetailsSpringService userDetailsSpringService) {
+    public JwtTokenProvider(ServerLogger serverLogger,
+                            @Value("${app.jwt-secret}")
+                                    String jwtSecretKey,
+                            @Value("${app.jwt-expiration-mills}")
+                                    int jwtExpirationInMs,
+                            UserDetailsSpringService userDetailsSpringService) {
         this.serverLogger = serverLogger;
         this.jwtSecretKey = jwtSecretKey;
         this.jwtExpirationInMs = jwtExpirationInMs;

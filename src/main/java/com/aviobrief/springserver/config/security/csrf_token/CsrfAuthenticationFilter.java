@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.config.security.csrf;
+package com.aviobrief.springserver.config.security.csrf_token;
 
 import com.aviobrief.springserver.utils.json.JsonUtil;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
@@ -53,13 +53,13 @@ public class CsrfAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         if (csrfTokenIsRequired(httpServletRequest)) {
-            String csrfHeaderToken = httpServletRequest.getHeader("X-XSRF-TOKEN");
+            String csrfHeaderToken = httpServletRequest.getHeader("X-CSRF-TOKEN");
 
             String csrfCookieToken = null;
             Cookie[] cookies = httpServletRequest.getCookies();
             if (cookies != null) {
                 Optional<Cookie> csrfCookie = Arrays.stream(cookies)
-                        .filter(cookie -> cookie.getName().equals("XSRF-TOKEN"))
+                        .filter(cookie -> cookie.getName().equals("CSRF-TOKEN"))
                         .findFirst();
                 if (csrfCookie.isPresent()) {
                     csrfCookieToken = csrfCookie.get().getValue();
