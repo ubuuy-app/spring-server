@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.webControllers;
+package com.aviobrief.springserver.web;
 
 import com.aviobrief.springserver.models.responses.UserViewModel;
 import com.aviobrief.springserver.services.UserService;

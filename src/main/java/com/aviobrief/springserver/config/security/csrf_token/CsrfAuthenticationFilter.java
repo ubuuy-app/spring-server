@@ -44,7 +44,7 @@ public class CsrfAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest httpServletRequest) throws ServletException {
         String path = httpServletRequest.getRequestURI();
-        return CSRF_DISABLED_PATH.equals(path);
+        return CSRF_DISABLED_PATH.contains(path);
     }
 
     @Override

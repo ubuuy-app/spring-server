@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.webControllers;
+package com.aviobrief.springserver.web;
 
 
 import com.aviobrief.springserver.config.security.jwt.JwtTokenProvider;
@@ -32,8 +32,6 @@ import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
@@ -44,19 +42,11 @@ public class AuthController {
                           JwtTokenProvider tokenProvider,
                           ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
         this.authService = authService;
-        this.userService = userService;
-        this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
     }
 
-
-//    @GetMapping(path = "/basic-auth", produces = "application/json")
-//    public ResponseEntity<ApiOkTrueOrFalse> authenticate() {
-//        //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
-//        return ResponseEntity.ok().body(new ApiOkTrueOrFalse(true));
-//    }
 
     @PostMapping(path = "/api/auth")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest,
@@ -121,6 +111,4 @@ public class AuthController {
         //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
         return ResponseEntity.ok().body(responseBuilder.ok(true));
     }
-
-
 }
