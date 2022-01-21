@@ -11,7 +11,7 @@ import static com.aviobrief.springserver.utils.json.JsonString.JSON_STRING;
 public class JsonUtilImpl implements JsonUtil {
 
     @Override
-    public JsonString toJsonString(JsonPair... jsonPairs) {
+    public JsonString toJson(JsonPair... jsonPairs) {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode objectNode = mapper.createObjectNode();
@@ -29,7 +29,7 @@ public class JsonUtilImpl implements JsonUtil {
     }
 
     @Override
-    public JsonPair fromStringPair(String key, String value){
+    public JsonPair pair(String key, String value){
         JsonPair jsonPair = new JsonPair();
         jsonPair.setKey(key);
         jsonPair.setValue(value);

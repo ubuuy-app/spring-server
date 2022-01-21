@@ -1,75 +1,81 @@
-package com.aviobrief.springserver.webControllers;
+package com.aviobrief.springserver.web;
 
 
-import com.aviobrief.springserver.config.security.filters.jwt.JwtTokenProvider;
+import com.aviobrief.springserver.config.security.jwt.JwtTokenProvider;
 import com.aviobrief.springserver.models.requests.LoginRequest;
-import com.aviobrief.springserver.models.responses.UserViewModel;
+import com.aviobrief.springserver.services.AuthService;
 import com.aviobrief.springserver.services.UserService;
 import com.aviobrief.springserver.utils.json.JsonUtil;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
 import com.aviobrief.springserver.utils.response_builder.responses.JwtResponse;
 import com.aviobrief.springserver.utils.response_builder.responses.OkResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.UUID;
 
 import static com.aviobrief.springserver.config.constants.ResponseMessages.BAD_CREDENTIALS;
 import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.Type;
 
-@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 public class AuthController {
 
-
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
     private final JwtTokenProvider tokenProvider;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
 
-    public AuthController(UserService userService,
+    public AuthController(AuthService authService, UserService userService,
                           AuthenticationManager authenticationManager,
                           JwtTokenProvider tokenProvider,
                           ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
-        this.userService = userService;
-        this.authenticationManager = authenticationManager;
+        this.authService = authService;
         this.tokenProvider = tokenProvider;
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
     }
 
 
-//    @GetMapping(path = "/basic-auth", produces = "application/json")
-//    public ResponseEntity<ApiOkTrueOrFalse> authenticate() {
-//        //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
-//        return ResponseEntity.ok().body(new ApiOkTrueOrFalse(true));
-//    }
-
     @PostMapping(path = "/api/auth")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest,
+                                              HttpServletResponse httpServletResponse) {
+
 
         try {
-            UserViewModel userViewModel = userService.getByEmail(loginRequest.username());
 
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.username(),
-                            loginRequest.password()
-                    )
-            );
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authService.getUsernamePasswordAuthToken(loginRequest.username()));
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = tokenProvider.generateToken(loginRequest.username());
 
-            return ResponseEntity.ok(new JwtResponse(jwt));
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            String csrfToken = UUID.randomUUID().toString();
+            responseHeaders.set("X-CSRF-TOKEN", csrfToken);
+
+            Cookie cookie = new Cookie("CSRF-TOKEN", csrfToken);
+            cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
+            cookie.setSecure(false);//TODO - TO BE TRUE in production
+            cookie.setHttpOnly(true);
+
+            cookie.setPath("/");
+            httpServletResponse.addCookie(cookie);
+
+            return ResponseEntity.ok()
+                    .headers(responseHeaders)
+                    .body(new JwtResponse(jwt));
 
         } catch (UsernameNotFoundException e) {
             return ResponseEntity
@@ -84,9 +90,9 @@ public class AuthController {
                                             .buildSingleError()
                                             .setTarget("credentials")
                                             .setMessage(BAD_CREDENTIALS)
-                                            .setRejectedValue(jsonUtil.toJsonString(
-                                                    jsonUtil.fromStringPair("email", loginRequest.username()),
-                                                    jsonUtil.fromStringPair("password", "hidden")
+                                            .setRejectedValue(jsonUtil.toJson(
+                                                    jsonUtil.pair("email", loginRequest.username()),
+                                                    jsonUtil.pair("password", "hidden")
                                             ))
                                             .setReason(BAD_CREDENTIALS)
                             )));
@@ -105,6 +111,4 @@ public class AuthController {
         //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
         return ResponseEntity.ok().body(responseBuilder.ok(true));
     }
-
-
 }

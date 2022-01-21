@@ -51,7 +51,7 @@ class ResponseBuilderTest {
                 .buildSingleError()
                 .setTarget("test_target")
                 .setMessage("test_message")
-                .setRejectedValue(jsonUtil.toJsonString(jsonUtil.fromStringPair("test_key", "test_value")))
+                .setRejectedValue(jsonUtil.toJson(jsonUtil.pair("test_key", "test_value")))
                 .setReason("test_reason");
         assertThat(singleError).hasFieldOrPropertyWithValue("target", "test_target");
         assertThat(singleError).hasFieldOrPropertyWithValue("message", "test_message");

@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.config.security.filters.jwt;
+package com.aviobrief.springserver.config.security.jwt;
 
 import com.aviobrief.springserver.utils.json.JsonUtil;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
@@ -19,7 +19,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.aviobrief.springserver.config.constants.LoggerMessages.JWT_UNAUTHORIZED_HANDLER_LOG_MESSAGE;
-import static com.aviobrief.springserver.config.constants.ResponseMessages.JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE;
+import static com.aviobrief.springserver.config.constants.ResponseMessages.UNAUTHORIZED_HANDLER_RES_MESSAGE;
+import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.Type;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -52,21 +53,23 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 responseBuilder
                         .buildSingleError()
                         .setTarget("jwt")
-                        .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
+                        .setMessage(UNAUTHORIZED_HANDLER_RES_MESSAGE)
                         .setRejectedValue(jwtTokenProvider.getJwtFromRequest(httpServletRequest) == null
-                                ? jsonUtil.toJsonString(jsonUtil.fromStringPair("jwt", "(empty string)"))
-                                : jsonUtil.toJsonString(jsonUtil.fromStringPair("jwt", jwtTokenProvider.getJwtFromRequest(httpServletRequest))))
+                                ? jsonUtil.toJson(jsonUtil.pair("jwt", "(empty string)"))
+                                : jsonUtil.toJson(jsonUtil.pair("jwt", jwtTokenProvider.getJwtFromRequest(httpServletRequest))))
                         .setReason(authException.getMessage());
 
 
         ErrorResponseObject errorResponseObject =
                 responseBuilder
                         .buildErrorObject()
+                        .setType(Type.AUTH)
                         .setStatus(HttpStatus.UNAUTHORIZED)
-                        .setMessage(JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE)
+                        .setMessage(UNAUTHORIZED_HANDLER_RES_MESSAGE)
                         .setErrors(List.of(singleError))
                         .setPath(requestPath);
 
+        /* Send error */
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpServletResponse.getWriter().println(gson.toJson(errorResponseObject));
@@ -74,11 +77,3 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     }
 }
 
-/* this implementation hides the setters, and they are just useful to read :) */
-//                        .buildSingleError(
-//                                "JWT",
-//                                JWT_UNAUTHORIZED_HANDLER_RES_MESSAGE,
-//                                jwtTokenProvider.getJwtFromRequest(httpServletRequest),
-//                                authException.getMessage());
-
-//        return new SingleError().setTarget(target).setMessage(message).setRejectedValue(rejectedValue).setReason(reason);

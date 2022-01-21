@@ -1,6 +1,6 @@
-package com.aviobrief.springserver.config.security.filters.jwt;
+package com.aviobrief.springserver.config.security.jwt;
 
-import com.aviobrief.springserver.config.security.speing_security_user_service.SpringSecurityUserDetailsService;
+import com.aviobrief.springserver.services.servicesImpl.UserDetailsSpringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,12 +25,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtTokenProvider tokenProvider;
-    private final SpringSecurityUserDetailsService springSecurityUserDetailsService;
+    private final UserDetailsSpringService userDetailsSpringService;
 
     public JwtAuthenticationFilter(JwtTokenProvider tokenProvider,
-                                   SpringSecurityUserDetailsService springSecurityUserDetailsService) {
+                                   UserDetailsSpringService userDetailsSpringService) {
         this.tokenProvider = tokenProvider;
-        this.springSecurityUserDetailsService = springSecurityUserDetailsService;
+        this.userDetailsSpringService = userDetailsSpringService;
     }
 
     @Override
@@ -48,16 +48,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String userEmail = tokenProvider.getUserEmailFromJWT(jwt);
 
                 /* Load Spring user details */
-                UserDetails userDetails = springSecurityUserDetailsService.loadUserByUsername(userEmail);
+                UserDetails userDetails = userDetailsSpringService.loadUserByUsername(userEmail);
 
-                /* The next two steps do the magic of signing in into Spring Security, when the token is valid */
+                /* The next two steps do the magic of signing in into Spring Security */
                 /* (1) generate internal username and password auth token */
                 UsernamePasswordAuthenticationToken usernamePasswordAuthToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 usernamePasswordAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
 
-                /* (2) manually authenticate (set the authentication token in Security Context) */
+                /* manually authenticate (set the authentication token in Security Context) */
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthToken);
 
             } else {

@@ -1,4 +1,4 @@
-package com.aviobrief.springserver.config.security.speing_security_user_service;
+package com.aviobrief.springserver.services.servicesImpl;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.repositories.UserRepository;
@@ -7,19 +7,19 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.aviobrief.springserver.config.constants.ExceptionMessages.USER_NOT_FOUND_IN_DATABASE_BY_EMAIL;
 
-@Component
-public class SpringSecurityUserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+@Service
+public class UserDetailsSpringService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     private final UserRepository userRepo;
 
-    public SpringSecurityUserDetailsService(UserRepository userRepo) {
+    public UserDetailsSpringService(UserRepository userRepo) {
         this.userRepo = userRepo;
     }
 
