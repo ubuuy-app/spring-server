@@ -67,7 +67,7 @@ public class AuthController {
 
             Cookie cookie = new Cookie("CSRF-TOKEN", csrfToken);
             cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
-            cookie.setSecure(false);//TODO - TO BE TRUE in production
+            cookie.setSecure(true);//TODO - TO BE TRUE in production
             cookie.setHttpOnly(true);
 
             cookie.setPath("/");
