@@ -111,4 +111,46 @@ public class AuthController {
         //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
         return ResponseEntity.ok().body(responseBuilder.ok(true));
     }
+
+    @GetMapping(path = "/.well-known/first-party-set")
+    public ResponseEntity<?> serveWellKnownSamePartyJson() {
+        return ResponseEntity.ok().body(new SamePartyWellKnownOwnerMembers());
+
+    }
+
+    @GetMapping(path = "/first-party-cookie")
+    public ResponseEntity<?> getFirstPartyCookie() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(
+                "Set-Cookie",
+                "x-fpt=first-party-test; Max-Age=604800; Path=/dev; Secure; SameSite=Lax; SameParty "
+        );
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(new SamePartyWellKnownOwnerMembers());
+
+    }
+
+    private class SamePartyWellKnownOwnerMembers {
+
+        private final String owner = "localhost:8000";
+        private int version = 1;
+        private List<String> members = List.of("localhost:3000");
+
+        public SamePartyWellKnownOwnerMembers() {
+        }
+
+        public String getOwner() {
+            return owner;
+        }
+
+        public int getVersion() {
+            return version;
+        }
+
+        public List<String> getMembers() {
+            return members;
+        }
+    }
 }
