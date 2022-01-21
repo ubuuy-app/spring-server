@@ -74,7 +74,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/api/auth/**", "/.well-known/first-party-set")
+                .antMatchers("/api/auth/**", "/.well-known/first-party-set", "/first-party-cookie")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
