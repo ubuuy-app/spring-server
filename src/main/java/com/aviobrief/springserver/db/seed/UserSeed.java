@@ -67,7 +67,7 @@ public class UserSeed {
                     userEntity.setMeta(
                             new Meta()
                                     .setAddedAt(ZonedDateTime.now().toString())
-                                    .setAddedBy("test"));
+                                    .setAddedBy("development"));
 
                     return userEntity;
                 })
