@@ -11,7 +11,7 @@ public class ApplicationCorsConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 .addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "https://ubuuy-53992.web.app/", "https://ubuuy-53992.firebaseapp.com/")
+                .allowedOrigins("http://localhost:3000", "https://ubuuy-53992.web.app", "https://ubuuy-53992.firebaseapp.com")
                 .allowCredentials(true)
                 .allowedHeaders("Authorization", "Cache-Control", "Content-Type","X-CSRF-TOKEN")
                 .exposedHeaders("X-CSRF-TOKEN")
