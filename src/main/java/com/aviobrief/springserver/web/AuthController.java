@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.UUID;
@@ -57,24 +56,30 @@ public class AuthController {
 
             SecurityContextHolder.getContext()
                     .setAuthentication(authService.getUsernamePasswordAuthToken(loginRequest.username()));
-
             String jwt = tokenProvider.generateToken(loginRequest.username());
 
-
-            HttpHeaders responseHeaders = new HttpHeaders();
             String csrfToken = UUID.randomUUID().toString();
-            responseHeaders.set("X-CSRF-TOKEN", csrfToken);
-
-            Cookie cookie = new Cookie("CSRF-TOKEN", csrfToken);
-            cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
-            cookie.setSecure(true);//TODO - TO BE TRUE in production
-            cookie.setHttpOnly(true);
-
-            cookie.setPath("/");
-            httpServletResponse.addCookie(cookie);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(
+                    "Set-Cookie",
+                    "X-CSRF-TOKEN=" + csrfToken + "; Max-Age=604800; Path=/; Secure; SameSite=Lax; SameParty; HttpOnly"
+            );
+//
+//
+//            HttpHeaders responseHeaders = new HttpHeaders();
+//            responseHeaders.set("X-CSRF-TOKEN", csrfToken);
+//
+//            Cookie cookie = new Cookie("CSRF-TOKEN", csrfToken);
+//            cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
+//            cookie.setSecure(true);//TODO - TO BE TRUE in production
+//            cookie.setHttpOnly(true);
+//
+//
+//            cookie.setPath("/");
+//            httpServletResponse.addCookie(cookie);
 
             return ResponseEntity.ok()
-                    .headers(responseHeaders)
+                    .headers(headers)
                     .body(new JwtResponse(jwt));
 
         } catch (UsernameNotFoundException e) {
