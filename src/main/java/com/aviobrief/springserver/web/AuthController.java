@@ -62,7 +62,7 @@ public class AuthController {
             HttpHeaders headers = new HttpHeaders();
             headers.add(
                     "Set-Cookie",
-                    "X-CSRF-TOKEN=" + csrfToken + "; Max-Age=604800; Path=/; Secure; SameSite=Lax; SameParty; HttpOnly"
+                    "X-CSRF-TOKEN=" + csrfToken + "; Max-Age=604800; Path=/; Secure; SameSite=None; SameParty; HttpOnly"
             );
 //
 //
