@@ -59,15 +59,13 @@ public class AuthController {
             String jwt = tokenProvider.generateToken(loginRequest.username());
 
             String csrfToken = UUID.randomUUID().toString();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add(
                     "Set-Cookie",
                     "CSRF-TOKEN=" + csrfToken + "; Max-Age=604800; Path=/; Secure; SameSite=None; SameParty; HttpOnly"
             );
-//
-//
-//            HttpHeaders responseHeaders = new HttpHeaders();
-//            responseHeaders.set("X-CSRF-TOKEN", csrfToken);
+
+            responseHeaders.set("X-CSRF-TOKEN", csrfToken);
 //
 //            Cookie cookie = new Cookie("CSRF-TOKEN", csrfToken);
 //            cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
@@ -79,7 +77,7 @@ public class AuthController {
 //            httpServletResponse.addCookie(cookie);
 
             return ResponseEntity.ok()
-                    .headers(headers)
+                    .headers(responseHeaders)
                     .body(new JwtResponse(jwt));
 
         } catch (UsernameNotFoundException e) {
