@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.UUID;
 
 import static com.aviobrief.springserver.config.constants.ResponseMessages.BAD_CREDENTIALS;
 import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.Type;
@@ -48,37 +47,23 @@ public class AuthController {
 
 
     @PostMapping(path = "/api/auth")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest,
-                                              HttpServletResponse httpServletResponse) {
-
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
         try {
+            /* AUTHENTICATE IN SPRING */
+            UsernamePasswordAuthenticationToken token = authService.getUsernamePasswordAuthToken(loginRequest.username());
+            SecurityContextHolder.getContext().setAuthentication(token);
 
-            SecurityContextHolder.getContext()
-                    .setAuthentication(authService.getUsernamePasswordAuthToken(loginRequest.username()));
+            /* GENERATE JWT RESPONSE */
             String jwt = tokenProvider.generateToken(loginRequest.username());
+            JwtResponse jwtResponse = new JwtResponse(jwt);
 
-            String csrfToken = UUID.randomUUID().toString();
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.add(
-                    "Set-Cookie",
-                    "CSRF-TOKEN=" + csrfToken + "; Max-Age=604800; Path=/; Secure; SameSite=None; SameParty; HttpOnly"
-            );
-
-            responseHeaders.set("X-CSRF-TOKEN", csrfToken);
-//
-//            Cookie cookie = new Cookie("CSRF-TOKEN", csrfToken);
-//            cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
-//            cookie.setSecure(true);//TODO - TO BE TRUE in production
-//            cookie.setHttpOnly(true);
-//
-//
-//            cookie.setPath("/");
-//            httpServletResponse.addCookie(cookie);
+            /* GENERATE DOUBLE SUBMIT COOKIE (WITH CSRF TOKEN) HEADER */
+            HttpHeaders responseHeaders = authService.generateDoubleSubmitCookieHeader();
 
             return ResponseEntity.ok()
                     .headers(responseHeaders)
-                    .body(new JwtResponse(jwt));
+                    .body(jwtResponse);
 
         } catch (UsernameNotFoundException e) {
             return ResponseEntity
