@@ -3,24 +3,40 @@ package com.aviobrief.springserver.services.servicesImpl;
 import com.aviobrief.springserver.models.auth.AuthMetadata;
 import com.aviobrief.springserver.repositories.AuthMetadataRepository;
 import com.aviobrief.springserver.services.AuthService;
+import com.google.common.base.Strings;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+import com.maxmind.geoip2.model.CityResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ua_parser.Client;
+import ua_parser.Parser;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.UUID;
+
+import static java.util.Objects.nonNull;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsSpringService userDetailsSpringService;
     private final AuthMetadataRepository authMetadataRepository;
+    private final Parser parser;
+    private final DatabaseReader databaseReader;
 
-    public AuthServiceImpl(UserDetailsSpringService userDetailsSpringService, AuthMetadataRepository authMetadataRepository) {
+
+    public AuthServiceImpl(UserDetailsSpringService userDetailsSpringService, AuthMetadataRepository authMetadataRepository, Parser parser, DatabaseReader databaseReader) {
         this.userDetailsSpringService = userDetailsSpringService;
         this.authMetadataRepository = authMetadataRepository;
+        this.parser = parser;
+        this.databaseReader = databaseReader;
     }
 
     @Override
@@ -47,13 +63,65 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void addLoginToUserHistory(String userEmail, HttpServletRequest request) {
-        String deviceDetails = "test details";
-        String location = "test location";
+    public void addLoginToUserHistory(String userEmail, HttpServletRequest request, String jwt) throws IOException, GeoIp2Exception {
+        String deviceDetails = getDeviceDetails(request.getHeader("user-agent"));
+        String location = getIpLocation(extractIp(request));
 
-        AuthMetadata authMetadata = new AuthMetadata();
-        authMetadata.addUserSession(ZonedDateTime.now());
+        AuthMetadata authMetadata =
+                new AuthMetadata()
+                        .addUserSession(ZonedDateTime.now())
+                        .setDeviceDetails(deviceDetails)
+                        .setLocation(location)
+                        .setJwt(jwt);
 
         authMetadataRepository.save(authMetadata);
+    }
+
+    private String getDeviceDetails(String userAgent) {
+        String deviceDetails = "UNKNOWN";
+
+        Client client = parser.parse(userAgent);
+        if (nonNull(client)) {
+            deviceDetails =
+                    client.userAgent.family
+                            + " " + client.userAgent.major + "."
+                            + client.userAgent.minor + " - "
+                            + client.os.family + " " + client.os.major
+                            + "." + client.os.minor;
+        }
+        return deviceDetails;
+    }
+
+    private String extractIp(HttpServletRequest request) {
+        String clientIp;
+        String clientXForwardedForIp = request.getHeader("x-forwarded-for");
+        if (nonNull(clientXForwardedForIp)) {
+            clientIp = parseXForwardedHeader(clientXForwardedForIp);
+        } else {
+            clientIp = request.getRemoteAddr();
+        }
+
+        return clientIp;
+    }
+
+    private String parseXForwardedHeader(String header) {
+        return header.split(" *, *")[0];
+    }
+
+    private String getIpLocation(String ip) throws IOException, GeoIp2Exception {
+
+        String location = "UNKNOWN";
+
+        InetAddress ipAddress = InetAddress.getByName(ip);
+
+        CityResponse cityResponse = databaseReader.city(ipAddress);
+        if (Objects.nonNull(cityResponse) &&
+                Objects.nonNull(cityResponse.getCity()) &&
+                !Strings.isNullOrEmpty(cityResponse.getCity().getName())) {
+
+            location = cityResponse.getCity().getName();
+        }
+
+        return location;
     }
 }

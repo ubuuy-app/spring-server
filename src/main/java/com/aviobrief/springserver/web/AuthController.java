@@ -63,7 +63,7 @@ public class AuthController {
             HttpHeaders responseHeaders = authService.generateDoubleSubmitCookieHeader();
 
             /* ADD LOGIN TO USER HISTORY */
-            authService.addLoginToUserHistory(loginRequest.username(), request);
+            authService.addLoginToUserHistory(loginRequest.username(), request, jwt);
 
             return ResponseEntity.ok()
                     .headers(responseHeaders)
