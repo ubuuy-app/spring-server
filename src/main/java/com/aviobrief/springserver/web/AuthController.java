@@ -90,6 +90,7 @@ public class AuthController {
                             )));
 
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .build();

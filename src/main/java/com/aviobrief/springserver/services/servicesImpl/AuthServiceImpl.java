@@ -1,6 +1,7 @@
 package com.aviobrief.springserver.services.servicesImpl;
 
 import com.aviobrief.springserver.models.auth.AuthMetadata;
+import com.aviobrief.springserver.models.auth.AuthSession;
 import com.aviobrief.springserver.repositories.AuthMetadataRepository;
 import com.aviobrief.springserver.services.AuthService;
 import com.google.common.base.Strings;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua_parser.Client;
 import ua_parser.Parser;
 
@@ -63,18 +65,30 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public void addLoginToUserHistory(String userEmail, HttpServletRequest request, String jwt) throws IOException, GeoIp2Exception {
         String deviceDetails = getDeviceDetails(request.getHeader("user-agent"));
         String location = getIpLocation(extractIp(request));
 
-        AuthMetadata authMetadata =
-                new AuthMetadata()
-                        .addUserSession(ZonedDateTime.now())
-                        .setDeviceDetails(deviceDetails)
-                        .setLocation(location)
-                        .setJwt(jwt);
+        AuthSession authSession = new AuthSession().setLogin(ZonedDateTime.now()).setJwt(jwt);
+        AuthMetadata existingAuthMetadata =
+                authMetadataRepository.findFirstByDeviceDetailsAndLocation(deviceDetails, location);
 
-        authMetadataRepository.save(authMetadata);
+        if (nonNull(existingAuthMetadata)) {
+            existingAuthMetadata.addAuthSession(authSession);
+            authSession.setAuthMetadata(existingAuthMetadata);
+
+            authMetadataRepository.saveAndFlush(existingAuthMetadata);
+        } else {
+            AuthMetadata authMetadata =
+                    new AuthMetadata()
+                            .addAuthSession(authSession)
+                            .setDeviceDetails(deviceDetails)
+                            .setLocation(location);
+            authSession.setAuthMetadata(authMetadata);
+
+            authMetadataRepository.saveAndFlush(authMetadata);
+        }
     }
 
     private String getDeviceDetails(String userAgent) {

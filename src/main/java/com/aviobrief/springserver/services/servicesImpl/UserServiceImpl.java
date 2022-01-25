@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity saveOne(UserEntity userEntity) {
         try {
-            return this.userRepo.save(userEntity);
+            return this.userRepo.saveAndFlush(userEntity);
         } catch (Exception e) {
             return null;
         }

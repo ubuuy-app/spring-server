@@ -2,19 +2,20 @@ package com.aviobrief.springserver.models.auth;
 
 import com.aviobrief.springserver.models.entities.BaseEntity;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "auth_sessions")
 @Access(AccessType.PROPERTY)
 public class AuthSession extends BaseEntity {
+
     private ZonedDateTime login;
     private ZonedDateTime logout;
     private long sessionDuration;
+    private String jwt;
+    private AuthMetadata authMetadata;
+
 
     public AuthSession() {
     }
@@ -36,9 +37,9 @@ public class AuthSession extends BaseEntity {
         return logout;
     }
 
-    public void setLogout(ZonedDateTime logout) {
+    public AuthSession setLogout(ZonedDateTime logout) {
         this.logout = logout;
-        this.sessionDuration = logout.toEpochSecond() - login.toEpochSecond();
+        return this;
     }
 
     public long getSessionDuration() {
@@ -47,6 +48,26 @@ public class AuthSession extends BaseEntity {
 
     public AuthSession setSessionDuration(long sessionDuration) {
         this.sessionDuration = sessionDuration;
+        return this;
+    }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public AuthSession setJwt(String jwt) {
+        this.jwt = jwt;
+        return this;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "auth_session_id")
+    public AuthMetadata getAuthMetadata() {
+        return authMetadata;
+    }
+
+    public AuthSession setAuthMetadata(AuthMetadata authMetadata) {
+        this.authMetadata = authMetadata;
         return this;
     }
 }

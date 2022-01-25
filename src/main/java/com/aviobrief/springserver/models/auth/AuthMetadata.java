@@ -3,7 +3,6 @@ package com.aviobrief.springserver.models.auth;
 import com.aviobrief.springserver.models.entities.BaseEntity;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,20 +14,23 @@ public class AuthMetadata extends BaseEntity {
     private List<AuthSession> authSessions = new ArrayList<>();
     private String deviceDetails;
     private String location;
-    private String jwt;
 
     public AuthMetadata() {
     }
 
-    public AuthMetadata addUserSession(ZonedDateTime login) {
-        authSessions.add(new AuthSession(login));
+    public AuthMetadata addAuthSession(AuthSession authSession) {
+        this.authSessions.add(authSession);
         return this;
     }
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
-    public List<AuthSession> getUserSessions() {
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "authMetadata", targetEntity = AuthSession.class)
+    public List<AuthSession> getAuthSessions() {
         return authSessions;
+    }
+
+    public AuthMetadata setAuthSessions(List<AuthSession> authSessions) {
+        this.authSessions = authSessions;
+        return this;
     }
 
     public AuthMetadata setUserSessions(List<AuthSession> authSessions) {
@@ -54,12 +56,5 @@ public class AuthMetadata extends BaseEntity {
         return this;
     }
 
-    public String getJwt() {
-        return jwt;
-    }
 
-    public AuthMetadata setJwt(String jwt) {
-        this.jwt = jwt;
-        return this;
-    }
 }
