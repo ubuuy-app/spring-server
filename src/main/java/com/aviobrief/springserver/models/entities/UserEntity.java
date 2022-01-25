@@ -1,6 +1,8 @@
 package com.aviobrief.springserver.models.entities;
 
 
+import com.aviobrief.springserver.models.auth.AuthMetadata;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ public class UserEntity extends BaseEntity {
     private String password;
     private List<RoleEntity> roles = new ArrayList<>();
     private Meta meta;
+    private List<AuthMetadata> authMetadata = new ArrayList<>();
 
 
     public UserEntity() {
@@ -85,5 +88,16 @@ public class UserEntity extends BaseEntity {
 
     public void setMeta(Meta meta) {
         this.meta = meta;
+    }
+
+    @OneToMany
+    @JoinColumn(name = "id")
+    public List<AuthMetadata> getAuthMetadata() {
+        return authMetadata;
+    }
+
+    public UserEntity setAuthMetadata(List<AuthMetadata> authMetadata) {
+        this.authMetadata = authMetadata;
+        return this;
     }
 }
