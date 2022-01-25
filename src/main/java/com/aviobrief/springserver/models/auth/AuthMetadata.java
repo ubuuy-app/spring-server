@@ -16,7 +16,6 @@ public class AuthMetadata extends BaseEntity {
     private String deviceDetails;
     private String location;
     private String jwt;
-    public  static AuthMetadata newAuthMetadata(){return new AuthMetadata();}
 
     public AuthMetadata() {
     }
@@ -26,7 +25,7 @@ public class AuthMetadata extends BaseEntity {
         return this;
     }
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="id")
     public List<AuthSession> getUserSessions() {
         return authSessions;

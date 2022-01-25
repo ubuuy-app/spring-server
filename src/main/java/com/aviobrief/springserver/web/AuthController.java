@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.aviobrief.springserver.config.constants.ResponseMessages.BAD_CREDENTIALS;
@@ -47,7 +48,7 @@ public class AuthController {
 
 
     @PostMapping(path = "/api/auth")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
 
         try {
             /* AUTHENTICATE IN SPRING */
@@ -60,6 +61,9 @@ public class AuthController {
 
             /* GENERATE DOUBLE SUBMIT COOKIE (WITH CSRF TOKEN) HEADER */
             HttpHeaders responseHeaders = authService.generateDoubleSubmitCookieHeader();
+
+            /* ADD LOGIN TO USER HISTORY */
+            authService.addLoginToUserHistory(loginRequest.username(), request);
 
             return ResponseEntity.ok()
                     .headers(responseHeaders)

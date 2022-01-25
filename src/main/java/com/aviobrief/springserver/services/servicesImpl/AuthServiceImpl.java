@@ -1,20 +1,26 @@
 package com.aviobrief.springserver.services.servicesImpl;
 
+import com.aviobrief.springserver.models.auth.AuthMetadata;
+import com.aviobrief.springserver.repositories.AuthMetadataRepository;
 import com.aviobrief.springserver.services.AuthService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsSpringService userDetailsSpringService;
+    private final AuthMetadataRepository authMetadataRepository;
 
-    public AuthServiceImpl(UserDetailsSpringService userDetailsSpringService) {
+    public AuthServiceImpl(UserDetailsSpringService userDetailsSpringService, AuthMetadataRepository authMetadataRepository) {
         this.userDetailsSpringService = userDetailsSpringService;
+        this.authMetadataRepository = authMetadataRepository;
     }
 
     @Override
@@ -38,5 +44,16 @@ public class AuthServiceImpl implements AuthService {
         responseHeaders.set("X-CSRF-TOKEN", csrfToken);
 
         return responseHeaders;
+    }
+
+    @Override
+    public void addLoginToUserHistory(String userEmail, HttpServletRequest request) {
+        String deviceDetails = "test details";
+        String location = "test location";
+
+        AuthMetadata authMetadata = new AuthMetadata();
+        authMetadata.addUserSession(ZonedDateTime.now());
+
+        authMetadataRepository.save(authMetadata);
     }
 }

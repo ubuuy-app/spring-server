@@ -88,6 +88,12 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <!-- User-Agent info parser -->
+        <dependency>
+            <groupId>com.github.ua-parser</groupId>
+            <artifactId>uap-java</artifactId>
+            <version>1.5.2</version>
+        </dependency>
 
         <!-- TESTS, MOCKS, IN MEMORY DATABASE  -->
         <dependency>
