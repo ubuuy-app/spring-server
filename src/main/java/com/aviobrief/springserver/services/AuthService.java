@@ -14,4 +14,6 @@ public interface AuthService {
     HttpHeaders generateDoubleSubmitCookieHeader();
 
     void addLoginToUserHistory(String userEmail, HttpServletRequest request, String jwt) throws IOException, GeoIp2Exception;
-}
+
+    void logoutUserFromDevice(HttpServletRequest request);
+  }

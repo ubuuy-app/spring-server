@@ -14,6 +14,7 @@ import java.util.List;
 public interface AuthMetadataRepository extends JpaRepository<AuthMetadata, Long> {
 
     AuthMetadata findFirstByDeviceDetailsAndLocation(String deviceDetails, String location);
+    AuthMetadata findFirstByDeviceDetails(String deviceDetails);
 
     @Modifying
     @Query("update AuthMetadata am set am.authSessions = :authSessions where am.id = :id")

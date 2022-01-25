@@ -4,6 +4,7 @@ import com.aviobrief.springserver.models.auth.AuthMetadata;
 import com.aviobrief.springserver.models.auth.AuthSession;
 import com.aviobrief.springserver.repositories.AuthMetadataRepository;
 import com.aviobrief.springserver.services.AuthService;
+import com.aviobrief.springserver.services.AuthSessionService;
 import com.google.common.base.Strings;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,13 +32,15 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsSpringService userDetailsSpringService;
     private final AuthMetadataRepository authMetadataRepository;
+    private final AuthSessionService authSessionService;
     private final Parser parser;
     private final DatabaseReader databaseReader;
 
 
-    public AuthServiceImpl(UserDetailsSpringService userDetailsSpringService, AuthMetadataRepository authMetadataRepository, Parser parser, DatabaseReader databaseReader) {
+    public AuthServiceImpl(UserDetailsSpringService userDetailsSpringService, AuthMetadataRepository authMetadataRepository, AuthSessionService authSessionService, Parser parser, DatabaseReader databaseReader) {
         this.userDetailsSpringService = userDetailsSpringService;
         this.authMetadataRepository = authMetadataRepository;
+        this.authSessionService = authSessionService;
         this.parser = parser;
         this.databaseReader = databaseReader;
     }
@@ -72,9 +76,19 @@ public class AuthServiceImpl implements AuthService {
 
         AuthSession authSession = new AuthSession().setLogin(ZonedDateTime.now()).setJwt(jwt);
         AuthMetadata existingAuthMetadata =
-                authMetadataRepository.findFirstByDeviceDetailsAndLocation(deviceDetails, location);
+                authMetadataRepository.findFirstByDeviceDetails(deviceDetails);
 
         if (nonNull(existingAuthMetadata)) {
+            /* logout previous active session for this auth metadata */
+            List<AuthSession> activeSessions =
+                    authSessionService.getAllActiveSessionsForAuthMetadata(existingAuthMetadata);
+            if (nonNull(activeSessions)) {
+                activeSessions.forEach(as -> {
+                    as.setLogout(ZonedDateTime.now());
+                    as.setSessionDuration(as.getLogout().toEpochSecond() - as.getLogin().toEpochSecond());
+                });
+            }
+
             existingAuthMetadata.addAuthSession(authSession);
             authSession.setAuthMetadata(existingAuthMetadata);
 
@@ -88,6 +102,23 @@ public class AuthServiceImpl implements AuthService {
             authSession.setAuthMetadata(authMetadata);
 
             authMetadataRepository.saveAndFlush(authMetadata);
+        }
+    }
+
+    @Override
+    public void logoutUserFromDevice(HttpServletRequest request) {
+        String deviceDetails = getDeviceDetails(request.getHeader("user-agent"));
+        AuthMetadata existingAuthMetadata =
+                authMetadataRepository.findFirstByDeviceDetails(deviceDetails);
+
+        /* logout previous active session for this auth metadata */
+        List<AuthSession> activeSessions =
+                authSessionService.getAllActiveSessionsForAuthMetadata(existingAuthMetadata);
+        if (nonNull(activeSessions)) {
+            activeSessions.forEach(as -> {
+                as.setLogout(ZonedDateTime.now());
+                as.setSessionDuration(as.getLogout().toEpochSecond() - as.getLogin().toEpochSecond());
+            });
         }
     }
 
