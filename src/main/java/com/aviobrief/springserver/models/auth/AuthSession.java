@@ -20,10 +20,7 @@ public class AuthSession extends BaseEntity {
     public AuthSession() {
     }
 
-    public AuthSession(ZonedDateTime login) {
-        this.login = login;
-    }
-
+    @Column(name = "login", unique = false, nullable = false)
     public ZonedDateTime getLogin() {
         return login;
     }
@@ -33,6 +30,7 @@ public class AuthSession extends BaseEntity {
         return this;
     }
 
+    @Column(name = "logout")
     public ZonedDateTime getLogout() {
         return logout;
     }
@@ -42,6 +40,7 @@ public class AuthSession extends BaseEntity {
         return this;
     }
 
+    @Column(name = "session_duration")
     public long getSessionDuration() {
         return sessionDuration;
     }
@@ -51,6 +50,7 @@ public class AuthSession extends BaseEntity {
         return this;
     }
 
+    @Column(name = "jwt", unique = false, nullable = false)
     public String getJwt() {
         return jwt;
     }
@@ -61,7 +61,6 @@ public class AuthSession extends BaseEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "auth_session_id")
     public AuthMetadata getAuthMetadata() {
         return authMetadata;
     }

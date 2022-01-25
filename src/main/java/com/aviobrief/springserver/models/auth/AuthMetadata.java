@@ -11,33 +11,14 @@ import java.util.List;
 @Access(AccessType.PROPERTY)
 public class AuthMetadata extends BaseEntity {
 
-    private List<AuthSession> authSessions = new ArrayList<>();
     private String deviceDetails;
     private String location;
+    private List<AuthSession> authSessions = new ArrayList<>();
 
     public AuthMetadata() {
     }
 
-    public AuthMetadata addAuthSession(AuthSession authSession) {
-        this.authSessions.add(authSession);
-        return this;
-    }
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "authMetadata", targetEntity = AuthSession.class)
-    public List<AuthSession> getAuthSessions() {
-        return authSessions;
-    }
-
-    public AuthMetadata setAuthSessions(List<AuthSession> authSessions) {
-        this.authSessions = authSessions;
-        return this;
-    }
-
-    public AuthMetadata setUserSessions(List<AuthSession> authSessions) {
-        this.authSessions = authSessions;
-        return this;
-    }
-
+    @Column(name = "device_details", unique = false, nullable = false)
     public String getDeviceDetails() {
         return deviceDetails;
     }
@@ -47,12 +28,30 @@ public class AuthMetadata extends BaseEntity {
         return this;
     }
 
+    @Column(name = "location", unique = false, nullable = false)
     public String getLocation() {
         return location;
     }
 
     public AuthMetadata setLocation(String location) {
         this.location = location;
+        return this;
+    }
+
+    @OneToMany(
+            mappedBy = "authMetadata", targetEntity = AuthSession.class,
+            cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    public List<AuthSession> getAuthSessions() {
+        return authSessions;
+    }
+
+    public AuthMetadata setAuthSessions(List<AuthSession> authSessions) {
+        this.authSessions = authSessions;
+        return this;
+    }
+
+    public AuthMetadata addAuthSession(AuthSession authSession) {
+        this.authSessions.add(authSession);
         return this;
     }
 
