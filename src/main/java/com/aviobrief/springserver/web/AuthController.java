@@ -97,14 +97,37 @@ public class AuthController {
     }
 
     @PostMapping(path = "/api/auth/logout", produces = "application/json")
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<?> logout(HttpServletRequest request) {
 
-        authService.logoutAllUserAuthMetadata();
-        HttpHeaders responseHeaders = authService.invalidateCsrfTokenCookie();
+        try{
+            authService.logoutAllUserAuthMetadata();
+            HttpHeaders responseHeaders = authService.invalidateCsrfTokenCookie();
+            SecurityContextHolder.getContext().setAuthentication(null);
 
-        return ResponseEntity.ok()
-//                .headers(responseHeaders)
-                .body(responseBuilder.ok(true));
+            return ResponseEntity.ok()
+                    .headers(responseHeaders)
+                    .body(responseBuilder.ok(true));
+
+        }catch (Exception ex){
+            return ResponseEntity
+                    .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
+                    .body(responseBuilder
+                            .buildErrorObject(true)
+                            .setType(Type.AUTH)
+                            .setStatus(HttpStatus.BAD_REQUEST)
+                            .setMessage("No active session found for provided jwt!")
+                            .setErrors(List.of(
+                                    responseBuilder
+                                            .buildSingleError()
+                                            .setTarget("credentials")
+                                            .setMessage(BAD_CREDENTIALS)
+                                            .setRejectedValue(jsonUtil.toJson(
+                                                    jsonUtil.pair("jwt",authService.getJwtFromRequest(request))
+                                            ))
+                                            .setReason(BAD_CREDENTIALS)
+                            )));
+
+        }
     }
 
     @GetMapping(path = "/.well-known/first-party-set")

@@ -208,7 +208,7 @@ public class AuthServiceImpl implements AuthService {
                             .setLogin(ZonedDateTime.now())
                             .setJwt(jwt);
 
-//            this.logoutUserFromAllSessions();
+            this.logoutAllUserAuthMetadata();
             currentlyAuthenticatedUser.getAuthMetadata().add(authMetadata);
             authMetadata.setUserEntity(currentlyAuthenticatedUser);
             this.userRepository.saveAndFlush(currentlyAuthenticatedUser);
