@@ -103,7 +103,7 @@ public class AuthController {
         HttpHeaders responseHeaders = authService.invalidateCsrfTokenCookie();
 
         return ResponseEntity.ok()
-                .headers(responseHeaders)
+//                .headers(responseHeaders)
                 .body(responseBuilder.ok(true));
     }
 

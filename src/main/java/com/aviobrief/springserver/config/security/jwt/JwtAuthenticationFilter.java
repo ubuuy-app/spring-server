@@ -47,6 +47,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 /* extract email from jwt */
                 String userEmail = authService.getUserEmailFromJWT(jwt);
 
+                /* check jwt does not belong to logged out AuthMetadata or is not missing */
+                if (authService.jwtIsLoggedOut(jwt, userEmail)) {
+                    throw new IllegalArgumentException();
+                }
+
                 /* Load Spring user details */
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 

@@ -14,6 +14,8 @@ public interface AuthService {
 
     boolean validateJWT(String jwt);
 
+    boolean jwtIsLoggedOut(String jwt, String userEmail);
+
     String getJwtFromRequest(HttpServletRequest request);
 
     UsernamePasswordAuthenticationToken getUsernamePasswordAuthToken(String userEmail);
@@ -26,4 +28,4 @@ public interface AuthService {
 
     void logoutAllUserAuthMetadata();
 
-  }
+}

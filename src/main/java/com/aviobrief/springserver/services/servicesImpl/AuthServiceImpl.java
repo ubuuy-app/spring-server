@@ -94,11 +94,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean validateJWT(String authToken) {
+    public boolean validateJWT(String jwt) {
         try {
             Jwts.parser()
                     .setSigningKey(convertToBites(jwtSecretKey))
-                    .parseClaimsJws(authToken);
+                    .parseClaimsJws(jwt);
 
             return true;
 
@@ -115,6 +115,29 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean jwtIsLoggedOut(String jwt, String userEmail) {
+        try {
+            /* search for active sessions */
+            List<AuthMetadata> activeSessions = authMetadataService.getAllActiveSessionsUser(userEmail);
+
+            if(nonNull(activeSessions)){
+                /* try to find one that matches the provided jwt */
+                AuthMetadata activeJwtAuthMetadata = activeSessions
+                        .stream()
+                        .filter(as -> as.getJwt().equals(jwt))
+                        .findFirst()
+                        .orElse(null);
+
+                return activeJwtAuthMetadata == null;
+            } else {
+                return true;
+            }
+        } catch (Exception e){
+            return true;
+        }
     }
 
     @Override
@@ -197,7 +220,6 @@ public class AuthServiceImpl implements AuthService {
 
         /* logout previous active sessions */
         List<AuthMetadata> activeSessions = authMetadataService.getAllActiveSessionsForCurrentUser();
-        activeSessions.forEach(System.out::println);
 
         activeSessions.forEach(as ->
                 as.setLogout(ZonedDateTime.now())

@@ -11,4 +11,6 @@ public interface AuthMetadataService {
     List<AuthMetadata> getAllActiveSessionsForCurrentUser();
 
     void saveAll(List<AuthMetadata> activeSessions);
+
+    List<AuthMetadata> getAllActiveSessionsUser(String userEmail);
 }
