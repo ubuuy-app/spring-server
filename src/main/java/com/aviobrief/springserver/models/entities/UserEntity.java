@@ -1,6 +1,8 @@
 package com.aviobrief.springserver.models.entities;
 
 
+import com.aviobrief.springserver.models.auth.AuthMetadata;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +18,22 @@ public class UserEntity extends BaseEntity {
     private String password;
     private List<RoleEntity> roles = new ArrayList<>();
     private Meta meta;
+    private List<AuthMetadata> authMetadata = new ArrayList<>();
 
 
     public UserEntity() {
     }
 
     /* For initial seed direct UserEntity creation */
-    public UserEntity(String email, String firstName, String lastName, String password ) {
+    public UserEntity(String email, String firstName, String lastName, String password) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
     }
 
-    @Column(name = "email", unique = true, nullable = true)//todo - email must not be empty, set like this for dev process
+    @Column(name = "email", unique = true, nullable = true)
+//todo - email must not be empty, set like this for dev process
     public String getEmail() {
         return email;
     }
@@ -78,12 +82,24 @@ public class UserEntity extends BaseEntity {
         this.roles = roles;
     }
 
-    @OneToOne(cascade = {CascadeType.ALL })
+    @OneToOne(cascade = {CascadeType.ALL})
     public Meta getMeta() {
         return meta;
     }
 
     public void setMeta(Meta meta) {
         this.meta = meta;
+    }
+
+    @OneToMany(
+            mappedBy = "userEntity", targetEntity = AuthMetadata.class,
+            cascade = CascadeType.ALL)
+    public List<AuthMetadata> getAuthMetadata() {
+        return authMetadata;
+    }
+
+    public UserEntity setAuthMetadata(List<AuthMetadata> authMetadata) {
+        this.authMetadata = authMetadata;
+        return this;
     }
 }

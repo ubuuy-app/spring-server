@@ -8,6 +8,10 @@ public class OkResponse {
     public OkResponse() {
     }
 
+    public boolean isOk() {
+        return ok;
+    }
+
     public OkResponse setOk(boolean ok) {
         this.ok = ok;
         return this;

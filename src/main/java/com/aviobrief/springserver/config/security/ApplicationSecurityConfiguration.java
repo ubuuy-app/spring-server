@@ -4,7 +4,7 @@ package com.aviobrief.springserver.config.security;
 import com.aviobrief.springserver.config.security.csrf_token.CsrfAuthenticationFilter;
 import com.aviobrief.springserver.config.security.jwt.JwtAuthenticationEntryPoint;
 import com.aviobrief.springserver.config.security.jwt.JwtAuthenticationFilter;
-import com.aviobrief.springserver.services.servicesImpl.UserDetailsSpringService;
+import com.aviobrief.springserver.services.servicesImpl.UserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,16 +30,16 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     private final CsrfAuthenticationFilter csrfAuthenticationFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtUnauthorizedHandler;
-    private final UserDetailsSpringService userDetailsSpringService;
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     public ApplicationSecurityConfiguration(CsrfAuthenticationFilter csrfAuthenticationFilter, JwtAuthenticationFilter jwtAuthenticationFilter,
-                                            UserDetailsSpringService userDetailsSpringService,
+                                            UserDetailsService userDetailsService,
                                             PasswordEncoder passwordEncoder,
                                             JwtAuthenticationEntryPoint jwtUnauthorizedHandler) {
         this.csrfAuthenticationFilter = csrfAuthenticationFilter;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.userDetailsSpringService = userDetailsSpringService;
+        this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUnauthorizedHandler = jwtUnauthorizedHandler;
     }
@@ -78,6 +78,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .permitAll()
                 .anyRequest()
                 .authenticated()
+                .and()
+                .logout().disable();
         ;
 
 
@@ -85,7 +87,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsSpringService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
 
