@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import ua_parser.Parser;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,11 @@ public class ApplicationBeanConfiguration {
 
     public ApplicationBeanConfiguration(HttpServletRequest httpServletRequest) {
         this.httpServletRequest = httpServletRequest;
+    }
+
+    @Bean
+    public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+        return new SecurityEvaluationContextExtension();
     }
 
     @Bean

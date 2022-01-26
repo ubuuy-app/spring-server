@@ -15,5 +15,5 @@ public interface AuthService {
 
     void addLoginToUserHistory(String userEmail, HttpServletRequest request, String jwt) throws IOException, GeoIp2Exception;
 
-    void logoutUserFromDevice(HttpServletRequest request);
+    void logoutUserFromAllSessions();
   }

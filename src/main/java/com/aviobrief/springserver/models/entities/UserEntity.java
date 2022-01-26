@@ -25,14 +25,15 @@ public class UserEntity extends BaseEntity {
     }
 
     /* For initial seed direct UserEntity creation */
-    public UserEntity(String email, String firstName, String lastName, String password ) {
+    public UserEntity(String email, String firstName, String lastName, String password) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
     }
 
-    @Column(name = "email", unique = true, nullable = true)//todo - email must not be empty, set like this for dev process
+    @Column(name = "email", unique = true, nullable = true)
+//todo - email must not be empty, set like this for dev process
     public String getEmail() {
         return email;
     }
@@ -81,7 +82,7 @@ public class UserEntity extends BaseEntity {
         this.roles = roles;
     }
 
-    @OneToOne(cascade = {CascadeType.ALL })
+    @OneToOne(cascade = {CascadeType.ALL})
     public Meta getMeta() {
         return meta;
     }
@@ -90,8 +91,9 @@ public class UserEntity extends BaseEntity {
         this.meta = meta;
     }
 
-    @OneToMany
-    @JoinColumn(name = "id")
+    @OneToMany(
+            mappedBy = "userEntity", targetEntity = AuthMetadata.class,
+            cascade = CascadeType.ALL)
     public List<AuthMetadata> getAuthMetadata() {
         return authMetadata;
     }

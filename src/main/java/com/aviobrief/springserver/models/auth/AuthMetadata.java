@@ -1,10 +1,10 @@
 package com.aviobrief.springserver.models.auth;
 
 import com.aviobrief.springserver.models.entities.BaseEntity;
+import com.aviobrief.springserver.models.entities.UserEntity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "auth_metadata")
@@ -13,7 +13,11 @@ public class AuthMetadata extends BaseEntity {
 
     private String deviceDetails;
     private String location;
-    private List<AuthSession> authSessions = new ArrayList<>();
+    private ZonedDateTime login;
+    private ZonedDateTime logout;
+    private long sessionDuration;
+    private String jwt;
+    private UserEntity userEntity;
 
     public AuthMetadata() {
     }
@@ -38,22 +42,53 @@ public class AuthMetadata extends BaseEntity {
         return this;
     }
 
-    @OneToMany(
-            mappedBy = "authMetadata", targetEntity = AuthSession.class,
-            cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    public List<AuthSession> getAuthSessions() {
-        return authSessions;
+    @Column(name = "login", nullable = false)
+    public ZonedDateTime getLogin() {
+        return login;
     }
 
-    public AuthMetadata setAuthSessions(List<AuthSession> authSessions) {
-        this.authSessions = authSessions;
+    public AuthMetadata setLogin(ZonedDateTime login) {
+        this.login = login;
         return this;
     }
 
-    public AuthMetadata addAuthSession(AuthSession authSession) {
-        this.authSessions.add(authSession);
+    @Column(name = "logout")
+    public ZonedDateTime getLogout() {
+        return logout;
+    }
+
+    public AuthMetadata setLogout(ZonedDateTime logout) {
+        this.logout = logout;
         return this;
     }
 
+    @Column(name = "session_duration")
+    public long getSessionDuration() {
+        return sessionDuration;
+    }
 
+    public AuthMetadata setSessionDuration(long sessionDuration) {
+        this.sessionDuration = sessionDuration;
+        return this;
+    }
+
+    @Column(name = "jwt")
+    public String getJwt() {
+        return jwt;
+    }
+
+    public AuthMetadata setJwt(String jwt) {
+        this.jwt = jwt;
+        return this;
+    }
+
+    @ManyToOne
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public AuthMetadata setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+        return this;
+    }
 }

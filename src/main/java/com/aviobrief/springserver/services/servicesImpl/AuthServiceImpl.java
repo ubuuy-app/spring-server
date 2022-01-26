@@ -1,17 +1,19 @@
 package com.aviobrief.springserver.services.servicesImpl;
 
 import com.aviobrief.springserver.models.auth.AuthMetadata;
-import com.aviobrief.springserver.models.auth.AuthSession;
-import com.aviobrief.springserver.repositories.AuthMetadataRepository;
+import com.aviobrief.springserver.models.entities.UserEntity;
+import com.aviobrief.springserver.repositories.UserRepository;
+import com.aviobrief.springserver.services.AuthMetadataService;
 import com.aviobrief.springserver.services.AuthService;
-import com.aviobrief.springserver.services.AuthSessionService;
 import com.google.common.base.Strings;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua_parser.Client;
@@ -23,6 +25,7 @@ import java.net.InetAddress;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.nonNull;
@@ -30,20 +33,24 @@ import static java.util.Objects.nonNull;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    private final UserRepository userRepository;
     private final UserDetailsSpringService userDetailsSpringService;
-    private final AuthMetadataRepository authMetadataRepository;
-    private final AuthSessionService authSessionService;
+    private final AuthMetadataService authMetadataService;
     private final Parser parser;
     private final DatabaseReader databaseReader;
 
 
-    public AuthServiceImpl(UserDetailsSpringService userDetailsSpringService, AuthMetadataRepository authMetadataRepository, AuthSessionService authSessionService, Parser parser, DatabaseReader databaseReader) {
+    public AuthServiceImpl(UserRepository userRepository, UserDetailsSpringService userDetailsSpringService,
+                           AuthMetadataService authMetadataService,
+                           Parser parser,
+                           DatabaseReader databaseReader) {
+        this.userRepository = userRepository;
         this.userDetailsSpringService = userDetailsSpringService;
-        this.authMetadataRepository = authMetadataRepository;
-        this.authSessionService = authSessionService;
+        this.authMetadataService = authMetadataService;
         this.parser = parser;
         this.databaseReader = databaseReader;
     }
+
 
     @Override
     public UsernamePasswordAuthenticationToken getUsernamePasswordAuthToken(String userEmail) {
@@ -70,55 +77,43 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void addLoginToUserHistory(String userEmail, HttpServletRequest request, String jwt) throws IOException, GeoIp2Exception {
-        String deviceDetails = getDeviceDetails(request.getHeader("user-agent"));
-        String location = getIpLocation(extractIp(request));
+    public void addLoginToUserHistory(String userEmail, HttpServletRequest request, String jwt)
+            throws IOException, GeoIp2Exception, UsernameNotFoundException {
 
-        AuthSession authSession = new AuthSession().setLogin(ZonedDateTime.now()).setJwt(jwt);
-        AuthMetadata existingAuthMetadata =
-                authMetadataRepository.findFirstByDeviceDetails(deviceDetails);
+        UserEntity currentlyAuthenticatedUser =
+                getCurrentlyAuthenticatedUser()
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found by email!"));
 
-        if (nonNull(existingAuthMetadata)) {
-            /* logout previous active session for this auth metadata */
-            List<AuthSession> activeSessions =
-                    authSessionService.getAllActiveSessionsForAuthMetadata(existingAuthMetadata);
-            if (nonNull(activeSessions)) {
-                activeSessions.forEach(as -> {
-                    as.setLogout(ZonedDateTime.now());
-                    as.setSessionDuration(as.getLogout().toEpochSecond() - as.getLogin().toEpochSecond());
-                });
-            }
+        if (nonNull(currentlyAuthenticatedUser)) {
 
-            existingAuthMetadata.addAuthSession(authSession);
-            authSession.setAuthMetadata(existingAuthMetadata);
+            String deviceDetails = getDeviceDetails(request.getHeader("user-agent"));
+            String location = getIpLocation(extractIp(request));
 
-            authMetadataRepository.saveAndFlush(existingAuthMetadata);
-        } else {
             AuthMetadata authMetadata =
                     new AuthMetadata()
-                            .addAuthSession(authSession)
                             .setDeviceDetails(deviceDetails)
-                            .setLocation(location);
-            authSession.setAuthMetadata(authMetadata);
+                            .setLocation(location)
+                            .setLogin(ZonedDateTime.now())
+                            .setJwt(jwt);
 
-            authMetadataRepository.saveAndFlush(authMetadata);
+            this.logoutUserFromAllSessions();
+            currentlyAuthenticatedUser.getAuthMetadata().add(authMetadata);
+            authMetadata.setUserEntity(currentlyAuthenticatedUser);
+            this.userRepository.saveAndFlush(currentlyAuthenticatedUser);
         }
     }
 
     @Override
-    public void logoutUserFromDevice(HttpServletRequest request) {
-        String deviceDetails = getDeviceDetails(request.getHeader("user-agent"));
-        AuthMetadata existingAuthMetadata =
-                authMetadataRepository.findFirstByDeviceDetails(deviceDetails);
+    public void logoutUserFromAllSessions() {
 
-        /* logout previous active session for this auth metadata */
-        List<AuthSession> activeSessions =
-                authSessionService.getAllActiveSessionsForAuthMetadata(existingAuthMetadata);
+        /* logout previous active sessions */
+        List<AuthMetadata> activeSessions = authMetadataService.getAllActiveSessionsForCurrentUser();
+
         if (nonNull(activeSessions)) {
-            activeSessions.forEach(as -> {
-                as.setLogout(ZonedDateTime.now());
-                as.setSessionDuration(as.getLogout().toEpochSecond() - as.getLogin().toEpochSecond());
-            });
+            activeSessions.forEach(as ->
+                    as.setLogout(ZonedDateTime.now())
+                            .setSessionDuration(as.getLogout().toEpochSecond() - as.getLogin().toEpochSecond())
+                            .setJwt(null));
         }
     }
 
@@ -168,5 +163,17 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return location;
+    }
+
+    private Optional<UserEntity> getCurrentlyAuthenticatedUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userEmail = "";
+        if (principal instanceof UserDetails) {
+            userEmail = ((UserDetails) principal).getUsername();
+        } else {
+            userEmail = principal.toString();
+        }
+
+        return this.userRepository.findByEmail(userEmail);
     }
 }
