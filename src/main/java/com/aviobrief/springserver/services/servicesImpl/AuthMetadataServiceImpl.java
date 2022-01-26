@@ -25,4 +25,9 @@ public class AuthMetadataServiceImpl implements AuthMetadataService {
     public List<AuthMetadata> getAllActiveSessionsForCurrentUser() {
         return this.authMetadataRepository.findAllActiveSessionsByUser();
     }
+
+    @Override
+    public void saveAll(List<AuthMetadata> activeSessions) {
+        this.authMetadataRepository.saveAllAndFlush(activeSessions);
+    }
 }

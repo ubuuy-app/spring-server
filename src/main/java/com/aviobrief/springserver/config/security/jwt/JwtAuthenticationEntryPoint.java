@@ -1,5 +1,6 @@
 package com.aviobrief.springserver.config.security.jwt;
 
+import com.aviobrief.springserver.services.AuthService;
 import com.aviobrief.springserver.utils.json.JsonUtil;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
 import com.aviobrief.springserver.utils.response_builder.responses.ErrorResponseObject;
@@ -26,13 +27,16 @@ import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
-    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthService authService;
     private final Gson gson;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
-    public JwtAuthenticationEntryPoint(JwtTokenProvider jwtTokenProvider, Gson gson, ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public JwtAuthenticationEntryPoint(AuthService authService,
+                                       Gson gson,
+                                       ResponseBuilder responseBuilder,
+                                       JsonUtil jsonUtil) {
+        this.authService = authService;
         this.gson = gson;
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
@@ -54,9 +58,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                         .buildSingleError()
                         .setTarget("jwt")
                         .setMessage(UNAUTHORIZED_HANDLER_RES_MESSAGE)
-                        .setRejectedValue(jwtTokenProvider.getJwtFromRequest(httpServletRequest) == null
+                        .setRejectedValue(authService.getJwtFromRequest(httpServletRequest) == null
                                 ? jsonUtil.toJson(jsonUtil.pair("jwt", "(empty string)"))
-                                : jsonUtil.toJson(jsonUtil.pair("jwt", jwtTokenProvider.getJwtFromRequest(httpServletRequest))))
+                                : jsonUtil.toJson(jsonUtil.pair("jwt", authService.getJwtFromRequest(httpServletRequest))))
                         .setReason(authException.getMessage());
 
 

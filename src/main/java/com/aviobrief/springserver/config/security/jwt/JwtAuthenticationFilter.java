@@ -1,6 +1,7 @@
 package com.aviobrief.springserver.config.security.jwt;
 
-import com.aviobrief.springserver.services.servicesImpl.UserDetailsSpringService;
+import com.aviobrief.springserver.services.AuthService;
+import com.aviobrief.springserver.services.servicesImpl.UserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,13 +25,12 @@ import static com.aviobrief.springserver.config.constants.LoggerMessages.SECURIT
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-    private final JwtTokenProvider tokenProvider;
-    private final UserDetailsSpringService userDetailsSpringService;
+    private final UserDetailsService userDetailsService;
+    private final AuthService authService;
 
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider,
-                                   UserDetailsSpringService userDetailsSpringService) {
-        this.tokenProvider = tokenProvider;
-        this.userDetailsSpringService = userDetailsSpringService;
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, AuthService authService) {
+        this.userDetailsService = userDetailsService;
+        this.authService = authService;
     }
 
     @Override
@@ -39,16 +39,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String jwt = tokenProvider.getJwtFromRequest(httpServletRequest);
+            String jwt = authService.getJwtFromRequest(httpServletRequest);
 
             /* Check Jwt has some text in it and verify validity */
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt) && authService.validateJWT(jwt)) {
 
                 /* extract email from jwt */
-                String userEmail = tokenProvider.getUserEmailFromJWT(jwt);
+                String userEmail = authService.getUserEmailFromJWT(jwt);
 
                 /* Load Spring user details */
-                UserDetails userDetails = userDetailsSpringService.loadUserByUsername(userEmail);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
                 /* The next two steps do the magic of signing in into Spring Security */
                 /* (1) generate internal username and password auth token */

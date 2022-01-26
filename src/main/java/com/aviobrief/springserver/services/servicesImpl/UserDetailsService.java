@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 import static com.aviobrief.springserver.config.constants.ExceptionMessages.USER_NOT_FOUND_IN_DATABASE_BY_EMAIL;
 
 @Service
-public class UserDetailsSpringService implements org.springframework.security.core.userdetails.UserDetailsService {
+public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     private final UserRepository userRepo;
 
-    public UserDetailsSpringService(UserRepository userRepo) {
+    public UserDetailsService(UserRepository userRepo) {
         this.userRepo = userRepo;
     }
 

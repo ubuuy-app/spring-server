@@ -9,4 +9,6 @@ public interface AuthMetadataService {
     void save(AuthMetadata authMetadata);
 
     List<AuthMetadata> getAllActiveSessionsForCurrentUser();
+
+    void saveAll(List<AuthMetadata> activeSessions);
 }

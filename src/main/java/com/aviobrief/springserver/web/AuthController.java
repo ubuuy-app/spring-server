@@ -1,14 +1,12 @@
 package com.aviobrief.springserver.web;
 
 
-import com.aviobrief.springserver.config.security.jwt.JwtTokenProvider;
 import com.aviobrief.springserver.models.requests.LoginRequest;
 import com.aviobrief.springserver.services.AuthService;
 import com.aviobrief.springserver.services.UserService;
 import com.aviobrief.springserver.utils.json.JsonUtil;
 import com.aviobrief.springserver.utils.response_builder.ResponseBuilder;
 import com.aviobrief.springserver.utils.response_builder.responses.JwtResponse;
-import com.aviobrief.springserver.utils.response_builder.responses.OkResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,17 +29,16 @@ import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtTokenProvider tokenProvider;
+
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
 
     public AuthController(AuthService authService, UserService userService,
                           AuthenticationManager authenticationManager,
-                          JwtTokenProvider tokenProvider,
                           ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
         this.authService = authService;
-        this.tokenProvider = tokenProvider;
+
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
     }
@@ -56,7 +53,7 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(token);
 
             /* GENERATE JWT RESPONSE */
-            String jwt = tokenProvider.generateToken(loginRequest.username());
+            String jwt = authService.generateJWT(loginRequest.username());
             JwtResponse jwtResponse = new JwtResponse(jwt);
 
             /* GENERATE DOUBLE SUBMIT COOKIE (WITH CSRF TOKEN) HEADER */
@@ -99,10 +96,15 @@ public class AuthController {
 
     }
 
-    @GetMapping(path = "/auth-logout", produces = "application/json")
-    public ResponseEntity<OkResponse> logout() {
-        //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
-        return ResponseEntity.ok().body(responseBuilder.ok(true));
+    @PostMapping(path = "/api/auth/logout", produces = "application/json")
+    public ResponseEntity<?> logout() {
+
+        authService.logoutAllUserAuthMetadata();
+        HttpHeaders responseHeaders = authService.invalidateCsrfTokenCookie();
+
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(responseBuilder.ok(true));
     }
 
     @GetMapping(path = "/.well-known/first-party-set")
