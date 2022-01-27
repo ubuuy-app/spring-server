@@ -2,10 +2,12 @@ package com.aviobrief.springserver.db.seed;
 
 import com.aviobrief.springserver.models.entities.Meta;
 import com.aviobrief.springserver.models.entities.RoleEntity;
-import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.models.enums.UserRole;
+import com.aviobrief.springserver.models.service_models.UserServiceModel;
 import com.aviobrief.springserver.repositories.RoleRepository;
 import com.aviobrief.springserver.services.UserService;
+import com.aviobrief.springserver.utils.mapper.Mapper;
+import com.aviobrief.springserver.utils.mapper.MapperImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,7 @@ import java.util.logging.Logger;
 public class UserSeed {
 
     private static final Logger logger = Logger.getLogger("UserSeed");
+    private static final Mapper mapper = new MapperImpl();
 
     private static final RoleEntity adminRole = new RoleEntity().setRole(UserRole.ADMIN);
     private static final RoleEntity userRole = new RoleEntity().setRole(UserRole.USER);
@@ -54,22 +57,22 @@ public class UserSeed {
                 .stream()
                 .map((email) -> {
                     int currentIndex = USER_EMAILS.indexOf(email);
-                    UserEntity userEntity = new UserEntity(
+                    UserServiceModel userServiceModel = new UserServiceModel(
                             email,
                             FULL_NAMES.get(currentIndex),
                             passwordEncoder.encode(PASSWORDS.get(currentIndex))
                     );
-                    userEntity.setRoles(currentIndex == 0 ? List.of(adminRole, userRole) : List.of(userRole));
-                    userEntity.setMeta(
+                    userServiceModel.setRoles(currentIndex == 0 ? List.of(adminRole, userRole) : List.of(userRole));
+                    userServiceModel.setMeta(
                             new Meta()
                                     .setAddedAt(ZonedDateTime.now().toString())
                                     .setAddedBy("development"));
 
-                    return userEntity;
+                    return userServiceModel;
                 })
-                .forEach(userEntity -> {
+                .forEach(userServiceModel -> {
                     try {
-                        UserEntity savedEntity = userService.saveOne(userEntity);
+                        UserServiceModel savedEntity = userService.saveOne(userServiceModel);
                         logger.log(Level.INFO, String.format("%d", savedEntity != null ? savedEntity.getId() : -1));
                     } catch (Exception e) {
                         logger.log(Level.INFO, e::getMessage);

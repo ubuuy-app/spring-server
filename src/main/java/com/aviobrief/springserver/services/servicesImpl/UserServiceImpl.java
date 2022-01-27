@@ -2,6 +2,7 @@ package com.aviobrief.springserver.services.servicesImpl;
 
 import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.models.responses.UserViewModel;
+import com.aviobrief.springserver.models.service_models.UserServiceModel;
 import com.aviobrief.springserver.repositories.UserRepository;
 import com.aviobrief.springserver.services.UserService;
 import com.aviobrief.springserver.utils.mapper.Mapper;
@@ -28,9 +29,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity saveOne(UserEntity userEntity) {
+    public UserServiceModel saveOne(UserServiceModel userServiceModel) {
         try {
-            return this.userRepo.saveAndFlush(userEntity);
+            UserEntity savedUser = this.userRepo.saveAndFlush(mapper.toModel(userServiceModel, UserEntity.class));
+            return mapper.toModel(savedUser, UserServiceModel.class);
         } catch (Exception e) {
             return null;
         }

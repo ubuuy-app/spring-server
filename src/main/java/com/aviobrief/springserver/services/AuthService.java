@@ -1,5 +1,7 @@
 package com.aviobrief.springserver.services;
 
+import com.aviobrief.springserver.models.service_models.OrganizationServiceModel;
+import com.aviobrief.springserver.models.service_models.UserServiceModel;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,5 +29,7 @@ public interface AuthService {
     void addLoginToUserHistory(String userEmail, HttpServletRequest request, String jwt) throws IOException, GeoIp2Exception;
 
     void logoutAllUserAuthMetadata();
+
+    void registerOrganizationOwner(UserServiceModel userServiceModel, OrganizationServiceModel organizationServiceModel);
 
 }

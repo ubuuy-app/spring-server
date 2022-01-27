@@ -1,7 +1,7 @@
 package com.aviobrief.springserver.services;
 
-import com.aviobrief.springserver.models.entities.UserEntity;
 import com.aviobrief.springserver.models.responses.UserViewModel;
+import com.aviobrief.springserver.models.service_models.UserServiceModel;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface UserService {
 
-    UserEntity saveOne(UserEntity userEntity); //todo -> use UserServiceModel and ModelMapper
+    UserServiceModel saveOne(UserServiceModel userServiceModel);
 
     CompletableFuture<List<UserViewModel>> getAll() throws Exception;
 

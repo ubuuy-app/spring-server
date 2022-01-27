@@ -6,6 +6,7 @@ import com.aviobrief.springserver.services.AuthService;
 import com.aviobrief.springserver.services.servicesImpl.AuthServiceImpl;
 import com.aviobrief.springserver.services.servicesImpl.UserDetailsService;
 import com.aviobrief.springserver.utils.logger.ServerLogger;
+import com.aviobrief.springserver.utils.mapper.Mapper;
 import com.maxmind.geoip2.DatabaseReader;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -41,6 +42,8 @@ class AuthServiceTests {
     @Mock
     private ServerLogger serverLogger;
     @Mock
+    private Mapper mapper;
+    @Mock
     private UserDetailsService userDetailsService;
     @Mock
     private UserRepository userRepository;
@@ -58,7 +61,7 @@ class AuthServiceTests {
         when(userDetailsService.loadUserByUsername("john.doe@icloud.com")).thenReturn(testUserDetails);
 
         authService = new AuthServiceImpl(
-                serverLogger, jwtSecretKey, jwtExpirationInMs, userRepository,
+                serverLogger, mapper, jwtSecretKey, jwtExpirationInMs, userRepository,
                 userDetailsService, authMetadataService, parser, databaseReader);
     }
 

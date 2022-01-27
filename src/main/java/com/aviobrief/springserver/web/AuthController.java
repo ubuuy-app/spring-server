@@ -2,6 +2,7 @@ package com.aviobrief.springserver.web;
 
 
 import com.aviobrief.springserver.models.requests.LoginRequest;
+import com.aviobrief.springserver.models.requests.RegisterOwnerRequest;
 import com.aviobrief.springserver.services.AuthService;
 import com.aviobrief.springserver.services.UserService;
 import com.aviobrief.springserver.utils.json.JsonUtil;
@@ -38,6 +39,11 @@ public class AuthController {
         this.authService = authService;
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
+    }
+
+    @PostMapping(path = "/api/auth/register-owner")
+    public ResponseEntity<?> registerOwner(@RequestBody RegisterOwnerRequest registerOwnerRequest, HttpServletRequest request) {
+        return null;
     }
 
 

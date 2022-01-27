@@ -1,5 +1,8 @@
 package com.aviobrief.springserver.models.enums;
 
 public enum UserRole {
-    USER, ADMIN
+    OWNER,
+    MEMBER,
+    USER,
+    ADMIN
 }

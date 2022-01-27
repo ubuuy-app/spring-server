@@ -18,20 +18,14 @@ public class UserEntity extends BaseEntity {
     private List<RoleEntity> roles = new ArrayList<>();
     private Meta meta;
     private List<AuthMetadata> authMetadata = new ArrayList<>();
+    private OrganizationEntity organization;
 
 
     public UserEntity() {
     }
 
-    /* For initial seed direct UserEntity creation */
-    public UserEntity(String email, String firstName, String password) {
-        this.email = email;
-        this.fullName = firstName;
-        this.password = password;
-    }
-
     @Column(name = "email", unique = true, nullable = true)
-//todo - email must not be empty, set like this for dev process
+    //todo - email must not be empty, set like this for dev process
     public String getEmail() {
         return email;
     }
@@ -88,6 +82,16 @@ public class UserEntity extends BaseEntity {
 
     public UserEntity setAuthMetadata(List<AuthMetadata> authMetadata) {
         this.authMetadata = authMetadata;
+        return this;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    public OrganizationEntity getOrganization() {
+        return organization;
+    }
+
+    public UserEntity setOrganization(OrganizationEntity organization) {
+        this.organization = organization;
         return this;
     }
 }

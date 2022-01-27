@@ -2,10 +2,13 @@ package com.aviobrief.springserver.services.servicesImpl;
 
 import com.aviobrief.springserver.models.auth.AuthMetadata;
 import com.aviobrief.springserver.models.entities.UserEntity;
+import com.aviobrief.springserver.models.service_models.OrganizationServiceModel;
+import com.aviobrief.springserver.models.service_models.UserServiceModel;
 import com.aviobrief.springserver.repositories.UserRepository;
 import com.aviobrief.springserver.services.AuthMetadataService;
 import com.aviobrief.springserver.services.AuthService;
 import com.aviobrief.springserver.utils.logger.ServerLogger;
+import com.aviobrief.springserver.utils.mapper.Mapper;
 import com.google.common.base.Strings;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
@@ -39,6 +42,7 @@ import static java.util.Objects.nonNull;
 public class AuthServiceImpl implements AuthService {
 
     private final ServerLogger serverLogger;
+    private final Mapper mapper;
     private final String jwtSecretKey;
     private final int jwtExpirationInMs;
     private final UserRepository userRepository;
@@ -49,6 +53,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     public AuthServiceImpl(ServerLogger serverLogger,
+                           Mapper mapper,
                            @Value("${app.jwt-secret}") String jwtSecretKey,
                            @Value("${app.jwt-expiration-mills}") int jwtExpirationInMs,
                            UserRepository userRepository,
@@ -57,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
                            Parser parser,
                            DatabaseReader databaseReader) {
         this.serverLogger = serverLogger;
+        this.mapper = mapper;
         this.jwtSecretKey = jwtSecretKey;
         this.jwtExpirationInMs = jwtExpirationInMs;
         this.userRepository = userRepository;
@@ -226,6 +232,14 @@ public class AuthServiceImpl implements AuthService {
                         .setSessionDuration(as.getLogout().toEpochSecond() - as.getLogin().toEpochSecond()));
 
         this.authMetadataService.saveAll(activeSessions);
+    }
+
+    @Override
+    public void registerOrganizationOwner(UserServiceModel userServiceModel,
+                                          OrganizationServiceModel organizationServiceModel) {
+
+        UserEntity userEntity = mapper.toModel()
+
     }
 
     private String getDeviceDetails(String userAgent) {
