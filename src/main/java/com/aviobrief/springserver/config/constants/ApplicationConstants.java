@@ -11,7 +11,13 @@ public record ApplicationConstants() {
 
 
     /* auth */
-    public static final List<String> CSRF_DISABLED_PATH = List.of("/api/auth", "/api/auth/logout","/.well-known/first-party-set", "/first-party-cookie");
+    public static final List<String> CSRF_DISABLED_PATH =
+            List.of(
+                    "/api/auth/login",
+                    "/api/auth/logout",
+                    "/.well-known/first-party-set",
+                    "/first-party-cookie");
+
     public static final Set<String> CSRF_TOKEN_SAFE_METHODS = new HashSet<>(Arrays.asList("HEAD", "TRACE", "OPTIONS"));
     public static final String HTTP_REQ_AUTH_HEADER = "Authorization";
     public static final String HTTP_REQ_AUTH_TOKEN_PREFIX = "Bearer ";

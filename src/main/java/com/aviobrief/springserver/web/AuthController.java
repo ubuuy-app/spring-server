@@ -29,22 +29,19 @@ import static com.aviobrief.springserver.utils.response_builder.ResponseBuilder.
 public class AuthController {
 
     private final AuthService authService;
-
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
-
 
     public AuthController(AuthService authService, UserService userService,
                           AuthenticationManager authenticationManager,
                           ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
         this.authService = authService;
-
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
     }
 
 
-    @PostMapping(path = "/api/auth")
+    @PostMapping(path = "/api/auth/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
 
         try {
@@ -126,7 +123,6 @@ public class AuthController {
                                             ))
                                             .setReason(BAD_CREDENTIALS)
                             )));
-
         }
     }
 
