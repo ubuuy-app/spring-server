@@ -238,7 +238,7 @@ public class AuthServiceImpl implements AuthService {
     public void registerOrganizationOwner(UserServiceModel userServiceModel,
                                           OrganizationServiceModel organizationServiceModel) {
 
-        UserEntity userEntity = mapper.toModel()
+        UserEntity userEntity = mapper.toModel(userServiceModel, UserEntity.class);
 
     }
 

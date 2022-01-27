@@ -65,8 +65,8 @@ public class UserSeed {
                     userServiceModel.setRoles(currentIndex == 0 ? List.of(adminRole, userRole) : List.of(userRole));
                     userServiceModel.setMeta(
                             new Meta()
-                                    .setAddedAt(ZonedDateTime.now().toString())
-                                    .setAddedBy("development"));
+                                    .setAddedAt(ZonedDateTime.now())
+                                    .setAddedBy(email));
 
                     return userServiceModel;
                 })
