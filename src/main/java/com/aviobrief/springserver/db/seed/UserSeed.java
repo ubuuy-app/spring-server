@@ -28,14 +28,11 @@ public class UserSeed {
             "petar.petkov@mailinator.com",
             "eli.deyanova@mailinator.com"
     );
-    private static final List<String> FIRST_NAMES = List.of(
-            "petar",
-            "eli"
+    private static final List<String> FULL_NAMES = List.of(
+            "petar petkov",
+            "eli deyanova"
     );
-    private static final List<String> LAST_NAMES = List.of(
-            "petkov",
-            "deyanova"
-    );
+
     private static final List<String> PASSWORDS = List.of(
             "111111",
             "222222"
@@ -59,8 +56,7 @@ public class UserSeed {
                     int currentIndex = USER_EMAILS.indexOf(email);
                     UserEntity userEntity = new UserEntity(
                             email,
-                            FIRST_NAMES.get(currentIndex),
-                            LAST_NAMES.get(currentIndex),
+                            FULL_NAMES.get(currentIndex),
                             passwordEncoder.encode(PASSWORDS.get(currentIndex))
                     );
                     userEntity.setRoles(currentIndex == 0 ? List.of(adminRole, userRole) : List.of(userRole));

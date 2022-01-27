@@ -13,8 +13,7 @@ import java.util.List;
 public class UserEntity extends BaseEntity {
 
     private String email;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String password;
     private List<RoleEntity> roles = new ArrayList<>();
     private Meta meta;
@@ -25,10 +24,9 @@ public class UserEntity extends BaseEntity {
     }
 
     /* For initial seed direct UserEntity creation */
-    public UserEntity(String email, String firstName, String lastName, String password) {
+    public UserEntity(String email, String firstName, String password) {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.fullName = firstName;
         this.password = password;
     }
 
@@ -44,22 +42,12 @@ public class UserEntity extends BaseEntity {
     }
 
     @Column(name = "first_name", unique = false, nullable = false)
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public UserEntity setFirstName(String firstName) {
-        this.firstName = firstName;
-        return this;
-    }
-
-    @Column(name = "last_name", unique = false, nullable = false)
-    public String getLastName() {
-        return lastName;
-    }
-
-    public UserEntity setLastName(String lastName) {
-        this.lastName = lastName;
+    public UserEntity setFullName(String fullName) {
+        this.fullName = fullName;
         return this;
     }
 
