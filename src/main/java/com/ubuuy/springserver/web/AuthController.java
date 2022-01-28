@@ -78,18 +78,18 @@ public class AuthController {
 
         try {
             /* AUTHENTICATE IN SPRING */
-            UsernamePasswordAuthenticationToken token = authService.getUsernamePasswordAuthToken(loginRequest.username());
+            UsernamePasswordAuthenticationToken token = authService.getUsernamePasswordAuthToken(loginRequest.email());
             SecurityContextHolder.getContext().setAuthentication(token);
 
             /* GENERATE JWT RESPONSE */
-            String jwt = authService.generateJWT(loginRequest.username());
+            String jwt = authService.generateJWT(loginRequest.email());
             JwtResponse jwtResponse = new JwtResponse(jwt);
 
             /* GENERATE DOUBLE SUBMIT COOKIE (WITH CSRF TOKEN) HEADER */
             HttpHeaders responseHeaders = authService.generateDoubleSubmitCookieHeader();
 
             /* ADD LOGIN TO USER HISTORY */
-            authService.addLoginToUserHistory(loginRequest.username(), request, jwt);
+            authService.addLoginToUserHistory(loginRequest.email(), request, jwt);
 
             return ResponseEntity.ok()
                     .headers(responseHeaders)
@@ -109,7 +109,7 @@ public class AuthController {
                                             .setTarget("credentials")
                                             .setMessage(ResponseMessages.BAD_CREDENTIALS)
                                             .setRejectedValue(jsonUtil.toJson(
-                                                    jsonUtil.pair("email", loginRequest.username()),
+                                                    jsonUtil.pair("email", loginRequest.email()),
                                                     jsonUtil.pair("password", "hidden")
                                             ))
                                             .setReason(ResponseMessages.BAD_CREDENTIALS)

@@ -1,10 +1,10 @@
 package com.ubuuy.springserver.models.requests;
 
-public record LoginRequest (String username, String password) {
+public record LoginRequest (String email, String password) {
 
     @Override
-    public String username() {
-        return username;
+    public String email() {
+        return email;
     }
 
     @Override
