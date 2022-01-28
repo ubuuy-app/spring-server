@@ -1,10 +1,10 @@
 package com.ubuuy.springserver.utils.response_builder;
 
 import com.ubuuy.springserver.config.date_time.ApplicationDateTimeConfiguration;
+import com.ubuuy.springserver.models.responses.api.GenericOkResponse;
 import com.ubuuy.springserver.utils.json.JsonUtil;
 import com.ubuuy.springserver.utils.json.JsonUtilImpl;
 import com.ubuuy.springserver.utils.response_builder.responses.ErrorResponseObject;
-import com.ubuuy.springserver.utils.response_builder.responses.OkResponse;
 import com.ubuuy.springserver.utils.response_builder.responses.SingleError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,13 +35,13 @@ class ResponseBuilderTest {
 
     @Test
     void ok_method_returns_true() {
-        OkResponse ok = responseBuilder.ok(true);
+        GenericOkResponse ok = responseBuilder.ok(true);
         assertThat(ok).hasFieldOrPropertyWithValue("ok", true);
     }
 
     @Test
     void ok_method_returns_false() {
-        OkResponse ok = responseBuilder.ok(false);
+        GenericOkResponse ok = responseBuilder.ok(false);
         assertThat(ok).hasFieldOrPropertyWithValue("ok", false);
     }
 

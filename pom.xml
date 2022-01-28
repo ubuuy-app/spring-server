@@ -29,6 +29,14 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        <!-- LOMBOK, used mainly to simplify declaring the response objects -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!--   JSON_PAIR RELATED     -->
         <dependency>
             <groupId>javax.json</groupId>
@@ -65,7 +73,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-<!--        SPRING SECURITY STARTER & DATA, CORE & WEB & etc. not needed with Spring Boot-->
+        <!--    SPRING SECURITY STARTER & DATA, CORE & WEB & etc. not needed with Spring Boot-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>

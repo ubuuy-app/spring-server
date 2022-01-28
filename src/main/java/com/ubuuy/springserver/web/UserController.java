@@ -1,7 +1,7 @@
 package com.ubuuy.springserver.web;
 
 import com.ubuuy.springserver.config.constants.LoggerMessages;
-import com.ubuuy.springserver.models.responses.UserResponseModel;
+import com.ubuuy.springserver.models.responses.response_models.UserResponseModel;
 import com.ubuuy.springserver.services.UserService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import org.springframework.http.ResponseEntity;

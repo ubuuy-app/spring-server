@@ -1,4 +1,4 @@
-package com.ubuuy.springserver.utils.response_builder.responses;
+package com.ubuuy.springserver.models.responses.api;
 
 public class JwtResponse {
 
