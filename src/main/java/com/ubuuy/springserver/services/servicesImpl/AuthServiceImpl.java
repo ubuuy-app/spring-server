@@ -129,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
             /* search for active sessions */
             List<AuthMetadata> activeSessions = authMetadataService.getAllActiveSessionsUser(userEmail);
 
-            if(nonNull(activeSessions)){
+            if (nonNull(activeSessions)) {
                 /* try to find one that matches the provided jwt */
                 AuthMetadata activeJwtAuthMetadata = activeSessions
                         .stream()
@@ -141,7 +141,7 @@ public class AuthServiceImpl implements AuthService {
             } else {
                 return true;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             return true;
         }
     }
@@ -158,9 +158,12 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public UsernamePasswordAuthenticationToken getUsernamePasswordAuthToken(String userEmail) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    public void authenticateInSecurityContext(String userEmail, String password) {
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(userEmail, password);
+
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
     @Override

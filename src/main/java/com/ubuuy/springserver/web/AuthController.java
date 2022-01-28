@@ -7,14 +7,12 @@ import com.ubuuy.springserver.models.responses.api.JwtResponse;
 import com.ubuuy.springserver.models.responses.api.RegisterOrganizationOwnerResponse;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.services.AuthService;
-import com.ubuuy.springserver.services.OrganizationService;
 import com.ubuuy.springserver.services.UserService;
 import com.ubuuy.springserver.utils.json.JsonUtil;
 import com.ubuuy.springserver.utils.response_builder.ResponseBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,18 +29,15 @@ import static com.ubuuy.springserver.utils.response_builder.ResponseBuilder.Type
 public class AuthController {
 
     private final AuthService authService;
-    private final OrganizationService organizationService;
     private final UserService userService;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
     public AuthController(AuthService authService,
-                          OrganizationService organizationService,
                           UserService userService,
                           ResponseBuilder responseBuilder,
                           JsonUtil jsonUtil) {
         this.authService = authService;
-        this.organizationService = organizationService;
         this.userService = userService;
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
@@ -78,8 +73,7 @@ public class AuthController {
 
         try {
             /* AUTHENTICATE IN SPRING */
-            UsernamePasswordAuthenticationToken token = authService.getUsernamePasswordAuthToken(loginRequest.email());
-            SecurityContextHolder.getContext().setAuthentication(token);
+            authService.authenticateInSecurityContext(loginRequest.email(), loginRequest.password());
 
             /* GENERATE JWT RESPONSE */
             String jwt = authService.generateJWT(loginRequest.email());

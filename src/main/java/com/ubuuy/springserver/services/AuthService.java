@@ -4,7 +4,6 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -20,7 +19,7 @@ public interface AuthService {
 
     String getJwtFromRequest(HttpServletRequest request);
 
-    UsernamePasswordAuthenticationToken getUsernamePasswordAuthToken(String userEmail);
+    void authenticateInSecurityContext(String userEmail, String password);
 
     HttpHeaders generateDoubleSubmitCookieHeader();
 
