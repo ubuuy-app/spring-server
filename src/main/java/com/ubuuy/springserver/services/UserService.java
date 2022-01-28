@@ -1,6 +1,6 @@
 package com.ubuuy.springserver.services;
 
-import com.ubuuy.springserver.models.responses.UserViewModel;
+import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -11,8 +11,10 @@ public interface UserService {
 
     UserServiceModel saveOne(UserServiceModel userServiceModel);
 
-    CompletableFuture<List<UserViewModel>> getAll() throws Exception;
+    CompletableFuture<List<UserServiceModel>> getAll() throws Exception;
 
-    UserViewModel getByEmail(String email) throws UsernameNotFoundException;
+    UserServiceModel getByEmail(String email) throws UsernameNotFoundException;
+
+    UserServiceModel registerOrganizationOwner(RegisterOwnerRequest registerOwnerRequest);
 
 }

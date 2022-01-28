@@ -20,9 +20,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public void save(OrganizationServiceModel organizationServiceModel){
-        this
-                .organizationRepository
-                .saveAndFlush(mapper.toModel(organizationServiceModel, OrganizationEntity.class));
+    public OrganizationServiceModel save(OrganizationServiceModel organizationServiceModel) {
+
+        OrganizationEntity organizationEntity =
+                organizationRepository.saveAndFlush(mapper.toModel(organizationServiceModel, OrganizationEntity.class));
+
+        return mapper.toModel(organizationEntity,OrganizationServiceModel.class);
     }
 }

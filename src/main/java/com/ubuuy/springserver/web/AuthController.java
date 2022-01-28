@@ -1,10 +1,12 @@
 package com.ubuuy.springserver.web;
 
-
 import com.ubuuy.springserver.config.constants.ResponseMessages;
 import com.ubuuy.springserver.models.requests.LoginRequest;
 import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
+import com.ubuuy.springserver.models.responses.RegisterOrganizationOwnerResponse;
+import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.services.AuthService;
+import com.ubuuy.springserver.services.OrganizationService;
 import com.ubuuy.springserver.services.UserService;
 import com.ubuuy.springserver.utils.json.JsonUtil;
 import com.ubuuy.springserver.utils.response_builder.ResponseBuilder;
@@ -12,7 +14,6 @@ import com.ubuuy.springserver.utils.response_builder.responses.JwtResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,21 +31,45 @@ import static com.ubuuy.springserver.utils.response_builder.ResponseBuilder.Type
 public class AuthController {
 
     private final AuthService authService;
+    private final OrganizationService organizationService;
+    private final UserService userService;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
-    public AuthController(AuthService authService, UserService userService,
-                          AuthenticationManager authenticationManager,
-                          ResponseBuilder responseBuilder, JsonUtil jsonUtil) {
+    public AuthController(AuthService authService,
+                          OrganizationService organizationService,
+                          UserService userService,
+                          ResponseBuilder responseBuilder,
+                          JsonUtil jsonUtil) {
         this.authService = authService;
+        this.organizationService = organizationService;
+        this.userService = userService;
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
     }
 
     @PostMapping(path = "/api/auth/register-organization-owner")
-    public ResponseEntity<?> registerOwner(@RequestBody RegisterOwnerRequest registerOwnerRequest, HttpServletRequest request) {
-        System.out.println(7);
-        return null;
+    public ResponseEntity<?> registerOwner(@RequestBody RegisterOwnerRequest registerOwnerRequest) {
+
+        try {
+            UserServiceModel registeredOwner = userService.registerOrganizationOwner(registerOwnerRequest);
+            return ResponseEntity
+                    .ok()
+                    .body(new RegisterOrganizationOwnerResponse(
+                            registeredOwner.getOrganization().getId(),
+                            registeredOwner.getId()));
+
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
+                    .body(responseBuilder
+                            .buildErrorObject(true)
+                            .setType(Type.REGISTER)
+                            .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .setMessage("Server could not process the request")
+                            .setErrors(null))
+                    ;
+        }
     }
 
 
@@ -103,7 +128,7 @@ public class AuthController {
     @PostMapping(path = "/api/auth/logout", produces = "application/json")
     public ResponseEntity<?> logout(HttpServletRequest request) {
 
-        try{
+        try {
             authService.logoutAllUserAuthMetadata();
             HttpHeaders responseHeaders = authService.invalidateCsrfTokenCookie();
             SecurityContextHolder.getContext().setAuthentication(null);
@@ -112,7 +137,7 @@ public class AuthController {
                     .headers(responseHeaders)
                     .body(responseBuilder.ok(true));
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return ResponseEntity
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .body(responseBuilder
@@ -126,7 +151,7 @@ public class AuthController {
                                             .setTarget("credentials")
                                             .setMessage(ResponseMessages.BAD_CREDENTIALS)
                                             .setRejectedValue(jsonUtil.toJson(
-                                                    jsonUtil.pair("jwt",authService.getJwtFromRequest(request))
+                                                    jsonUtil.pair("jwt", authService.getJwtFromRequest(request))
                                             ))
                                             .setReason(ResponseMessages.BAD_CREDENTIALS)
                             )));

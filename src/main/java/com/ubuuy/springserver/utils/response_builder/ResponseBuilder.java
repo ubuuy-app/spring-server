@@ -18,7 +18,8 @@ public interface ResponseBuilder {
     String getRequestPath(HttpServletRequest httpServletRequest);
 
     public static enum Type{
-        AUTH("Auth");
+        AUTH("Authentication processing."),
+        REGISTER("Register request");
 
         public final String detailedType;
 

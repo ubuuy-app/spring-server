@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "organizations")
 @Access(AccessType.PROPERTY)
-public class OrganizationEntity extends BaseEntity{
+public class OrganizationEntity extends BaseEntity {
 
     private String name;
     private List<UserEntity> members = new ArrayList<>();
@@ -15,7 +15,7 @@ public class OrganizationEntity extends BaseEntity{
     public OrganizationEntity() {
     }
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }

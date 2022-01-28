@@ -55,13 +55,14 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<RoleEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RoleEntity> roles) {
+    public UserEntity setRoles(List<RoleEntity> roles) {
         this.roles = roles;
+        return this;
     }
 
     @OneToOne(cascade = {CascadeType.ALL})
@@ -69,10 +70,10 @@ public class UserEntity extends BaseEntity {
         return meta;
     }
 
-    public void setMeta(Meta meta) {
+    public UserEntity setMeta(Meta meta) {
         this.meta = meta;
+        return this;
     }
-
     @OneToMany(
             mappedBy = "userEntity", targetEntity = AuthMetadata.class,
             cascade = CascadeType.ALL)
@@ -85,7 +86,7 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public OrganizationEntity getOrganization() {
         return organization;
     }
