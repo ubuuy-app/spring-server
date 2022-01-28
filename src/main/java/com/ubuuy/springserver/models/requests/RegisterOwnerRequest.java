@@ -7,6 +7,8 @@ public class RegisterOwnerRequest {
     private String organization;
     private String password;
 
+    //todo - add validations
+
     public String getEmail() {
         return email;
     }

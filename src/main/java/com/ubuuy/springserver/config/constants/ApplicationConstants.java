@@ -13,6 +13,7 @@ public record ApplicationConstants() {
     /* auth */
     public static final List<String> CSRF_DISABLED_PATH =
             List.of(
+                    "/api/auth/register-organization-owner",
                     "/api/auth/login",
                     "/api/auth/logout",
                     "/.well-known/first-party-set",

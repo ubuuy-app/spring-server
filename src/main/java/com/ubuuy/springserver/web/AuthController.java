@@ -41,8 +41,9 @@ public class AuthController {
         this.jsonUtil = jsonUtil;
     }
 
-    @PostMapping(path = "/api/auth/register-owner")
+    @PostMapping(path = "/api/auth/register-organization-owner")
     public ResponseEntity<?> registerOwner(@RequestBody RegisterOwnerRequest registerOwnerRequest, HttpServletRequest request) {
+        System.out.println(7);
         return null;
     }
 

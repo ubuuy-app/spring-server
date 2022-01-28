@@ -238,8 +238,8 @@ public class AuthServiceImpl implements AuthService {
     public void registerOrganizationOwner(UserServiceModel userServiceModel,
                                           OrganizationServiceModel organizationServiceModel) {
 
+        userServiceModel.setMeta(new Meta(userServiceModel.getEmail()));
         UserEntity userEntity = mapper.toModel(userServiceModel, UserEntity.class);
-        userEntity.setMeta(new Meta(userServiceModel.getEmail()));
 
     }
 
