@@ -13,8 +13,11 @@ import com.ubuuy.springserver.utils.response_builder.ResponseBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,15 +31,17 @@ import static com.ubuuy.springserver.utils.response_builder.ResponseBuilder.Type
 @RestController
 public class AuthController {
 
+    private final AuthenticationManager authenticationManager;
     private final AuthService authService;
     private final UserService userService;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
-    public AuthController(AuthService authService,
+    public AuthController(AuthenticationManager authenticationManager, AuthService authService,
                           UserService userService,
                           ResponseBuilder responseBuilder,
                           JsonUtil jsonUtil) {
+        this.authenticationManager = authenticationManager;
         this.authService = authService;
         this.userService = userService;
         this.responseBuilder = responseBuilder;
@@ -73,7 +78,12 @@ public class AuthController {
 
         try {
             /* AUTHENTICATE IN SPRING */
-            authService.authenticateInSecurityContext(loginRequest.email(), loginRequest.password());
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password());
+
+            Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
             /* GENERATE JWT RESPONSE */
             String jwt = authService.generateJWT(loginRequest.email());
@@ -89,7 +99,7 @@ public class AuthController {
                     .headers(responseHeaders)
                     .body(jwtResponse);
 
-        } catch (UsernameNotFoundException e) {
+        } catch (BadCredentialsException e) {
             return ResponseEntity
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .body(responseBuilder
@@ -110,7 +120,6 @@ public class AuthController {
                             )));
 
         } catch (Exception e) {
-            System.out.println(e);
             return ResponseEntity
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .build();

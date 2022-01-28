@@ -19,8 +19,6 @@ public interface AuthService {
 
     String getJwtFromRequest(HttpServletRequest request);
 
-    void authenticateInSecurityContext(String userEmail, String password);
-
     HttpHeaders generateDoubleSubmitCookieHeader();
 
     HttpHeaders invalidateCsrfTokenCookie();

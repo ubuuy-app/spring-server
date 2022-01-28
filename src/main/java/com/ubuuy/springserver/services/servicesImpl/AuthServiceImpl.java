@@ -18,7 +18,6 @@ import com.ubuuy.springserver.utils.mapper.Mapper;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -156,15 +155,6 @@ public class AuthServiceImpl implements AuthService {
         return null;
     }
 
-
-    @Override
-    public void authenticateInSecurityContext(String userEmail, String password) {
-
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(userEmail, password);
-
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-    }
 
     @Override
     public HttpHeaders generateDoubleSubmitCookieHeader() {
