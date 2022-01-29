@@ -11,7 +11,7 @@ public record ApplicationConstants() {
 
 
     /* auth */
-    public static final List<String> CSRF_DISABLED_PATH =
+    public static final List<String> SECURITY_FILTERS_DISABLED_PATHS =
             List.of(
                     "/api/auth/register-organization-owner",
                     "/api/auth/login",

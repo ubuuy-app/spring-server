@@ -1,5 +1,6 @@
 package com.ubuuy.springserver.config.security.jwt;
 
+import com.ubuuy.springserver.config.constants.ApplicationConstants;
 import com.ubuuy.springserver.config.constants.LoggerMessages;
 import com.ubuuy.springserver.services.AuthService;
 import com.ubuuy.springserver.services.servicesImpl.UserDetailsService;
@@ -29,6 +30,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(UserDetailsService userDetailsService, AuthService authService) {
         this.userDetailsService = userDetailsService;
         this.authService = authService;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest httpServletRequest) throws ServletException {
+        String path = httpServletRequest.getRequestURI();
+        return ApplicationConstants.SECURITY_FILTERS_DISABLED_PATHS.contains(path);
     }
 
     @Override
