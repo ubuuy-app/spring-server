@@ -6,6 +6,7 @@ import com.ubuuy.springserver.services.AuthMetadataService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class AuthMetadataServiceImpl implements AuthMetadataService {
@@ -23,7 +24,9 @@ public class AuthMetadataServiceImpl implements AuthMetadataService {
 
     @Override
     public List<AuthMetadata> getAllActiveSessionsForCurrentUser() {
-        return this.authMetadataRepository.findAllActiveSessionsByUser();
+        return this.authMetadataRepository
+                .findAllActiveSessionsByUser()
+                .orElseThrow(()-> new NoSuchElementException("Data load fail!"));
     }
 
     @Override
@@ -33,6 +36,8 @@ public class AuthMetadataServiceImpl implements AuthMetadataService {
 
     @Override
     public List<AuthMetadata> getAllActiveSessionsUser(String userEmail) {
-        return this.authMetadataRepository.findAllActiveSessionsByUser(userEmail);
+        return this.authMetadataRepository
+                .findAllActiveSessionsByUser(userEmail)
+                .orElseThrow(()-> new NoSuchElementException("Data load fail!"));
     }
 }

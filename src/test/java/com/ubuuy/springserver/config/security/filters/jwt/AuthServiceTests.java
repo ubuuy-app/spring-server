@@ -4,6 +4,7 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.ubuuy.springserver.repositories.UserRepository;
 import com.ubuuy.springserver.services.AuthMetadataService;
 import com.ubuuy.springserver.services.AuthService;
+import com.ubuuy.springserver.services.RoleService;
 import com.ubuuy.springserver.services.servicesImpl.AuthServiceImpl;
 import com.ubuuy.springserver.services.servicesImpl.UserDetailsService;
 import com.ubuuy.springserver.utils.logger.ServerLogger;
@@ -19,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ua_parser.Parser;
 
 import javax.xml.bind.DatatypeConverter;
@@ -50,9 +52,13 @@ class AuthServiceTests {
     @Mock
     private AuthMetadataService authMetadataService;
     @Mock
+    private RoleService roleService;
+    @Mock
     private Parser parser;
     @Mock
     private DatabaseReader databaseReader;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     private void initJwtTokenProvider() {
@@ -61,8 +67,8 @@ class AuthServiceTests {
         when(userDetailsService.loadUserByUsername("john.doe@icloud.com")).thenReturn(testUserDetails);
 
         authService = new AuthServiceImpl(
-                serverLogger, mapper, jwtSecretKey, jwtExpirationInMs, userRepository,
-                userDetailsService, authMetadataService, parser, databaseReader);
+                serverLogger, mapper, jwtSecretKey, jwtExpirationInMs, userRepository, userDetailsService,
+                authMetadataService, roleService, parser, databaseReader, passwordEncoder);
     }
 
     @Test

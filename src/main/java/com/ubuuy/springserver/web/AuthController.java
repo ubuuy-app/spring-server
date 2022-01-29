@@ -7,7 +7,6 @@ import com.ubuuy.springserver.models.responses.api.JwtResponse;
 import com.ubuuy.springserver.models.responses.api.RegisterOrganizationOwnerResponse;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.services.AuthService;
-import com.ubuuy.springserver.services.UserService;
 import com.ubuuy.springserver.utils.json.JsonUtil;
 import com.ubuuy.springserver.utils.response_builder.ResponseBuilder;
 import org.springframework.http.HttpHeaders;
@@ -33,17 +32,16 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final AuthService authService;
-    private final UserService userService;
     private final ResponseBuilder responseBuilder;
     private final JsonUtil jsonUtil;
 
-    public AuthController(AuthenticationManager authenticationManager, AuthService authService,
-                          UserService userService,
+    public AuthController(AuthenticationManager authenticationManager,
+                          AuthService authService,
                           ResponseBuilder responseBuilder,
-                          JsonUtil jsonUtil) {
+                          JsonUtil jsonUtil
+    ) {
         this.authenticationManager = authenticationManager;
         this.authService = authService;
-        this.userService = userService;
         this.responseBuilder = responseBuilder;
         this.jsonUtil = jsonUtil;
     }
@@ -52,7 +50,7 @@ public class AuthController {
     public ResponseEntity<?> registerOwner(@RequestBody RegisterOwnerRequest registerOwnerRequest) {
 
         try {
-            UserServiceModel registeredOwner = userService.registerOrganizationOwner(registerOwnerRequest);
+            UserServiceModel registeredOwner = authService.registerOrganizationOwner(registerOwnerRequest);
             return ResponseEntity
                     .ok()
                     .body(new RegisterOrganizationOwnerResponse(

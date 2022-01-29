@@ -7,14 +7,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AuthMetadataRepository extends JpaRepository<AuthMetadata, Long> {
 
     @Query("select am from AuthMetadata am where am.userEntity.email = :#{principal.username} and am.logout is null and am.jwt is not null ")
-    List<AuthMetadata> findAllActiveSessionsByUser();
+    Optional<List<AuthMetadata>> findAllActiveSessionsByUser();
 
     @Query("select am from AuthMetadata am where am.userEntity.email = :userEmail and am.logout is null and am.jwt is not null ")
-    List<AuthMetadata> findAllActiveSessionsByUser(@Param("userEmail") String userEmail);
+    Optional<List<AuthMetadata>> findAllActiveSessionsByUser(@Param("userEmail") String userEmail);
 
 }
