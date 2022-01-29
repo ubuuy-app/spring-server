@@ -57,11 +57,12 @@ public class UserSeed {
                 .stream()
                 .map((email) -> {
                     int currentIndex = USER_EMAILS.indexOf(email);
-                    UserServiceModel userServiceModel = new UserServiceModel(
-                            email,
-                            FULL_NAMES.get(currentIndex),
-                            passwordEncoder.encode(PASSWORDS.get(currentIndex))
-                    );
+                    UserServiceModel userServiceModel =
+                            new UserServiceModel(
+                                    email,
+                                    FULL_NAMES.get(currentIndex),
+                                    passwordEncoder.encode(PASSWORDS.get(currentIndex))
+                            );
                     userServiceModel.setRoles(currentIndex == 0 ? List.of(adminRole, userRole) : List.of(userRole));
                     userServiceModel.setMeta(
                             new Meta()
