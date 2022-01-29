@@ -15,7 +15,6 @@ public record ApplicationConstants() {
             List.of(
                     "/api/auth/register-organization-owner",
                     "/api/auth/login",
-                    "/api/auth/logout",
                     "/.well-known/first-party-set",
                     "/first-party-cookie");
 
