@@ -4,6 +4,8 @@ spring:
     url: "jdbc:mysql://root:3871@localhost:3306/aviobrief_sql?serverTimezone=UTC&characterEncoding=UTF-8&sslMode=DISABLED&createDatabaseIfNotExist=true"
 #    url: "jdbc:mysql://b90433b29bf259:f8ac0bdf@us-cdbr-east-05.cleardb.net/heroku_6a011a739c59ec5?reconnect=true&serverTimezone=UTC&characterEncoding=UTF-8&createDatabaseIfNotExist=true"
     driver-class-name: "com.mysql.cj.jdbc.Driver"
+    hikari:
+      maximum-pool-size: 5
     connection-test-query: SELECT 1
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
