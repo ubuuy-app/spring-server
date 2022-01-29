@@ -5,14 +5,20 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.ubuuy.springserver.config.constants.ApplicationConstants;
+import com.ubuuy.springserver.config.constants.ExceptionMessages;
 import com.ubuuy.springserver.models.auth.AuthMetadata;
 import com.ubuuy.springserver.models.entities.Meta;
+import com.ubuuy.springserver.models.entities.OrganizationEntity;
+import com.ubuuy.springserver.models.entities.RoleEntity;
 import com.ubuuy.springserver.models.entities.UserEntity;
+import com.ubuuy.springserver.models.enums.UserRole;
+import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
 import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.repositories.UserRepository;
 import com.ubuuy.springserver.services.AuthMetadataService;
 import com.ubuuy.springserver.services.AuthService;
+import com.ubuuy.springserver.services.RoleService;
 import com.ubuuy.springserver.utils.logger.ServerLogger;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import io.jsonwebtoken.*;
@@ -21,6 +27,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -31,9 +38,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 import static java.util.Objects.nonNull;
 
@@ -44,11 +55,14 @@ public class AuthServiceImpl implements AuthService {
     private final Mapper mapper;
     private final String jwtSecretKey;
     private final int jwtExpirationInMs;
+
     private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
     private final AuthMetadataService authMetadataService;
+    private final RoleService roleService;
     private final Parser parser;
     private final DatabaseReader databaseReader;
+    private final PasswordEncoder passwordEncoder;
 
 
     public AuthServiceImpl(ServerLogger serverLogger,
@@ -58,8 +72,10 @@ public class AuthServiceImpl implements AuthService {
                            UserRepository userRepository,
                            UserDetailsService userDetailsService,
                            AuthMetadataService authMetadataService,
+                           RoleService roleService,
                            Parser parser,
-                           DatabaseReader databaseReader) {
+                           DatabaseReader databaseReader,
+                           PasswordEncoder passwordEncoder) {
         this.serverLogger = serverLogger;
         this.mapper = mapper;
         this.jwtSecretKey = jwtSecretKey;
@@ -67,8 +83,10 @@ public class AuthServiceImpl implements AuthService {
         this.userRepository = userRepository;
         this.userDetailsService = userDetailsService;
         this.authMetadataService = authMetadataService;
+        this.roleService = roleService;
         this.parser = parser;
         this.databaseReader = databaseReader;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -191,9 +209,7 @@ public class AuthServiceImpl implements AuthService {
     public void addLoginToUserHistory(String userEmail, HttpServletRequest request, String jwt)
             throws IOException, GeoIp2Exception, UsernameNotFoundException {
 
-        UserEntity currentlyAuthenticatedUser =
-                getCurrentlyAuthenticatedUser()
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found by email!"));
+        UserEntity currentlyAuthenticatedUser = getCurrentlyAuthenticatedUser();
 
         if (nonNull(currentlyAuthenticatedUser)) {
 
@@ -208,6 +224,7 @@ public class AuthServiceImpl implements AuthService {
                             .setJwt(jwt);
 
             this.logoutAllUserAuthMetadata();
+
             currentlyAuthenticatedUser.getAuthMetadata().add(authMetadata);
             authMetadata.setUserEntity(currentlyAuthenticatedUser);
             this.userRepository.saveAndFlush(currentlyAuthenticatedUser);
@@ -228,12 +245,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void registerOrganizationOwner(UserServiceModel userServiceModel,
-                                          OrganizationServiceModel organizationServiceModel) {
+    @Transactional
+    public UserServiceModel registerOrganizationOwner(RegisterOwnerRequest registerOwnerRequest) throws SQLException {
 
-        userServiceModel.setMeta(new Meta(userServiceModel.getEmail()));
-        UserEntity userEntity = mapper.toModel(userServiceModel, UserEntity.class);
+        OrganizationServiceModel organizationServiceModel =
+                new OrganizationServiceModel().setName(registerOwnerRequest.getOrganization());
 
+        RoleEntity roleEntity = this.roleService.findExistingOrSaveNew(UserRole.OWNER);
+
+        UserEntity userEntity = new UserEntity()
+                .setEmail(registerOwnerRequest.getEmail())
+                .setFullName(registerOwnerRequest.getFullName())
+                .setPassword(passwordEncoder.encode(registerOwnerRequest.getPassword()))
+                .setRoles(List.of(roleEntity))
+                .setMeta(new Meta(registerOwnerRequest.getEmail()))
+                .setOrganization(mapper.toModel(organizationServiceModel, OrganizationEntity.class));
+
+
+        return mapper.toModel(userRepository.saveAndFlush(userEntity), UserServiceModel.class);
     }
 
     private String getDeviceDetails(String userAgent) {
@@ -284,7 +313,7 @@ public class AuthServiceImpl implements AuthService {
         return location;
     }
 
-    private Optional<UserEntity> getCurrentlyAuthenticatedUser() {
+    private UserEntity getCurrentlyAuthenticatedUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userEmail = "";
         if (principal instanceof UserDetails) {
@@ -293,7 +322,9 @@ public class AuthServiceImpl implements AuthService {
             userEmail = principal.toString();
         }
 
-        return this.userRepository.findByEmail(userEmail);
+        return this.userRepository
+                .findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionMessages.USER_FIND_BY_EMAIL_FAIL));
     }
 
     private byte[] convertToBites(String key) {

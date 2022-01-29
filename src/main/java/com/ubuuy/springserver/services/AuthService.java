@@ -1,12 +1,13 @@
 package com.ubuuy.springserver.services;
 
 import com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
+import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public interface AuthService {
     String generateJWT(String userEmail);
@@ -27,6 +28,6 @@ public interface AuthService {
 
     void logoutAllUserAuthMetadata();
 
-    void registerOrganizationOwner(UserServiceModel userServiceModel, OrganizationServiceModel organizationServiceModel);
+    UserServiceModel registerOrganizationOwner(RegisterOwnerRequest registerOwnerRequest) throws SQLException;
 
 }

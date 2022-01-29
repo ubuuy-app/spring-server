@@ -12,23 +12,23 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ubuuy.springserver.config.constants.ExceptionMessages.USER_NOT_FOUND_IN_DATABASE_BY_EMAIL;
+import static com.ubuuy.springserver.config.constants.ExceptionMessages.USER_FIND_BY_EMAIL_FAIL;
 
 @Service
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
-    private final UserRepository userRepo;
+    private final UserRepository userRepository;
 
-    public UserDetailsService(UserRepository userRepo) {
-        this.userRepo = userRepo;
+    public UserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        UserEntity userEntity = this.userRepo
+        UserEntity userEntity = this.userRepository
                 .findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND_IN_DATABASE_BY_EMAIL));
+                .orElseThrow(() -> new UsernameNotFoundException(USER_FIND_BY_EMAIL_FAIL));
 
         return mapToUserDetails(userEntity);
     }
