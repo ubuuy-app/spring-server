@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest httpServletRequest) throws ServletException {
         String path = httpServletRequest.getRequestURI();
-        return ApplicationConstants.SECURITY_FILTERS_DISABLED_PATHS.contains(path);
+        return ApplicationConstants.JWT_FILTER_DISABLED_PATHS.contains(path);
     }
 
     @Override

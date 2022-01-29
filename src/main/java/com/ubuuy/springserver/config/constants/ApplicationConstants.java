@@ -11,7 +11,15 @@ public record ApplicationConstants() {
 
 
     /* auth */
-    public static final List<String> SECURITY_FILTERS_DISABLED_PATHS =
+    public static final List<String> CSRF_FILTER_DISABLED_PATHS =
+            List.of(
+                    "/api/auth/register-organization-owner",
+                    "/api/auth/login",
+                    "/api/auth/logout",
+                    "/.well-known/first-party-set",
+                    "/first-party-cookie");
+
+    public static final List<String> JWT_FILTER_DISABLED_PATHS =
             List.of(
                     "/api/auth/register-organization-owner",
                     "/api/auth/login",
