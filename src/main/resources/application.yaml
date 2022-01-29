@@ -7,7 +7,8 @@ spring:
     hikari:
       minimum-idle: 2
       maximum-pool-size: 10
-      max-lifetime: 40000
+      max-lifetime: 55000
+      keepalive-time: 10000
       idle-timeout: 10000
     connection-test-query: SELECT 1
   jpa:
