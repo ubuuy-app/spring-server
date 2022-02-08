@@ -86,7 +86,7 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public OrganizationEntity getOrganization() {
         return organization;
     }

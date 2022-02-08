@@ -2,6 +2,7 @@ package com.ubuuy.springserver.services;
 
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
+import com.ubuuy.springserver.models.responses.api.LoginResponse;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import org.springframework.http.HttpHeaders;
 
@@ -12,7 +13,7 @@ import java.sql.SQLException;
 public interface AuthService {
     String generateJWT(String userEmail);
 
-    String generateLoginResponse(String userEmail);
+    LoginResponse generateLoginResponse(String userEmail) throws UnsupportedOperationException;
 
     String getUserEmailFromJWT(String jwt);
 

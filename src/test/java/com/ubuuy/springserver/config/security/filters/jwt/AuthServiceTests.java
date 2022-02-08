@@ -2,9 +2,7 @@ package com.ubuuy.springserver.config.security.filters.jwt;
 
 import com.maxmind.geoip2.DatabaseReader;
 import com.ubuuy.springserver.repositories.UserRepository;
-import com.ubuuy.springserver.services.AuthMetadataService;
-import com.ubuuy.springserver.services.AuthService;
-import com.ubuuy.springserver.services.RoleService;
+import com.ubuuy.springserver.services.*;
 import com.ubuuy.springserver.services.servicesImpl.AuthServiceImpl;
 import com.ubuuy.springserver.services.servicesImpl.UserDetailsService;
 import com.ubuuy.springserver.utils.logger.ServerLogger;
@@ -48,6 +46,10 @@ class AuthServiceTests {
     @Mock
     private UserDetailsService userDetailsService;
     @Mock
+    private UserService userService;
+    @Mock
+    private OrganizationService organizationService;
+    @Mock
     private UserRepository userRepository;
     @Mock
     private AuthMetadataService authMetadataService;
@@ -67,8 +69,8 @@ class AuthServiceTests {
         when(userDetailsService.loadUserByUsername("john.doe@icloud.com")).thenReturn(testUserDetails);
 
         authService = new AuthServiceImpl(
-                serverLogger, mapper, jwtSecretKey, jwtExpirationInMs, userRepository, userDetailsService,
-                authMetadataService, roleService, parser, databaseReader, passwordEncoder);
+                serverLogger, mapper, jwtSecretKey, jwtExpirationInMs, userRepository, userService, userDetailsService,
+                organizationService, authMetadataService, roleService, parser, databaseReader, passwordEncoder);
     }
 
     @Test

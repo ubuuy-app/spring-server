@@ -13,12 +13,12 @@ import com.ubuuy.springserver.models.entities.RoleEntity;
 import com.ubuuy.springserver.models.entities.UserEntity;
 import com.ubuuy.springserver.models.enums.UserRole;
 import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
+import com.ubuuy.springserver.models.responses.api.LoginResponse;
+import com.ubuuy.springserver.models.service_models.CustomClaimsServiceModel;
 import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.repositories.UserRepository;
-import com.ubuuy.springserver.services.AuthMetadataService;
-import com.ubuuy.springserver.services.AuthService;
-import com.ubuuy.springserver.services.RoleService;
+import com.ubuuy.springserver.services.*;
 import com.ubuuy.springserver.utils.logger.ServerLogger;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import io.jsonwebtoken.*;
@@ -57,7 +57,9 @@ public class AuthServiceImpl implements AuthService {
     private final int jwtExpirationInMs;
 
     private final UserRepository userRepository;
+    private final UserService userService;
     private final UserDetailsService userDetailsService;
+    private final OrganizationService organizationService;
     private final AuthMetadataService authMetadataService;
     private final RoleService roleService;
     private final Parser parser;
@@ -70,8 +72,8 @@ public class AuthServiceImpl implements AuthService {
                            @Value("${app.jwt-secret}") String jwtSecretKey,
                            @Value("${app.jwt-expiration-mills}") int jwtExpirationInMs,
                            UserRepository userRepository,
-                           UserDetailsService userDetailsService,
-                           AuthMetadataService authMetadataService,
+                           UserService userService, UserDetailsService userDetailsService,
+                           OrganizationService organizationService, AuthMetadataService authMetadataService,
                            RoleService roleService,
                            Parser parser,
                            DatabaseReader databaseReader,
@@ -81,7 +83,9 @@ public class AuthServiceImpl implements AuthService {
         this.jwtSecretKey = jwtSecretKey;
         this.jwtExpirationInMs = jwtExpirationInMs;
         this.userRepository = userRepository;
+        this.userService = userService;
         this.userDetailsService = userDetailsService;
+        this.organizationService = organizationService;
         this.authMetadataService = authMetadataService;
         this.roleService = roleService;
         this.parser = parser;
@@ -106,8 +110,23 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String generateLoginResponse(String userEmail) {
-        return null;
+    public LoginResponse generateLoginResponse(String userEmail) throws UnsupportedOperationException {
+
+        try {
+            String jwt = this.generateJWT(userEmail);
+            UserServiceModel userServiceModel = userService.getByEmail(userEmail);
+
+            CustomClaimsServiceModel customClaimsServiceModel
+                    = new CustomClaimsServiceModel()
+                    .setEmail(userServiceModel.getEmail())
+                    .setFullName(userServiceModel.getFullName())
+                    .setOrganizationId(userServiceModel.getOrganization().getId())
+                    .setOrganizationName(userServiceModel.getOrganization().getName());
+
+            return new LoginResponse(jwt).setCustomClaims(customClaimsServiceModel);
+        } catch (Exception ex){
+            throw new UnsupportedOperationException("Could not generate login response!");
+        }
     }
 
     @Override
