@@ -12,7 +12,7 @@ public class ProductServiceModel extends BaseEntity {
     private String productName;
     private String priority;
     private Boolean exactBrand;
-    private List<StoreEntity> storeEntity;
+    private List<StoreEntity> stores;
 
     public ProductServiceModel() {
     }
@@ -53,12 +53,12 @@ public class ProductServiceModel extends BaseEntity {
         return this;
     }
 
-    public List<StoreEntity> getStoreEntity() {
-        return storeEntity;
+    public List<StoreEntity> getStores() {
+        return stores;
     }
 
-    public ProductServiceModel setStoreEntity(List<StoreEntity> storeEntity) {
-        this.storeEntity = storeEntity;
+    public ProductServiceModel setStores(List<StoreEntity> stores) {
+        this.stores = stores;
         return this;
     }
 }

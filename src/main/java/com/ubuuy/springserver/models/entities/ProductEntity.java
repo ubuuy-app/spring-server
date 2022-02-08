@@ -12,7 +12,7 @@ public class ProductEntity  extends BaseEntity{
     private String productName;
     private String priority;
     private Boolean exactBrand;
-    private List<StoreEntity> storeEntity;
+    private List<StoreEntity> stores;
 
     public ProductEntity() {
     }
@@ -54,12 +54,12 @@ public class ProductEntity  extends BaseEntity{
     }
 
     @ManyToMany
-    public List<StoreEntity> getStoreEntity() {
-        return storeEntity;
+    public List<StoreEntity> getStores() {
+        return stores;
     }
 
-    public ProductEntity setStoreEntity(List<StoreEntity> storeEntity) {
-        this.storeEntity = storeEntity;
+    public ProductEntity setStores(List<StoreEntity> stores) {
+        this.stores = stores;
         return this;
     }
 }

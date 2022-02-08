@@ -19,7 +19,8 @@ public interface ResponseBuilder {
 
     enum Type{
         AUTH("Authentication processing."),
-        REGISTER("Register request");
+        REGISTER("Register request"),
+        ADD_PRODUCT("Add product request");
 
         public final String detailedType;
 

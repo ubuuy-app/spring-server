@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface UserService {
 
-    UserServiceModel saveOne(UserServiceModel userServiceModel);
+    UserServiceModel save(UserServiceModel userServiceModel);
 
     CompletableFuture<List<UserServiceModel>> getAll() throws Exception;
 
