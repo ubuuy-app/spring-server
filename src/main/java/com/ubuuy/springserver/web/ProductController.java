@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProductController {
 
-    @PostMapping(path = "/products")
-    public ResponseEntity<?> registerOwner(@RequestBody AddProductRequest addProductRequest) {
+    @PostMapping(path = "/api/products")
+    public ResponseEntity<?> addProduct(@RequestBody AddProductRequest addProductRequest) {
 
         System.out.println(6);
 
