@@ -83,7 +83,7 @@ public class AuthController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            /* GENERATE JWT RESPONSE */
+            /* GENERATE LOGIN RESPONSE ( JWT AND CUSTOM CLAIMS ) */
             String jwt = authService.generateJWT(loginRequest.email());
             JwtResponse jwtResponse = new JwtResponse(jwt);
 

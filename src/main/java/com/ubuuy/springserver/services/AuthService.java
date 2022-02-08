@@ -12,6 +12,8 @@ import java.sql.SQLException;
 public interface AuthService {
     String generateJWT(String userEmail);
 
+    String generateLoginResponse(String userEmail);
+
     String getUserEmailFromJWT(String jwt);
 
     boolean validateJWT(String jwt);

@@ -102,8 +102,12 @@ public class AuthServiceImpl implements AuthService {
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiryDate))
                 .signWith(SignatureAlgorithm.HS512, convertToBites(jwtSecretKey))
-                .se
                 .compact();
+    }
+
+    @Override
+    public String generateLoginResponse(String userEmail) {
+        return null;
     }
 
     @Override

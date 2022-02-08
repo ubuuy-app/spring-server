@@ -35,7 +35,7 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    @Column(name = "first_name", unique = false, nullable = false)
+    @Column(name = "full_name", unique = false, nullable = false)
     public String getFullName() {
         return fullName;
     }
