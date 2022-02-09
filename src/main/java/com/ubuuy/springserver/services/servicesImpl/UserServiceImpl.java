@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserServiceModel saveOne(UserServiceModel userServiceModel) {
+    public UserServiceModel save(UserServiceModel userServiceModel) {
         try {
             UserEntity savedUser = this.userRepository.saveAndFlush(mapper.toModel(userServiceModel, UserEntity.class));
             return mapper.toModel(savedUser, UserServiceModel.class);

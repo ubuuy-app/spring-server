@@ -7,6 +7,8 @@ import com.ubuuy.springserver.services.OrganizationService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
@@ -25,6 +27,15 @@ public class OrganizationServiceImpl implements OrganizationService {
         OrganizationEntity organizationEntity =
                 organizationRepository.saveAndFlush(mapper.toModel(organizationServiceModel, OrganizationEntity.class));
 
-        return mapper.toModel(organizationEntity,OrganizationServiceModel.class);
+        return mapper.toModel(organizationEntity, OrganizationServiceModel.class);
+    }
+
+    @Override
+    public OrganizationServiceModel getById(Long id) throws NoSuchElementException {
+
+        OrganizationEntity organizationEntity
+                = this.organizationRepository.findById(id).orElseThrow(NoSuchElementException::new);
+
+        return mapper.toModel(organizationEntity, OrganizationServiceModel.class);
     }
 }

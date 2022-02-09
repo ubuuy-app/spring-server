@@ -35,7 +35,7 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    @Column(name = "first_name", unique = false, nullable = false)
+    @Column(name = "full_name", unique = false, nullable = false)
     public String getFullName() {
         return fullName;
     }
@@ -86,7 +86,7 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public OrganizationEntity getOrganization() {
         return organization;
     }

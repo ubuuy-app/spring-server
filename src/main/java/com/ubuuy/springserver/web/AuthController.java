@@ -3,7 +3,7 @@ package com.ubuuy.springserver.web;
 import com.ubuuy.springserver.config.constants.ResponseMessages;
 import com.ubuuy.springserver.models.requests.LoginRequest;
 import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
-import com.ubuuy.springserver.models.responses.api.JwtResponse;
+import com.ubuuy.springserver.models.responses.api.LoginResponse;
 import com.ubuuy.springserver.models.responses.api.RegisterOrganizationOwnerResponse;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.services.AuthService;
@@ -83,19 +83,18 @@ public class AuthController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            /* GENERATE JWT RESPONSE */
-            String jwt = authService.generateJWT(loginRequest.email());
-            JwtResponse jwtResponse = new JwtResponse(jwt);
+            /* GENERATE LOGIN RESPONSE ( JWT AND CUSTOM CLAIMS ) */
+            LoginResponse loginResponse = authService.generateLoginResponse(loginRequest.email());
 
             /* GENERATE DOUBLE SUBMIT COOKIE (WITH CSRF TOKEN) HEADER */
             HttpHeaders responseHeaders = authService.generateDoubleSubmitCookieHeader();
 
             /* ADD LOGIN TO USER HISTORY */
-            authService.addLoginToUserHistory(loginRequest.email(), request, jwt);
+            authService.addLoginToUserHistory(loginRequest.email(), request, loginResponse.getAccessToken());
 
             return ResponseEntity.ok()
                     .headers(responseHeaders)
-                    .body(jwtResponse);
+                    .body(loginResponse);
 
         } catch (BadCredentialsException e) {
             return ResponseEntity
@@ -126,7 +125,7 @@ public class AuthController {
 
     }
 
-    @PostMapping(path = "/api/auth/logout", produces = "application/json")
+    @GetMapping(path = "/api/auth/logout", produces = "application/json")
     public ResponseEntity<?> logout(HttpServletRequest request) {
 
         try {
