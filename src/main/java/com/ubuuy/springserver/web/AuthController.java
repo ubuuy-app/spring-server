@@ -90,7 +90,7 @@ public class AuthController {
             HttpHeaders responseHeaders = authService.generateDoubleSubmitCookieHeader();
 
             /* ADD LOGIN TO USER HISTORY */
-//            authService.addLoginToUserHistory(loginRequest.email(), request, loginResponse.getAccessToken());
+            authService.addLoginToUserHistory(loginRequest.email(), request, loginResponse.getAccessToken());
 
             return ResponseEntity.ok()
                     .headers(responseHeaders)
@@ -125,7 +125,7 @@ public class AuthController {
 
     }
 
-    @PostMapping(path = "/api/auth/logout", produces = "application/json")
+    @GetMapping(path = "/api/auth/logout", produces = "application/json")
     public ResponseEntity<?> logout(HttpServletRequest request) {
 
         try {
