@@ -3,12 +3,11 @@ package com.ubuuy.springserver.services.servicesImpl;
 import com.ubuuy.springserver.config.constants.ExceptionMessages;
 import com.ubuuy.springserver.models.entities.OrganizationEntity;
 import com.ubuuy.springserver.models.entities.ProductEntity;
+import com.ubuuy.springserver.models.entities.PurchaseEntity;
 import com.ubuuy.springserver.models.enums.ProductPackage;
 import com.ubuuy.springserver.models.requests.AddProductRequest;
 import com.ubuuy.springserver.models.responses.api.AddProductAndPurchaseResponse;
 import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
-import com.ubuuy.springserver.models.service_models.ProductServiceModel;
-import com.ubuuy.springserver.models.service_models.PurchaseServiceModel;
 import com.ubuuy.springserver.repositories.OrganizationRepository;
 import com.ubuuy.springserver.services.MetaService;
 import com.ubuuy.springserver.services.OrganizationService;
@@ -62,18 +61,18 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         try {
 
-            OrganizationServiceModel organizationServiceModel = this.findById(organizationId);
+            OrganizationEntity organizationInDb = this.organizationRepository.getById(organizationId);
 
-            ProductServiceModel productServiceModel =
-                    new ProductServiceModel()
+            ProductEntity productEntity =
+                    new ProductEntity()
                             .setProductName(addProductRequest.getProductName())
                             .setImage(addProductRequest.getImage())
                             .setPrice(0.0)
                             .setMetaEntity(metaService.create());
 
-            PurchaseServiceModel purchaseServiceModel =
-                    new PurchaseServiceModel()
-                            .setProduct(mapper.toModel(productServiceModel, ProductEntity.class))
+            PurchaseEntity purchaseEntity =
+                    new PurchaseEntity()
+                            .setProduct(productEntity)
                             .setQuantity(1)
                             .setProductPackage(ProductPackage.NOT_SPECIFIED)
                             .setPriority(addProductRequest.getPriority())
@@ -81,17 +80,17 @@ public class OrganizationServiceImpl implements OrganizationService {
                             .setExactBrand(addProductRequest.getExactBrand())
                             .setMetaEntity(metaService.create());
 
-            organizationServiceModel.getPurchases().add(purchaseServiceModel);
-            organizationServiceModel.setMetaEntity(metaService.create());
+            organizationInDb.getPurchases().add(purchaseEntity);
+            organizationInDb.getProducts().add(productEntity);
 
-            OrganizationEntity organizationEntity =
-                    this.organizationRepository.save(mapper.toModel(organizationServiceModel, OrganizationEntity.class));
+            OrganizationEntity updatedOrganizationInDb =
+                    this.organizationRepository.save(organizationInDb);
 
 
             return new AddProductAndPurchaseResponse()
                     .setOrganizationId(organizationId)
-                    .setProductId(organizationEntity.getProducts().get(organizationEntity.getProducts().size() - 1).getId())
-                    .setPurchaseId(organizationEntity.getPurchases().get(organizationEntity.getPurchases().size() - 1).getId());
+                    .setProductId(updatedOrganizationInDb.getProducts().get(updatedOrganizationInDb.getProducts().size() - 1).getId())
+                    .setPurchaseId(updatedOrganizationInDb.getPurchases().get(updatedOrganizationInDb.getPurchases().size() - 1).getId());
 
         } catch (Exception ex) {
             throw new SQLException(ExceptionMessages.ENTITY_DATABASE_SAVE_FAIL);

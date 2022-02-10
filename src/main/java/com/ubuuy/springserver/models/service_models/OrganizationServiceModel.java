@@ -10,7 +10,7 @@ public class OrganizationServiceModel {
     private String name;
     private List<UserServiceModel> members = new ArrayList<>();
     private List<PurchaseServiceModel> purchases = new ArrayList<>();
-    private List<PurchaseServiceModel> products = new ArrayList<>();
+    private List<ProductServiceModel> products = new ArrayList<>();
     private MetaEntity metaEntity;
 
     public OrganizationServiceModel() {
@@ -43,11 +43,11 @@ public class OrganizationServiceModel {
         return this;
     }
 
-    public List<PurchaseServiceModel> getProducts() {
+    public List<ProductServiceModel> getProducts() {
         return products;
     }
 
-    public OrganizationServiceModel setProducts(List<PurchaseServiceModel> products) {
+    public OrganizationServiceModel setProducts(List<ProductServiceModel> products) {
         this.products = products;
         return this;
     }
