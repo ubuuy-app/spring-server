@@ -11,6 +11,9 @@ public class OrganizationEntity extends BaseEntity {
 
     private String name;
     private List<UserEntity> members = new ArrayList<>();
+    private List<PurchaseEntity> purchases = new ArrayList<>();
+    private List<ProductEntity> products = new ArrayList<>();
+    private MetaEntity metaEntity;
 
     public OrganizationEntity() {
     }
@@ -36,6 +39,36 @@ public class OrganizationEntity extends BaseEntity {
 
     public OrganizationEntity setMembers(List<UserEntity> members) {
         this.members = members;
+        return this;
+    }
+
+    @OneToMany
+    public List<PurchaseEntity> getPurchases() {
+        return purchases;
+    }
+
+    public OrganizationEntity setPurchases(List<PurchaseEntity> purchases) {
+        this.purchases = purchases;
+        return this;
+    }
+
+    @OneToMany
+    public List<ProductEntity> getProducts() {
+        return products;
+    }
+
+    public OrganizationEntity setProducts(List<ProductEntity> products) {
+        this.products = products;
+        return this;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    public MetaEntity getMetaEntity() {
+        return metaEntity;
+    }
+
+    public OrganizationEntity setMetaEntity(MetaEntity metaEntity) {
+        this.metaEntity = metaEntity;
         return this;
     }
 }

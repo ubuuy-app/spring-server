@@ -1,10 +1,8 @@
 package com.ubuuy.springserver.services.servicesImpl;
 
 import com.ubuuy.springserver.config.constants.ExceptionMessages;
-import com.ubuuy.springserver.models.entities.MetaEntity;
 import com.ubuuy.springserver.models.entities.ProductEntity;
 import com.ubuuy.springserver.models.entities.PurchaseEntity;
-import com.ubuuy.springserver.models.enums.MetaActionEnum;
 import com.ubuuy.springserver.models.enums.ProductPackage;
 import com.ubuuy.springserver.models.requests.AddProductRequest;
 import com.ubuuy.springserver.models.responses.api.AddProductAndPurchaseResponse;
@@ -37,14 +35,12 @@ public class PurchaseServiceImpl implements PurchaseService {
     public AddProductAndPurchaseResponse saveNewPurchaseAndProduct(AddProductRequest addProductRequest) throws SQLException {
 
         try {
-            MetaEntity newItemMeta = this.metaService.createMetaData(MetaActionEnum.CREATE);
-
             ProductServiceModel productServiceModel =
                     new ProductServiceModel()
                             .setProductName(addProductRequest.getProductName())
                             .setImage(addProductRequest.getImage())
                             .setPrice(0.0)
-                            .setMetaEntity(newItemMeta);
+                            .setMetaEntity(metaService.create());
 
             PurchaseEntity purchaseEntityToSave =
                     new PurchaseEntity()
@@ -54,7 +50,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                             .setPriority(addProductRequest.getPriority())
                             .setStore(null)
                             .setExactBrand(addProductRequest.getExactBrand())
-                            .setMetaEntity(newItemMeta);
+                            .setMetaEntity(metaService.create());
 
             PurchaseEntity purchaseEntity =
                     this.purchaseRepository.save(purchaseEntityToSave);
