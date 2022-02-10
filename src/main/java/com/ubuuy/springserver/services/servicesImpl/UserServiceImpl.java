@@ -5,6 +5,7 @@ import com.ubuuy.springserver.config.constants.ExceptionMessages;
 import com.ubuuy.springserver.models.entities.UserEntity;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.repositories.UserRepository;
+import com.ubuuy.springserver.services.MetaService;
 import com.ubuuy.springserver.services.UserService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import org.springframework.scheduling.annotation.Async;
@@ -21,20 +22,23 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final MetaService metaService;
     private final Mapper mapper;
 
     public UserServiceImpl(
             PasswordEncoder passwordEncoder,
             UserRepository userRepository,
+            MetaService metaService,
             Mapper mapper
     ) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.metaService = metaService;
         this.mapper = mapper;
     }
 
     @Override
-    public UserServiceModel save(UserServiceModel userServiceModel) {
+    public UserServiceModel saveNewUser(UserServiceModel userServiceModel) {
         try {
             UserEntity savedUser = this.userRepository.saveAndFlush(mapper.toModel(userServiceModel, UserEntity.class));
             return mapper.toModel(savedUser, UserServiceModel.class);

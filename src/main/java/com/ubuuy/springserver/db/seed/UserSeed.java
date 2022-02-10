@@ -1,7 +1,8 @@
 package com.ubuuy.springserver.db.seed;
 
-import com.ubuuy.springserver.models.entities.Meta;
+import com.ubuuy.springserver.models.entities.MetaEntity;
 import com.ubuuy.springserver.models.entities.RoleEntity;
+import com.ubuuy.springserver.models.enums.MetaActionEnum;
 import com.ubuuy.springserver.models.enums.UserRole;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.repositories.RoleRepository;
@@ -12,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -64,16 +64,13 @@ public class UserSeed {
                                     passwordEncoder.encode(PASSWORDS.get(currentIndex))
                             );
                     userServiceModel.setRoles(currentIndex == 0 ? List.of(adminRole, userRole) : List.of(userRole));
-                    userServiceModel.setMeta(
-                            new Meta()
-                                    .setAddedAt(ZonedDateTime.now())
-                                    .setAddedBy(email));
+                    userServiceModel.setMeta(new MetaEntity().setSystemUser(email).setAction(MetaActionEnum.CREATE));
 
                     return userServiceModel;
                 })
                 .forEach(userServiceModel -> {
                     try {
-                        UserServiceModel savedEntity = userService.save(userServiceModel);
+                        UserServiceModel savedEntity = userService.saveNewUser(userServiceModel);
                         logger.log(Level.INFO, String.format("%d", savedEntity != null ? savedEntity.getId() : -1));
                     } catch (Exception e) {
                         logger.log(Level.INFO, e::getMessage);

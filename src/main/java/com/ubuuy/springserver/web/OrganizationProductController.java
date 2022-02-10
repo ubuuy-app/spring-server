@@ -2,9 +2,8 @@ package com.ubuuy.springserver.web;
 
 
 import com.ubuuy.springserver.models.requests.AddProductRequest;
-import com.ubuuy.springserver.models.responses.api.GenericIdResponse;
-import com.ubuuy.springserver.models.service_models.ProductServiceModel;
-import com.ubuuy.springserver.services.ProductService;
+import com.ubuuy.springserver.models.responses.api.AddProductAndPurchaseResponse;
+import com.ubuuy.springserver.services.OrganizationService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import com.ubuuy.springserver.utils.response_builder.ResponseBuilder;
 import org.springframework.http.HttpStatus;
@@ -18,12 +17,13 @@ import java.util.logging.Logger;
 public class OrganizationProductController {
 
     private static final Logger logger = Logger.getLogger("OrganizationProductController");
-    private final ProductService productService;
+    private final OrganizationService organizationService;
     private final Mapper mapper;
     private final ResponseBuilder responseBuilder;
 
-    public OrganizationProductController(ProductService productService, Mapper mapper, ResponseBuilder responseBuilder) {
-        this.productService = productService;
+    public OrganizationProductController(
+            OrganizationService organizationService, Mapper mapper, ResponseBuilder responseBuilder) {
+        this.organizationService = organizationService;
         this.mapper = mapper;
         this.responseBuilder = responseBuilder;
     }
@@ -34,12 +34,12 @@ public class OrganizationProductController {
             @RequestBody AddProductRequest addProductRequest) {
 
         try {
-            ProductServiceModel productServiceModel =
-                    productService.save(mapper.toModel(addProductRequest, ProductServiceModel.class));
+            AddProductAndPurchaseResponse addProductAndPurchaseResponse =
+                    organizationService.addNewPurchaseAndProduct(addProductRequest, organizationId);
 
             return ResponseEntity
                     .ok()
-                    .body(new GenericIdResponse().setId(productServiceModel.getId()));
+                    .body(addProductAndPurchaseResponse);
 
         } catch (Exception ex) {
             return ResponseEntity

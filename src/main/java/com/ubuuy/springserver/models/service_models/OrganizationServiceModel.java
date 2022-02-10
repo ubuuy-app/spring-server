@@ -1,5 +1,7 @@
 package com.ubuuy.springserver.models.service_models;
 
+import com.ubuuy.springserver.models.entities.MetaEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,9 @@ public class OrganizationServiceModel {
 
     private String name;
     private List<UserServiceModel> members = new ArrayList<>();
+    private List<PurchaseServiceModel> purchases = new ArrayList<>();
+    private List<ProductServiceModel> products = new ArrayList<>();
+    private MetaEntity metaEntity;
 
     public OrganizationServiceModel() {
     }
@@ -26,6 +31,33 @@ public class OrganizationServiceModel {
 
     public OrganizationServiceModel setMembers(List<UserServiceModel> members) {
         this.members = members;
+        return this;
+    }
+
+    public List<PurchaseServiceModel> getPurchases() {
+        return purchases;
+    }
+
+    public OrganizationServiceModel setPurchases(List<PurchaseServiceModel> purchases) {
+        this.purchases = purchases;
+        return this;
+    }
+
+    public List<ProductServiceModel> getProducts() {
+        return products;
+    }
+
+    public OrganizationServiceModel setProducts(List<ProductServiceModel> products) {
+        this.products = products;
+        return this;
+    }
+
+    public MetaEntity getMetaEntity() {
+        return metaEntity;
+    }
+
+    public OrganizationServiceModel setMetaEntity(MetaEntity metaEntity) {
+        this.metaEntity = metaEntity;
         return this;
     }
 }

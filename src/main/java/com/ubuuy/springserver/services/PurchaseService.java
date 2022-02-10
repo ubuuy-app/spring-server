@@ -1,5 +1,6 @@
 package com.ubuuy.springserver.services;
 
-public interface ProductService {
+public interface PurchaseService {
+
 
 }

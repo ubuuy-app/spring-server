@@ -1,7 +1,6 @@
 package com.ubuuy.springserver.models.entities;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -10,9 +9,9 @@ public class ProductEntity  extends BaseEntity{
 
     private String image;
     private String productName;
-    private String priority;
-    private Boolean exactBrand;
-    private List<StoreEntity> stores;
+    private Double price;
+    private MetaEntity metaEntity;
+
 
     public ProductEntity() {
     }
@@ -35,31 +34,22 @@ public class ProductEntity  extends BaseEntity{
         return this;
     }
 
-    public String getPriority() {
-        return priority;
+    public Double getPrice() {
+        return price;
     }
 
-    public ProductEntity setPriority(String priority) {
-        this.priority = priority;
+    public ProductEntity setPrice(Double price) {
+        this.price = price;
         return this;
     }
 
-    public Boolean getExactBrand() {
-        return exactBrand;
+    @OneToOne(cascade = CascadeType.ALL)
+    public MetaEntity getMetaEntity() {
+        return metaEntity;
     }
 
-    public ProductEntity setExactBrand(Boolean exactBrand) {
-        this.exactBrand = exactBrand;
-        return this;
-    }
-
-    @ManyToMany
-    public List<StoreEntity> getStores() {
-        return stores;
-    }
-
-    public ProductEntity setStores(List<StoreEntity> stores) {
-        this.stores = stores;
+    public ProductEntity setMetaEntity(MetaEntity metaEntity) {
+        this.metaEntity = metaEntity;
         return this;
     }
 }
