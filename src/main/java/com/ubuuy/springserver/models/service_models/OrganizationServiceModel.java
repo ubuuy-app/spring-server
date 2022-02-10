@@ -1,8 +1,6 @@
 package com.ubuuy.springserver.models.service_models;
 
 import com.ubuuy.springserver.models.entities.MetaEntity;
-import com.ubuuy.springserver.models.entities.ProductEntity;
-import com.ubuuy.springserver.models.entities.PurchaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +9,8 @@ public class OrganizationServiceModel {
 
     private String name;
     private List<UserServiceModel> members = new ArrayList<>();
-    private List<PurchaseEntity> purchases = new ArrayList<>();
-    private List<ProductEntity> products = new ArrayList<>();
+    private List<PurchaseServiceModel> purchases = new ArrayList<>();
+    private List<PurchaseServiceModel> products = new ArrayList<>();
     private MetaEntity metaEntity;
 
     public OrganizationServiceModel() {
@@ -36,20 +34,20 @@ public class OrganizationServiceModel {
         return this;
     }
 
-    public List<PurchaseEntity> getPurchases() {
+    public List<PurchaseServiceModel> getPurchases() {
         return purchases;
     }
 
-    public OrganizationServiceModel setPurchases(List<PurchaseEntity> purchases) {
+    public OrganizationServiceModel setPurchases(List<PurchaseServiceModel> purchases) {
         this.purchases = purchases;
         return this;
     }
 
-    public List<ProductEntity> getProducts() {
+    public List<PurchaseServiceModel> getProducts() {
         return products;
     }
 
-    public OrganizationServiceModel setProducts(List<ProductEntity> products) {
+    public OrganizationServiceModel setProducts(List<PurchaseServiceModel> products) {
         this.products = products;
         return this;
     }

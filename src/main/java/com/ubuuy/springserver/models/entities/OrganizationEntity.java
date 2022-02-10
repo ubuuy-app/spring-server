@@ -30,8 +30,8 @@ public class OrganizationEntity extends BaseEntity {
 
     @OneToMany(
             mappedBy = "organization",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE
     )
     public List<UserEntity> getMembers() {
         return members;
@@ -42,7 +42,7 @@ public class OrganizationEntity extends BaseEntity {
         return this;
     }
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     public List<PurchaseEntity> getPurchases() {
         return purchases;
     }
@@ -52,7 +52,7 @@ public class OrganizationEntity extends BaseEntity {
         return this;
     }
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     public List<ProductEntity> getProducts() {
         return products;
     }
