@@ -33,4 +33,6 @@ public interface AuthService {
 
     UserServiceModel registerOrganizationOwner(RegisterOwnerRequest registerOwnerRequest) throws SQLException;
 
+    String getPrincipalUsername();
+
 }

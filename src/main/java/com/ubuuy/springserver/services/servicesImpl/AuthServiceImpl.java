@@ -7,10 +7,11 @@ import com.maxmind.geoip2.model.CityResponse;
 import com.ubuuy.springserver.config.constants.ApplicationConstants;
 import com.ubuuy.springserver.config.constants.ExceptionMessages;
 import com.ubuuy.springserver.models.auth.AuthMetadata;
-import com.ubuuy.springserver.models.entities.Meta;
+import com.ubuuy.springserver.models.entities.MetaEntity;
 import com.ubuuy.springserver.models.entities.OrganizationEntity;
 import com.ubuuy.springserver.models.entities.RoleEntity;
 import com.ubuuy.springserver.models.entities.UserEntity;
+import com.ubuuy.springserver.models.enums.MetaActionEnum;
 import com.ubuuy.springserver.models.enums.UserRole;
 import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
 import com.ubuuy.springserver.models.responses.api.LoginResponse;
@@ -282,11 +283,18 @@ public class AuthServiceImpl implements AuthService {
                 .setFullName(registerOwnerRequest.getFullName())
                 .setPassword(passwordEncoder.encode(registerOwnerRequest.getPassword()))
                 .setRoles(List.of(roleEntity))
-                .setMeta(new Meta(registerOwnerRequest.getEmail()))
+                .setMeta(new MetaEntity()
+                        .setSystemUser(registerOwnerRequest.getEmail())
+                        .setAction(MetaActionEnum.CREATE))
                 .setOrganization(mapper.toModel(organizationServiceModel, OrganizationEntity.class));
 
 
         return mapper.toModel(userRepository.saveAndFlush(userEntity), UserServiceModel.class);
+    }
+
+    @Override
+    public String getPrincipalUsername() {
+        return this.getCurrentlyAuthenticatedUser().getEmail();
     }
 
     private String getDeviceDetails(String userAgent) {

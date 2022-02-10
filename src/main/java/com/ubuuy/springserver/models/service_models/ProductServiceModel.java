@@ -1,18 +1,15 @@
 package com.ubuuy.springserver.models.service_models;
 
 import com.ubuuy.springserver.models.entities.BaseEntity;
-import com.ubuuy.springserver.models.entities.StoreEntity;
-
-import java.util.List;
+import com.ubuuy.springserver.models.entities.MetaEntity;
 
 
 public class ProductServiceModel extends BaseEntity {
 
     private String image;
     private String productName;
-    private String priority;
-    private Boolean exactBrand;
-    private List<StoreEntity> stores;
+    private Double price;
+    private MetaEntity metaEntity;
 
     public ProductServiceModel() {
     }
@@ -35,30 +32,21 @@ public class ProductServiceModel extends BaseEntity {
         return this;
     }
 
-    public String getPriority() {
-        return priority;
+    public Double getPrice() {
+        return price;
     }
 
-    public ProductServiceModel setPriority(String priority) {
-        this.priority = priority;
+    public ProductServiceModel setPrice(Double price) {
+        this.price = price;
         return this;
     }
 
-    public Boolean getExactBrand() {
-        return exactBrand;
+    public MetaEntity getMetaEntity() {
+        return metaEntity;
     }
 
-    public ProductServiceModel setExactBrand(Boolean exactBrand) {
-        this.exactBrand = exactBrand;
-        return this;
-    }
-
-    public List<StoreEntity> getStores() {
-        return stores;
-    }
-
-    public ProductServiceModel setStores(List<StoreEntity> stores) {
-        this.stores = stores;
+    public ProductServiceModel setMetaEntity(MetaEntity metaEntity) {
+        this.metaEntity = metaEntity;
         return this;
     }
 }

@@ -16,7 +16,7 @@ public class UserEntity extends BaseEntity {
     private String fullName;
     private String password;
     private List<RoleEntity> roles = new ArrayList<>();
-    private Meta meta;
+    private MetaEntity metaEntity;
     private List<AuthMetadata> authMetadata = new ArrayList<>();
     private OrganizationEntity organization;
 
@@ -66,14 +66,15 @@ public class UserEntity extends BaseEntity {
     }
 
     @OneToOne(cascade = {CascadeType.ALL})
-    public Meta getMeta() {
-        return meta;
+    public MetaEntity getMeta() {
+        return metaEntity;
     }
 
-    public UserEntity setMeta(Meta meta) {
-        this.meta = meta;
+    public UserEntity setMeta(MetaEntity metaEntity) {
+        this.metaEntity = metaEntity;
         return this;
     }
+
     @OneToMany(
             mappedBy = "userEntity", targetEntity = AuthMetadata.class,
             cascade = CascadeType.ALL)
