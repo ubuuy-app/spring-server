@@ -342,6 +342,9 @@ public class AuthServiceImpl implements AuthService {
             location = cityResponse.getCity().getName();
         }
 
+        System.out.println(ip);
+        System.out.println(location);
+
         return location;
     }
 
