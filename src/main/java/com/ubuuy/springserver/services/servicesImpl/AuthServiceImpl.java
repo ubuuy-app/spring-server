@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
@@ -122,10 +123,15 @@ public class AuthServiceImpl implements AuthService {
                     .setEmail(userServiceModel.getEmail())
                     .setFullName(userServiceModel.getFullName())
                     .setOrganizationId(userServiceModel.getOrganization().getId())
-                    .setOrganizationName(userServiceModel.getOrganization().getName());
+                    .setOrganizationName(userServiceModel.getOrganization().getName())
+                    .setRoles(userServiceModel
+                            .getRoles()
+                            .stream()
+                            .map(ur -> ur.getRole().name())
+                            .collect(Collectors.toList()));
 
             return new LoginResponse(jwt).setCustomClaims(customClaimsServiceModel);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new UnsupportedOperationException("Could not generate login response!");
         }
     }

@@ -14,6 +14,8 @@ public class PurchaseServiceModel extends BaseServiceModel {
     private String priority;
     private StoreEntity store;
     private Boolean exactBrand;
+    private Boolean isBought;
+
 
     public PurchaseServiceModel() {
     }
@@ -81,5 +83,12 @@ public class PurchaseServiceModel extends BaseServiceModel {
         return this;
     }
 
+    public Boolean getBought() {
+        return isBought;
+    }
 
+    public PurchaseServiceModel setBought(Boolean bought) {
+        isBought = bought;
+        return this;
+    }
 }

@@ -17,6 +17,7 @@ public class PurchaseEntity extends BaseEntity{
     private String priority;
     private StoreEntity store;
     private Boolean exactBrand;
+    private Boolean isBought;
 
     public PurchaseEntity() {
     }
@@ -88,5 +89,13 @@ public class PurchaseEntity extends BaseEntity{
         return this;
     }
 
+    @Column(name = "is_bought")
+    public Boolean getBought() {
+        return isBought;
+    }
 
+    public PurchaseEntity setBought(Boolean bought) {
+        isBought = bought;
+        return this;
+    }
 }

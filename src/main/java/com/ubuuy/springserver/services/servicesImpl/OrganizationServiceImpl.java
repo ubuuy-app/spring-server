@@ -72,13 +72,14 @@ public class OrganizationServiceImpl implements OrganizationService {
 
             PurchaseEntity purchaseEntity =
                     new PurchaseEntity()
+                            .setMetaEntity(metaService.create())
                             .setProduct(productEntity)
                             .setQuantity(1)
                             .setProductPackage(ProductPackage.NOT_SPECIFIED)
                             .setPriority(addProductRequest.getPriority())
                             .setStore(null)
                             .setExactBrand(addProductRequest.getExactBrand())
-                            .setMetaEntity(metaService.create());
+                            .setBought(false);
 
             organizationInDb.getPurchases().add(purchaseEntity);
             organizationInDb.getProducts().add(productEntity);
