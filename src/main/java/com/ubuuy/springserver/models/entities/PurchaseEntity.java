@@ -10,15 +10,25 @@ import javax.persistence.*;
 @Access(AccessType.PROPERTY)
 public class PurchaseEntity extends BaseEntity{
 
+    private MetaEntity metaEntity;
     private ProductEntity product;
     private Integer quantity;
     private ProductPackage productPackage;
     private String priority;
     private StoreEntity store;
     private Boolean exactBrand;
-    private MetaEntity metaEntity;
 
     public PurchaseEntity() {
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    public MetaEntity getMetaEntity() {
+        return metaEntity;
+    }
+
+    public PurchaseEntity setMetaEntity(MetaEntity metaEntity) {
+        this.metaEntity = metaEntity;
+        return this;
     }
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -78,13 +88,5 @@ public class PurchaseEntity extends BaseEntity{
         return this;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    public MetaEntity getMetaEntity() {
-        return metaEntity;
-    }
 
-    public PurchaseEntity setMetaEntity(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
-        return this;
-    }
 }

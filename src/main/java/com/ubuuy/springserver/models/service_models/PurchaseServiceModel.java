@@ -5,15 +5,27 @@ import com.ubuuy.springserver.models.entities.ProductEntity;
 import com.ubuuy.springserver.models.entities.StoreEntity;
 import com.ubuuy.springserver.models.enums.ProductPackage;
 
-public class PurchaseServiceModel extends BaseServiceModel{
+public class PurchaseServiceModel extends BaseServiceModel {
 
+    private MetaEntity metaEntity;
     private ProductEntity product;
     private Integer quantity;
     private ProductPackage productPackage;
     private String priority;
     private StoreEntity store;
     private Boolean exactBrand;
-    private MetaEntity metaEntity;
+
+    public PurchaseServiceModel() {
+    }
+
+    public MetaEntity getMetaEntity() {
+        return metaEntity;
+    }
+
+    public PurchaseServiceModel setMetaEntity(MetaEntity metaEntity) {
+        this.metaEntity = metaEntity;
+        return this;
+    }
 
     public ProductEntity getProduct() {
         return product;
@@ -69,12 +81,5 @@ public class PurchaseServiceModel extends BaseServiceModel{
         return this;
     }
 
-    public MetaEntity getMetaEntity() {
-        return metaEntity;
-    }
 
-    public PurchaseServiceModel setMetaEntity(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
-        return this;
-    }
 }
