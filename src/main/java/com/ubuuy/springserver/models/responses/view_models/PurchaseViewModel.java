@@ -1,10 +1,12 @@
 package com.ubuuy.springserver.models.responses.view_models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ubuuy.springserver.models.entities.StoreEntity;
 import com.ubuuy.springserver.models.enums.ProductPackage;
 
 public class PurchaseViewModel {
 
+    private Long id;
     private ProductViewModel product;
     private Integer quantity;
     private ProductPackage productPackage;
@@ -14,6 +16,16 @@ public class PurchaseViewModel {
     private Boolean isBought;
 
     public PurchaseViewModel() {
+    }
+
+    @JsonProperty("_id")
+    public Long getId() {
+        return id;
+    }
+
+    public PurchaseViewModel setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public ProductViewModel getProduct() {
