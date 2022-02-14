@@ -1,13 +1,13 @@
 package com.ubuuy.springserver.models.service_models;
 
-import com.ubuuy.springserver.models.entities.MetaEntity;
 import com.ubuuy.springserver.models.entities.ProductEntity;
 import com.ubuuy.springserver.models.entities.StoreEntity;
 import com.ubuuy.springserver.models.enums.ProductPackage;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 
 public class PurchaseServiceModel extends BaseServiceModel {
 
-    private MetaEntity metaEntity;
+    private MetaData metaData;
     private ProductEntity product;
     private Integer quantity;
     private ProductPackage productPackage;
@@ -20,12 +20,12 @@ public class PurchaseServiceModel extends BaseServiceModel {
     public PurchaseServiceModel() {
     }
 
-    public MetaEntity getMetaEntity() {
-        return metaEntity;
+    public MetaData getMetaData() {
+        return metaData;
     }
 
-    public PurchaseServiceModel setMetaEntity(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
+    public PurchaseServiceModel setMetaData(MetaData metaData) {
+        this.metaData = metaData;
         return this;
     }
 

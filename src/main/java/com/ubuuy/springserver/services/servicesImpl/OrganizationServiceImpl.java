@@ -43,7 +43,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public OrganizationServiceModel saveNewOrganization(OrganizationServiceModel organizationServiceModel) {
 
-        organizationServiceModel.setMetaEntity(metaService.create());
+        organizationServiceModel.setMetaData(metaService.create());
 
         OrganizationEntity organizationEntity =
                 organizationRepository.saveAndFlush(mapper.toModel(organizationServiceModel, OrganizationEntity.class));
@@ -74,11 +74,11 @@ public class OrganizationServiceImpl implements OrganizationService {
                             .setProductName(addProductRequest.getProductName())
                             .setImage(addProductRequest.getImage())
                             .setPrice(0.0)
-                            .setMetaEntity(metaService.create());
+                            .setMetaData(metaService.create());
 
             PurchaseEntity purchaseEntity =
                     new PurchaseEntity()
-                            .setMetaEntity(metaService.create())
+                            .setMetaData(metaService.create())
                             .setProduct(productEntity)
                             .setQuantity(1)
                             .setProductPackage(ProductPackage.NOT_SPECIFIED)

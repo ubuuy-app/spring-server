@@ -1,6 +1,7 @@
 package com.ubuuy.springserver.models.entities;
 
 import com.ubuuy.springserver.models.enums.ProductPackage;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 
 import javax.persistence.*;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Access(AccessType.PROPERTY)
 public class PurchaseEntity extends BaseEntity{
 
-    private MetaEntity metaEntity;
+    private MetaData metaData;
     private ProductEntity product;
     private Integer quantity;
     private ProductPackage productPackage;
@@ -23,12 +24,12 @@ public class PurchaseEntity extends BaseEntity{
     }
 
     @OneToOne(cascade = CascadeType.ALL)
-    public MetaEntity getMetaEntity() {
-        return metaEntity;
+    public MetaData getMetaData() {
+        return metaData;
     }
 
-    public PurchaseEntity setMetaEntity(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
+    public PurchaseEntity setMetaData(MetaData metaData) {
+        this.metaData = metaData;
         return this;
     }
 

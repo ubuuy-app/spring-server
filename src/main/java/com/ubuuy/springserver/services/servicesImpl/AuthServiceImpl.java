@@ -6,13 +6,13 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.ubuuy.springserver.config.constants.ApplicationConstants;
 import com.ubuuy.springserver.config.constants.ExceptionMessages;
-import com.ubuuy.springserver.models.auth.AuthMetadata;
-import com.ubuuy.springserver.models.entities.MetaEntity;
 import com.ubuuy.springserver.models.entities.OrganizationEntity;
 import com.ubuuy.springserver.models.entities.RoleEntity;
 import com.ubuuy.springserver.models.entities.UserEntity;
 import com.ubuuy.springserver.models.enums.MetaActionEnum;
 import com.ubuuy.springserver.models.enums.UserRole;
+import com.ubuuy.springserver.models.meta_data.AuthMetadata;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
 import com.ubuuy.springserver.models.responses.api_responses.LoginResponse;
 import com.ubuuy.springserver.models.service_models.CustomClaimsServiceModel;
@@ -67,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
     private final Parser parser;
     private final DatabaseReader databaseReader;
     private final PasswordEncoder passwordEncoder;
+    private final MetaService metaService;
 
 
     public AuthServiceImpl(ServerLogger serverLogger,
@@ -79,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
                            RoleService roleService,
                            Parser parser,
                            DatabaseReader databaseReader,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder, MetaService metaService) {
         this.serverLogger = serverLogger;
         this.mapper = mapper;
         this.jwtSecretKey = jwtSecretKey;
@@ -93,6 +94,7 @@ public class AuthServiceImpl implements AuthService {
         this.parser = parser;
         this.databaseReader = databaseReader;
         this.passwordEncoder = passwordEncoder;
+        this.metaService = metaService;
     }
 
     @Override
@@ -280,7 +282,12 @@ public class AuthServiceImpl implements AuthService {
     public UserServiceModel registerOrganizationOwner(RegisterOwnerRequest registerOwnerRequest) throws SQLException {
 
         OrganizationServiceModel organizationServiceModel =
-                new OrganizationServiceModel().setName(registerOwnerRequest.getOrganization());
+                new OrganizationServiceModel()
+                        .setName(registerOwnerRequest.getOrganization())
+                        .setMetaData(new MetaData()
+                                .setSystemUser(registerOwnerRequest.getEmail())
+                                .setAction(MetaActionEnum.CREATE)
+                        );
 
         RoleEntity roleEntity = this.roleService.findExistingOrSaveNew(UserRole.OWNER);
 
@@ -289,7 +296,7 @@ public class AuthServiceImpl implements AuthService {
                 .setFullName(registerOwnerRequest.getFullName())
                 .setPassword(passwordEncoder.encode(registerOwnerRequest.getPassword()))
                 .setRoles(List.of(roleEntity))
-                .setMeta(new MetaEntity()
+                .setMeta(new MetaData()
                         .setSystemUser(registerOwnerRequest.getEmail())
                         .setAction(MetaActionEnum.CREATE))
                 .setOrganization(mapper.toModel(organizationServiceModel, OrganizationEntity.class));

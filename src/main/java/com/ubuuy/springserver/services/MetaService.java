@@ -1,15 +1,15 @@
 package com.ubuuy.springserver.services;
 
-import com.ubuuy.springserver.models.entities.MetaEntity;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 
 public interface MetaService {
 
-    MetaEntity create();
+    MetaData create();
 
-    MetaEntity update();
+    MetaData update();
 
-    MetaEntity delete();
+    MetaData delete();
 
-    MetaEntity actionNotApplicable();
+    MetaData actionNotApplicable();
 
 }

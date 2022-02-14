@@ -1,6 +1,6 @@
 package com.ubuuy.springserver.services;
 
-import com.ubuuy.springserver.models.auth.AuthMetadata;
+import com.ubuuy.springserver.models.meta_data.AuthMetadata;
 
 import java.util.List;
 

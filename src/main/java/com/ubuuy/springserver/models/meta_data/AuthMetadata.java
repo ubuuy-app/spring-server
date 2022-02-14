@@ -1,4 +1,4 @@
-package com.ubuuy.springserver.models.auth;
+package com.ubuuy.springserver.models.meta_data;
 
 import com.ubuuy.springserver.models.entities.BaseEntity;
 import com.ubuuy.springserver.models.entities.UserEntity;
