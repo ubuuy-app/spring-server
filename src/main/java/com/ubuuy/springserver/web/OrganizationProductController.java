@@ -54,4 +54,14 @@ public class OrganizationProductController {
         }
 
     }
+
+    @GetMapping
+    ResponseEntity<?> getOrganizationProducts(
+            @PathVariable("organizationId") Long organizationId) {
+
+
+        System.out.println(organizationId);
+        return null;
+
+    }
 }

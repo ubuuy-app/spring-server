@@ -8,28 +8,34 @@ import com.ubuuy.springserver.models.enums.ProductPackage;
 import com.ubuuy.springserver.models.requests.AddProductRequest;
 import com.ubuuy.springserver.models.responses.api.AddProductAndPurchaseResponse;
 import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
+import com.ubuuy.springserver.models.service_models.ProductServiceModel;
 import com.ubuuy.springserver.repositories.OrganizationRepository;
 import com.ubuuy.springserver.services.MetaService;
 import com.ubuuy.springserver.services.OrganizationService;
+import com.ubuuy.springserver.services.ProductService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository organizationRepository;
+    private final ProductService productService;
     private final MetaService metaService;
     private final Mapper mapper;
 
 
     public OrganizationServiceImpl(OrganizationRepository organizationRepository,
-                                   MetaService metaService,
+                                   ProductService productService, MetaService metaService,
                                    Mapper mapper) {
         this.organizationRepository = organizationRepository;
+        this.productService = productService;
         this.metaService = metaService;
         this.mapper = mapper;
     }
@@ -97,4 +103,12 @@ public class OrganizationServiceImpl implements OrganizationService {
             throw new SQLException(ExceptionMessages.ENTITY_DATABASE_SAVE_FAIL);
         }
     }
+
+    @Override
+    public CompletableFuture<List<ProductServiceModel>> getOrganizationProducts(Long organizationId) throws SQLException {
+        OrganizationEntity organization = this.organizationRepository.getById(organizationId);
+        return null;
+    }
+
+
 }
