@@ -6,7 +6,8 @@ import com.ubuuy.springserver.models.entities.ProductEntity;
 import com.ubuuy.springserver.models.entities.PurchaseEntity;
 import com.ubuuy.springserver.models.enums.ProductPackage;
 import com.ubuuy.springserver.models.requests.AddProductRequest;
-import com.ubuuy.springserver.models.responses.api.AddProductAndPurchaseResponse;
+import com.ubuuy.springserver.models.responses.api_responses.AddProductAndPurchaseResponse;
+import com.ubuuy.springserver.models.responses.view_models.PurchaseViewModel;
 import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
 import com.ubuuy.springserver.models.service_models.ProductServiceModel;
 import com.ubuuy.springserver.repositories.OrganizationRepository;
@@ -20,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -105,9 +105,33 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public CompletableFuture<List<ProductServiceModel>> getOrganizationProducts(Long organizationId) throws SQLException {
-        OrganizationEntity organization = this.organizationRepository.getById(organizationId);
-        return null;
+    @Transactional
+    public List<PurchaseViewModel> getOrganizationPurchases(Long organizationId) throws SQLException {
+        try {
+            OrganizationEntity organization =
+                    this.organizationRepository
+                            .findById(organizationId)
+                            .orElseThrow(NoSuchElementException::new);
+
+            return mapper.toModel(organization.getPurchases(), PurchaseViewModel.class);
+        } catch (Exception ex) {
+            throw new SQLException(ExceptionMessages.ENTITY_DATABASE_FETCH_FAIL);
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<ProductServiceModel> getOrganizationProducts(Long organizationId) throws SQLException {
+        try {
+            OrganizationEntity organization =
+                    this.organizationRepository
+                            .findById(organizationId)
+                            .orElseThrow(NoSuchElementException::new);
+
+            return mapper.toModel(organization.getProducts(), ProductServiceModel.class);
+        } catch (Exception ex) {
+            throw new SQLException(ExceptionMessages.ENTITY_DATABASE_FETCH_FAIL);
+        }
     }
 
 

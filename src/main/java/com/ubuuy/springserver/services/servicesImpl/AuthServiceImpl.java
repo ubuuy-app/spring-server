@@ -14,7 +14,7 @@ import com.ubuuy.springserver.models.entities.UserEntity;
 import com.ubuuy.springserver.models.enums.MetaActionEnum;
 import com.ubuuy.springserver.models.enums.UserRole;
 import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
-import com.ubuuy.springserver.models.responses.api.LoginResponse;
+import com.ubuuy.springserver.models.responses.api_responses.LoginResponse;
 import com.ubuuy.springserver.models.service_models.CustomClaimsServiceModel;
 import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;

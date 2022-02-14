@@ -1,7 +1,7 @@
 package com.ubuuy.springserver.utils.response_builder;
 
 import com.ubuuy.springserver.config.date_time.ApplicationDateTimeConfiguration;
-import com.ubuuy.springserver.models.responses.api.GenericOkResponse;
+import com.ubuuy.springserver.models.responses.api_responses.GenericOkResponse;
 import com.ubuuy.springserver.utils.json.JsonUtil;
 import com.ubuuy.springserver.utils.json.JsonUtilImpl;
 import com.ubuuy.springserver.utils.response_builder.responses.ErrorResponseObject;

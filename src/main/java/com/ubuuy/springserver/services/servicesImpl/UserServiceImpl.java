@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
                     .supplyAsync(() -> mapper.toModel(userRepository.findAll(), UserServiceModel.class))
                     .orTimeout(ApplicationConstants.COMPLETABLE_AWAIT_TIME_SEC, TimeUnit.SECONDS);
         } catch (Exception e) {
-            throw new Exception(e.getMessage()); //todo - change exception and message
+            throw new SQLException(ExceptionMessages.ENTITY_DATABASE_FETCH_FAIL);
         }
     }
 
