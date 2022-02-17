@@ -1,6 +1,6 @@
 package com.ubuuy.springserver.utils.response_builder;
 
-import com.ubuuy.springserver.models.responses.api.GenericOkResponse;
+import com.ubuuy.springserver.models.responses.api_responses.GenericOkResponse;
 import com.ubuuy.springserver.utils.response_builder.responses.ErrorResponseObject;
 import com.ubuuy.springserver.utils.response_builder.responses.SingleError;
 

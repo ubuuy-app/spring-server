@@ -1,11 +1,14 @@
 package com.ubuuy.springserver.models.service_models;
 
+import java.util.List;
+
 public class CustomClaimsServiceModel {
 
     private String email;
     private String fullName;
     private Long organizationId;
     private String organizationName;
+    private List<String> roles;
 
     public CustomClaimsServiceModel() {
     }
@@ -43,6 +46,15 @@ public class CustomClaimsServiceModel {
 
     public CustomClaimsServiceModel setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
+        return this;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public CustomClaimsServiceModel setRoles(List<String> roles) {
+        this.roles = roles;
         return this;
     }
 }

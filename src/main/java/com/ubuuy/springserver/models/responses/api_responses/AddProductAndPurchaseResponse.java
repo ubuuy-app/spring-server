@@ -1,4 +1,4 @@
-package com.ubuuy.springserver.models.responses.api;
+package com.ubuuy.springserver.models.responses.api_responses;
 
 public class AddProductAndPurchaseResponse {
 

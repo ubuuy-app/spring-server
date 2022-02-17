@@ -61,6 +61,8 @@ class AuthServiceTests {
     private DatabaseReader databaseReader;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private MetaService metaService;
 
     @BeforeEach
     private void initJwtTokenProvider() {
@@ -70,7 +72,7 @@ class AuthServiceTests {
 
         authService = new AuthServiceImpl(
                 serverLogger, mapper, jwtSecretKey, jwtExpirationInMs, userRepository, userService, userDetailsService,
-                organizationService, authMetadataService, roleService, parser, databaseReader, passwordEncoder);
+                organizationService, authMetadataService, roleService, parser, databaseReader, passwordEncoder, metaService);
     }
 
     @Test

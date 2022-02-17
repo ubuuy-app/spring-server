@@ -1,5 +1,6 @@
-package com.ubuuy.springserver.models.entities;
+package com.ubuuy.springserver.models.meta_data;
 
+import com.ubuuy.springserver.models.entities.BaseEntity;
 import com.ubuuy.springserver.models.enums.MetaActionEnum;
 
 import javax.persistence.*;
@@ -8,14 +9,14 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "meta")
 @Access(AccessType.PROPERTY)
-public class MetaEntity extends BaseEntity{
+public class MetaData extends BaseEntity {
 
     private ZonedDateTime dateTime = ZonedDateTime.now();
     private String systemUser;
     private MetaActionEnum action;
     private Long _v = 0L;
 
-    public MetaEntity() {
+    public MetaData() {
     }
 
     @Column(name = "date_time", unique = false)
@@ -23,7 +24,7 @@ public class MetaEntity extends BaseEntity{
         return dateTime;
     }
 
-    public MetaEntity setDateTime(ZonedDateTime dateTime) {
+    public MetaData setDateTime(ZonedDateTime dateTime) {
         this.dateTime = dateTime;
         return this;
     }
@@ -33,7 +34,7 @@ public class MetaEntity extends BaseEntity{
         return systemUser;
     }
 
-    public MetaEntity setSystemUser(String systemUser) {
+    public MetaData setSystemUser(String systemUser) {
         this.systemUser = systemUser;
         return this;
     }
@@ -43,9 +44,9 @@ public class MetaEntity extends BaseEntity{
         return action;
     }
 
-    public MetaEntity setAction(MetaActionEnum action) {
+    public MetaData setAction(MetaActionEnum action) {
         this.action = action;
-        if(MetaActionEnum.UPDATE.equals(action)){
+        if (MetaActionEnum.UPDATE.equals(action)) {
             this.updateVersion();
         }
         return this;
@@ -56,7 +57,7 @@ public class MetaEntity extends BaseEntity{
         return _v;
     }
 
-    public MetaEntity set_v(Long _v) {
+    public MetaData set_v(Long _v) {
         this._v = _v;
         return this;
     }

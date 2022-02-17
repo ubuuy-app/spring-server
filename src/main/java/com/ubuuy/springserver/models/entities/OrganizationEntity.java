@@ -1,5 +1,7 @@
 package com.ubuuy.springserver.models.entities;
 
+import com.ubuuy.springserver.models.meta_data.MetaData;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ public class OrganizationEntity extends BaseEntity {
     private List<UserEntity> members = new ArrayList<>();
     private List<PurchaseEntity> purchases = new ArrayList<>();
     private List<ProductEntity> products = new ArrayList<>();
-    private MetaEntity metaEntity;
+    private MetaData metaData;
 
     public OrganizationEntity() {
     }
@@ -63,12 +65,12 @@ public class OrganizationEntity extends BaseEntity {
     }
 
     @OneToOne(cascade = CascadeType.ALL)
-    public MetaEntity getMetaEntity() {
-        return metaEntity;
+    public MetaData getMetaData() {
+        return metaData;
     }
 
-    public OrganizationEntity setMetaEntity(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
+    public OrganizationEntity setMetaData(MetaData metaData) {
+        this.metaData = metaData;
         return this;
     }
 }

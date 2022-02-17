@@ -11,7 +11,8 @@ public abstract class BaseServiceModel {
         return id;
     }
 
-    public void setId(Long id) {
+    public BaseServiceModel setId(Long id) {
         this.id = id;
+        return this;
     }
 }

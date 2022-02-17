@@ -1,6 +1,6 @@
 package com.ubuuy.springserver.services.servicesImpl;
 
-import com.ubuuy.springserver.models.auth.AuthMetadata;
+import com.ubuuy.springserver.models.meta_data.AuthMetadata;
 import com.ubuuy.springserver.repositories.AuthMetadataRepository;
 import com.ubuuy.springserver.services.AuthMetadataService;
 import org.springframework.stereotype.Service;

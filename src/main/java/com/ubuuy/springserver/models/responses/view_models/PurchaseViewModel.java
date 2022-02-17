@@ -1,14 +1,13 @@
-package com.ubuuy.springserver.models.service_models;
+package com.ubuuy.springserver.models.responses.view_models;
 
-import com.ubuuy.springserver.models.entities.ProductEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ubuuy.springserver.models.entities.StoreEntity;
 import com.ubuuy.springserver.models.enums.ProductPackage;
-import com.ubuuy.springserver.models.meta_data.MetaData;
 
-public class PurchaseServiceModel extends BaseServiceModel {
+public class PurchaseViewModel {
 
-    private MetaData metaData;
-    private ProductEntity product;
+    private Long id;
+    private ProductViewModel product;
     private Integer quantity;
     private ProductPackage productPackage;
     private String priority;
@@ -16,24 +15,24 @@ public class PurchaseServiceModel extends BaseServiceModel {
     private Boolean exactBrand;
     private Boolean isBought;
 
-
-    public PurchaseServiceModel() {
+    public PurchaseViewModel() {
     }
 
-    public MetaData getMetaData() {
-        return metaData;
+    @JsonProperty("_id")
+    public Long getId() {
+        return id;
     }
 
-    public PurchaseServiceModel setMetaData(MetaData metaData) {
-        this.metaData = metaData;
+    public PurchaseViewModel setId(Long id) {
+        this.id = id;
         return this;
     }
 
-    public ProductEntity getProduct() {
+    public ProductViewModel getProduct() {
         return product;
     }
 
-    public PurchaseServiceModel setProduct(ProductEntity product) {
+    public PurchaseViewModel setProduct(ProductViewModel product) {
         this.product = product;
         return this;
     }
@@ -42,7 +41,7 @@ public class PurchaseServiceModel extends BaseServiceModel {
         return quantity;
     }
 
-    public PurchaseServiceModel setQuantity(Integer quantity) {
+    public PurchaseViewModel setQuantity(Integer quantity) {
         this.quantity = quantity;
         return this;
     }
@@ -51,7 +50,7 @@ public class PurchaseServiceModel extends BaseServiceModel {
         return productPackage;
     }
 
-    public PurchaseServiceModel setProductPackage(ProductPackage productPackage) {
+    public PurchaseViewModel setProductPackage(ProductPackage productPackage) {
         this.productPackage = productPackage;
         return this;
     }
@@ -60,7 +59,7 @@ public class PurchaseServiceModel extends BaseServiceModel {
         return priority;
     }
 
-    public PurchaseServiceModel setPriority(String priority) {
+    public PurchaseViewModel setPriority(String priority) {
         this.priority = priority;
         return this;
     }
@@ -69,7 +68,7 @@ public class PurchaseServiceModel extends BaseServiceModel {
         return store;
     }
 
-    public PurchaseServiceModel setStore(StoreEntity store) {
+    public PurchaseViewModel setStore(StoreEntity store) {
         this.store = store;
         return this;
     }
@@ -78,7 +77,7 @@ public class PurchaseServiceModel extends BaseServiceModel {
         return exactBrand;
     }
 
-    public PurchaseServiceModel setExactBrand(Boolean exactBrand) {
+    public PurchaseViewModel setExactBrand(Boolean exactBrand) {
         this.exactBrand = exactBrand;
         return this;
     }
@@ -87,7 +86,7 @@ public class PurchaseServiceModel extends BaseServiceModel {
         return isBought;
     }
 
-    public PurchaseServiceModel setBought(Boolean bought) {
+    public PurchaseViewModel setBought(Boolean bought) {
         isBought = bought;
         return this;
     }

@@ -1,7 +1,7 @@
 package com.ubuuy.springserver.models.service_models;
 
 import com.ubuuy.springserver.models.entities.BaseEntity;
-import com.ubuuy.springserver.models.entities.MetaEntity;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 
 
 public class ProductServiceModel extends BaseEntity {
@@ -9,7 +9,7 @@ public class ProductServiceModel extends BaseEntity {
     private String image;
     private String productName;
     private Double price;
-    private MetaEntity metaEntity;
+    private MetaData metaData;
 
     public ProductServiceModel() {
     }
@@ -41,12 +41,12 @@ public class ProductServiceModel extends BaseEntity {
         return this;
     }
 
-    public MetaEntity getMetaEntity() {
-        return metaEntity;
+    public MetaData getMetaData() {
+        return metaData;
     }
 
-    public ProductServiceModel setMetaEntity(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
+    public ProductServiceModel setMetaData(MetaData metaData) {
+        this.metaData = metaData;
         return this;
     }
 }

@@ -1,6 +1,6 @@
 package com.ubuuy.springserver.repositories;
 
-import com.ubuuy.springserver.models.auth.AuthMetadata;
+import com.ubuuy.springserver.models.meta_data.AuthMetadata;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

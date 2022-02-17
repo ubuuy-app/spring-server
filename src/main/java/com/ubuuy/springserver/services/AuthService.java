@@ -2,7 +2,7 @@ package com.ubuuy.springserver.services;
 
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
-import com.ubuuy.springserver.models.responses.api.LoginResponse;
+import com.ubuuy.springserver.models.responses.api_responses.LoginResponse;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import org.springframework.http.HttpHeaders;
 

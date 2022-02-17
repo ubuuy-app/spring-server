@@ -1,7 +1,7 @@
 package com.ubuuy.springserver.web;
 
 import com.ubuuy.springserver.config.constants.LoggerMessages;
-import com.ubuuy.springserver.models.responses.response_models.UserResponseModel;
+import com.ubuuy.springserver.models.responses.view_models.UserViewModel;
 import com.ubuuy.springserver.services.UserService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public DeferredResult<ResponseEntity<List<UserResponseModel>>> getAll() {
-        DeferredResult<ResponseEntity<List<UserResponseModel>>> dr = new DeferredResult<>();
+    public DeferredResult<ResponseEntity<List<UserViewModel>>> getAll() {
+        DeferredResult<ResponseEntity<List<UserViewModel>>> dr = new DeferredResult<>();
 
         try {
             userService
@@ -39,7 +39,7 @@ public class UserController {
                         return dr.setResult(
                                 ResponseEntity
                                         .ok()
-                                        .body(mapper.toModel(userServiceModels, UserResponseModel.class))
+                                        .body(mapper.toModel(userServiceModels, UserViewModel.class))
                         );
                     })
                     .exceptionally(e -> {

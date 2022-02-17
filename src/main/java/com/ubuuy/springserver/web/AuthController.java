@@ -3,8 +3,8 @@ package com.ubuuy.springserver.web;
 import com.ubuuy.springserver.config.constants.ResponseMessages;
 import com.ubuuy.springserver.models.requests.LoginRequest;
 import com.ubuuy.springserver.models.requests.RegisterOwnerRequest;
-import com.ubuuy.springserver.models.responses.api.LoginResponse;
-import com.ubuuy.springserver.models.responses.api.RegisterOrganizationOwnerResponse;
+import com.ubuuy.springserver.models.responses.api_responses.LoginResponse;
+import com.ubuuy.springserver.models.responses.api_responses.RegisterOrganizationOwnerResponse;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.services.AuthService;
 import com.ubuuy.springserver.utils.json.JsonUtil;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ubuuy.springserver.utils.response_builder.ResponseBuilder.Type;
@@ -65,7 +66,7 @@ public class AuthController {
                             .setType(Type.REGISTER)
                             .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
                             .setMessage("Server could not process the request")
-                            .setErrors(null))
+                            .setErrors(new ArrayList<>()))
                     ;
         }
     }

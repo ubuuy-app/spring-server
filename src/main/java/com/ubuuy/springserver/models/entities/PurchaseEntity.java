@@ -1,6 +1,7 @@
 package com.ubuuy.springserver.models.entities;
 
 import com.ubuuy.springserver.models.enums.ProductPackage;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 
 import javax.persistence.*;
 
@@ -10,15 +11,26 @@ import javax.persistence.*;
 @Access(AccessType.PROPERTY)
 public class PurchaseEntity extends BaseEntity{
 
+    private MetaData metaData;
     private ProductEntity product;
     private Integer quantity;
     private ProductPackage productPackage;
     private String priority;
     private StoreEntity store;
     private Boolean exactBrand;
-    private MetaEntity metaEntity;
+    private Boolean isBought;
 
     public PurchaseEntity() {
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    public MetaData getMetaData() {
+        return metaData;
+    }
+
+    public PurchaseEntity setMetaData(MetaData metaData) {
+        this.metaData = metaData;
+        return this;
     }
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -78,13 +90,13 @@ public class PurchaseEntity extends BaseEntity{
         return this;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    public MetaEntity getMetaEntity() {
-        return metaEntity;
+    @Column(name = "is_bought")
+    public Boolean getBought() {
+        return isBought;
     }
 
-    public PurchaseEntity setMetaEntity(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
+    public PurchaseEntity setBought(Boolean bought) {
+        isBought = bought;
         return this;
     }
 }

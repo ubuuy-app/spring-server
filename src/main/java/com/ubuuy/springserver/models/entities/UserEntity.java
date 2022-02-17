@@ -1,7 +1,8 @@
 package com.ubuuy.springserver.models.entities;
 
 
-import com.ubuuy.springserver.models.auth.AuthMetadata;
+import com.ubuuy.springserver.models.meta_data.AuthMetadata;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class UserEntity extends BaseEntity {
     private String fullName;
     private String password;
     private List<RoleEntity> roles = new ArrayList<>();
-    private MetaEntity metaEntity;
+    private MetaData metaData;
     private List<AuthMetadata> authMetadata = new ArrayList<>();
     private OrganizationEntity organization;
 
@@ -66,12 +67,12 @@ public class UserEntity extends BaseEntity {
     }
 
     @OneToOne(cascade = {CascadeType.ALL})
-    public MetaEntity getMeta() {
-        return metaEntity;
+    public MetaData getMeta() {
+        return metaData;
     }
 
-    public UserEntity setMeta(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
+    public UserEntity setMeta(MetaData metaData) {
+        this.metaData = metaData;
         return this;
     }
 

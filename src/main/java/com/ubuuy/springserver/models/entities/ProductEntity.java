@@ -1,5 +1,7 @@
 package com.ubuuy.springserver.models.entities;
 
+import com.ubuuy.springserver.models.meta_data.MetaData;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,7 +12,7 @@ public class ProductEntity  extends BaseEntity{
     private String image;
     private String productName;
     private Double price;
-    private MetaEntity metaEntity;
+    private MetaData metaData;
 
 
     public ProductEntity() {
@@ -44,12 +46,12 @@ public class ProductEntity  extends BaseEntity{
     }
 
     @OneToOne(cascade = CascadeType.ALL)
-    public MetaEntity getMetaEntity() {
-        return metaEntity;
+    public MetaData getMetaData() {
+        return metaData;
     }
 
-    public ProductEntity setMetaEntity(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
+    public ProductEntity setMetaData(MetaData metaData) {
+        this.metaData = metaData;
         return this;
     }
 }

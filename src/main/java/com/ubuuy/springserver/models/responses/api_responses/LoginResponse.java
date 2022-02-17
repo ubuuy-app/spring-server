@@ -1,4 +1,4 @@
-package com.ubuuy.springserver.models.responses.api;
+package com.ubuuy.springserver.models.responses.api_responses;
 
 import com.ubuuy.springserver.models.service_models.CustomClaimsServiceModel;
 

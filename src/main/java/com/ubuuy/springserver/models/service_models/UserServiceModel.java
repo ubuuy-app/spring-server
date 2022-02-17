@@ -1,8 +1,8 @@
 package com.ubuuy.springserver.models.service_models;
 
-import com.ubuuy.springserver.models.entities.MetaEntity;
 import com.ubuuy.springserver.models.entities.OrganizationEntity;
 import com.ubuuy.springserver.models.entities.RoleEntity;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class UserServiceModel extends BaseServiceModel{
     private String email;
     private String password;
     private List<RoleEntity> roles = new ArrayList<>();
-    private MetaEntity metaEntity;
+    private MetaData metaData;
     private OrganizationEntity organization;
 
     public UserServiceModel() {
@@ -62,12 +62,12 @@ public class UserServiceModel extends BaseServiceModel{
         return this;
     }
 
-    public MetaEntity getMeta() {
-        return metaEntity;
+    public MetaData getMetaData() {
+        return metaData;
     }
 
-    public UserServiceModel setMeta(MetaEntity metaEntity) {
-        this.metaEntity = metaEntity;
+    public UserServiceModel setMetaData(MetaData metaData) {
+        this.metaData = metaData;
         return this;
     }
 

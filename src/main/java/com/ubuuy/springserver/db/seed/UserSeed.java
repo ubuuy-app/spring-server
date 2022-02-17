@@ -1,9 +1,9 @@
 package com.ubuuy.springserver.db.seed;
 
-import com.ubuuy.springserver.models.entities.MetaEntity;
 import com.ubuuy.springserver.models.entities.RoleEntity;
 import com.ubuuy.springserver.models.enums.MetaActionEnum;
 import com.ubuuy.springserver.models.enums.UserRole;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 import com.ubuuy.springserver.models.service_models.UserServiceModel;
 import com.ubuuy.springserver.repositories.RoleRepository;
 import com.ubuuy.springserver.services.UserService;
@@ -64,7 +64,7 @@ public class UserSeed {
                                     passwordEncoder.encode(PASSWORDS.get(currentIndex))
                             );
                     userServiceModel.setRoles(currentIndex == 0 ? List.of(adminRole, userRole) : List.of(userRole));
-                    userServiceModel.setMeta(new MetaEntity().setSystemUser(email).setAction(MetaActionEnum.CREATE));
+                    userServiceModel.setMetaData(new MetaData().setSystemUser(email).setAction(MetaActionEnum.CREATE));
 
                     return userServiceModel;
                 })

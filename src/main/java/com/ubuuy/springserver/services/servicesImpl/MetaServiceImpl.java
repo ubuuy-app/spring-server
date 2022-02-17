@@ -1,7 +1,7 @@
 package com.ubuuy.springserver.services.servicesImpl;
 
-import com.ubuuy.springserver.models.entities.MetaEntity;
 import com.ubuuy.springserver.models.enums.MetaActionEnum;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 import com.ubuuy.springserver.services.AuthService;
 import com.ubuuy.springserver.services.MetaService;
 import org.springframework.context.annotation.Lazy;
@@ -19,28 +19,28 @@ public class MetaServiceImpl implements MetaService {
     }
 
     @Override
-    public MetaEntity create() {
+    public MetaData create() {
         return createNewMetaEntity().setAction(MetaActionEnum.CREATE);
     }
 
     @Override
-    public MetaEntity update() {
+    public MetaData update() {
         return createNewMetaEntity().setAction(MetaActionEnum.UPDATE);
     }
 
     @Override
-    public MetaEntity delete() {
+    public MetaData delete() {
         return createNewMetaEntity().setAction(MetaActionEnum.DELETE);
     }
 
     @Override
-    public MetaEntity actionNotApplicable() {
+    public MetaData actionNotApplicable() {
         return createNewMetaEntity().setAction(MetaActionEnum.NOT_APPLICABLE);
     }
 
 
-    private MetaEntity createNewMetaEntity(){
-        return new MetaEntity()
+    private MetaData createNewMetaEntity() {
+        return new MetaData()
                 .setDateTime(ZonedDateTime.now())
                 .setSystemUser(this.authService.getPrincipalUsername());
     }
