@@ -51,7 +51,7 @@ public class OrganizationPurchaseController {
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .body(responseBuilder
                             .buildErrorObject(true)
-                            .setType(ResponseBuilder.Type.ADD_PRODUCT)
+                            .setType(ResponseBuilder.Type.PRODUCTS)
                             .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
                             .setMessage("Server could not process the request")
                             .setErrors(new ArrayList<>()));
@@ -63,7 +63,6 @@ public class OrganizationPurchaseController {
     ResponseEntity<?> getOrganizationPurchases(@PathVariable("organizationId") Long organizationId) {
 
         try {
-            System.out.println(6);
             List<PurchaseViewModel> purchaseViewModelList =
                     organizationService.getOrganizationPurchases(organizationId);
 
@@ -77,7 +76,7 @@ public class OrganizationPurchaseController {
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .body(responseBuilder
                             .buildErrorObject(true)
-                            .setType(ResponseBuilder.Type.ADD_PRODUCT)
+                            .setType(ResponseBuilder.Type.PRODUCTS)
                             .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
                             .setMessage("Server could not process the request")
                             .setErrors(new ArrayList<>()));

@@ -10,5 +10,7 @@ public interface ProductService {
 
     CompletableFuture<List<ProductServiceModel>> getAllProducts(Long organizationId) throws SQLException;
 
+    List<String> getProductPackages() throws UnsupportedOperationException;
+
 
 }

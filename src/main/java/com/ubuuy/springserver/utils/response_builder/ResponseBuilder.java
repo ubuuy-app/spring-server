@@ -17,14 +17,14 @@ public interface ResponseBuilder {
 
     String getRequestPath(HttpServletRequest httpServletRequest);
 
-    enum Type{
+    enum Type {
         AUTH("Authentication processing."),
         REGISTER("Register request"),
-        ADD_PRODUCT("Add product request");
+        PRODUCTS("Product(s) request");
 
         public final String detailedType;
 
-        Type(String detailedType){
+        Type(String detailedType) {
             this.detailedType = detailedType;
         }
     }

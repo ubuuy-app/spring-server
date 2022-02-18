@@ -81,7 +81,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                             .setMetaData(metaService.create())
                             .setProduct(productEntity)
                             .setQuantity(1)
-                            .setProductPackage(ProductPackage.NOT_SPECIFIED)
+                            .setProductPackage(ProductPackage.OTHER)
                             .setPriority(addProductRequest.getPriority())
                             .setStore(null)
                             .setExactBrand(addProductRequest.getExactBrand())
@@ -113,7 +113,10 @@ public class OrganizationServiceImpl implements OrganizationService {
                             .findById(organizationId)
                             .orElseThrow(NoSuchElementException::new);
 
-            return mapper.toModel(organization.getPurchases(), PurchaseViewModel.class);
+            List<PurchaseViewModel> purchaseViewModelList =
+                    mapper.toModel(organization.getPurchases(), PurchaseViewModel.class);
+
+            return purchaseViewModelList;
         } catch (Exception ex) {
             throw new SQLException(ExceptionMessages.ENTITY_DATABASE_FETCH_FAIL);
         }
