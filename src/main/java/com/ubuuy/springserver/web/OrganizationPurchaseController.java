@@ -1,8 +1,7 @@
 package com.ubuuy.springserver.web;
 
 
-import com.ubuuy.springserver.models.requests.AddProductRequest;
-import com.ubuuy.springserver.models.responses.api_responses.AddProductAndPurchaseResponse;
+import com.ubuuy.springserver.models.requests.AddPurchaseAndProductRequest;
 import com.ubuuy.springserver.models.responses.view_models.PurchaseViewModel;
 import com.ubuuy.springserver.services.OrganizationService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
@@ -35,15 +34,16 @@ public class OrganizationPurchaseController {
     @PostMapping
     public ResponseEntity<?> addPurchaseToOrganization(
             @PathVariable("organizationId") Long organizationId,
-            @RequestBody AddProductRequest addProductRequest) {
+            @RequestBody AddPurchaseAndProductRequest addPurchaseAndProductRequest) {
 
         try {
-            AddProductAndPurchaseResponse addProductAndPurchaseResponse =
-                    organizationService.addNewPurchaseAndProduct(addProductRequest, organizationId);
+            PurchaseViewModel purchaseViewModel =
+                    organizationService
+                            .addNewPurchaseAndProductFullDataResponse(addPurchaseAndProductRequest, organizationId);
 
             return ResponseEntity
                     .ok()
-                    .body(addProductAndPurchaseResponse);
+                    .body(purchaseViewModel);
 
         } catch (Exception ex) {
             logger.log(Level.WARNING, ex.getMessage());

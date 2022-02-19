@@ -2,14 +2,12 @@ package com.ubuuy.springserver.models.responses.view_models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ubuuy.springserver.models.entities.StoreEntity;
-import com.ubuuy.springserver.models.enums.ProductPackage;
 
 public class PurchaseViewModel {
 
     private Long id;
     private ProductViewModel product;
     private Integer quantity;
-    private ProductPackage productPackage;
     private String priority;
     private StoreEntity store;
     private Boolean exactBrand;
@@ -46,18 +44,9 @@ public class PurchaseViewModel {
         return this;
     }
 
-    public ProductPackage getProductPackage() {
-        return productPackage;
-    }
-
-    public PurchaseViewModel setProductPackage(ProductPackage productPackage) {
-        this.productPackage = productPackage;
-        return this;
-    }
-
-    public String getPriority() {
-        return priority;
-    }
+     public String getPriority() {
+         return priority;
+     }
 
     public PurchaseViewModel setPriority(String priority) {
         this.priority = priority;

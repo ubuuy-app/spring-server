@@ -4,8 +4,7 @@ import com.ubuuy.springserver.config.constants.ExceptionMessages;
 import com.ubuuy.springserver.models.entities.OrganizationEntity;
 import com.ubuuy.springserver.models.entities.ProductEntity;
 import com.ubuuy.springserver.models.entities.PurchaseEntity;
-import com.ubuuy.springserver.models.enums.ProductPackage;
-import com.ubuuy.springserver.models.requests.AddProductRequest;
+import com.ubuuy.springserver.models.requests.AddPurchaseAndProductRequest;
 import com.ubuuy.springserver.models.responses.api_responses.AddProductAndPurchaseResponse;
 import com.ubuuy.springserver.models.responses.view_models.PurchaseViewModel;
 import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
@@ -62,7 +61,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @Transactional
-    public AddProductAndPurchaseResponse addNewPurchaseAndProduct(AddProductRequest addProductRequest,
+    public AddProductAndPurchaseResponse addNewPurchaseAndProduct(AddPurchaseAndProductRequest addPurchaseAndProductRequest,
                                                                   Long organizationId) throws SQLException {
 
         try {
@@ -71,21 +70,22 @@ public class OrganizationServiceImpl implements OrganizationService {
 
             ProductEntity productEntity =
                     new ProductEntity()
-                            .setProductName(addProductRequest.getProductName())
-                            .setImage(addProductRequest.getImage())
+                            .setMetaData(metaService.create())
+                            .setProductName(addPurchaseAndProductRequest.getProductName())
+                            .setImage(addPurchaseAndProductRequest.getImage())
                             .setPrice(0.0)
-                            .setMetaData(metaService.create());
+                            .setProductPackage(addPurchaseAndProductRequest.getProductPackage());
 
             PurchaseEntity purchaseEntity =
                     new PurchaseEntity()
                             .setMetaData(metaService.create())
                             .setProduct(productEntity)
                             .setQuantity(1)
-                            .setProductPackage(ProductPackage.OTHER)
-                            .setPriority(addProductRequest.getPriority())
+                            .setPriority(addPurchaseAndProductRequest.getPriority())
                             .setStore(null)
-                            .setExactBrand(addProductRequest.getExactBrand())
-                            .setBought(false);
+                            .setExactBrand(addPurchaseAndProductRequest.getExactBrand())
+                            .setBought(false)
+                            .setQuantity(addPurchaseAndProductRequest.getQuantity());
 
             organizationInDb.getPurchases().add(purchaseEntity);
             organizationInDb.getProducts().add(productEntity);
@@ -98,6 +98,44 @@ public class OrganizationServiceImpl implements OrganizationService {
                     .setOrganizationId(organizationId)
                     .setProductId(updatedOrganizationInDb.getProducts().get(updatedOrganizationInDb.getProducts().size() - 1).getId())
                     .setPurchaseId(updatedOrganizationInDb.getPurchases().get(updatedOrganizationInDb.getPurchases().size() - 1).getId());
+
+        } catch (Exception ex) {
+            throw new SQLException(ExceptionMessages.ENTITY_DATABASE_SAVE_FAIL);
+        }
+    }
+
+    @Override
+    @Transactional
+    public PurchaseViewModel addNewPurchaseAndProductFullDataResponse(AddPurchaseAndProductRequest addPurchaseAndProductRequest, Long organizationId) throws SQLException {
+        try {
+
+            OrganizationEntity organizationInDb = this.organizationRepository.getById(organizationId);
+
+            ProductEntity productEntity =
+                    new ProductEntity()
+                            .setMetaData(metaService.create())
+                            .setProductName(addPurchaseAndProductRequest.getProductName())
+                            .setImage(addPurchaseAndProductRequest.getImage())
+                            .setPrice(0.0)
+                            .setProductPackage(addPurchaseAndProductRequest.getProductPackage());
+
+            PurchaseEntity purchaseEntity =
+                    new PurchaseEntity()
+                            .setMetaData(metaService.create())
+                            .setProduct(productEntity)
+                            .setQuantity(1)
+                            .setPriority(addPurchaseAndProductRequest.getPriority())
+                            .setStore(null)
+                            .setExactBrand(addPurchaseAndProductRequest.getExactBrand())
+                            .setBought(false)
+                            .setQuantity(addPurchaseAndProductRequest.getQuantity());
+
+            organizationInDb.getPurchases().add(purchaseEntity);
+            organizationInDb.getProducts().add(productEntity);
+
+            this.organizationRepository.save(organizationInDb);
+
+            return mapper.toModel(purchaseEntity, PurchaseViewModel.class);
 
         } catch (Exception ex) {
             throw new SQLException(ExceptionMessages.ENTITY_DATABASE_SAVE_FAIL);

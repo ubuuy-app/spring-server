@@ -1,6 +1,6 @@
 package com.ubuuy.springserver.web;
 
-import com.ubuuy.springserver.models.requests.AddProductRequest;
+import com.ubuuy.springserver.models.requests.AddPurchaseAndProductRequest;
 import com.ubuuy.springserver.services.ProductService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import com.ubuuy.springserver.utils.response_builder.ResponseBuilder;
@@ -52,7 +52,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addProduct(@RequestBody AddProductRequest addProductRequest) {
+    public ResponseEntity<?> addProduct(@RequestBody AddPurchaseAndProductRequest addPurchaseAndProductRequest) {
 
         System.out.println(6);
 

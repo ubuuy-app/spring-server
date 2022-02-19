@@ -1,11 +1,15 @@
 package com.ubuuy.springserver.models.requests;
 
-public class AddProductRequest {
+import com.ubuuy.springserver.models.enums.ProductPackage;
+
+public class AddPurchaseAndProductRequest {
 
     private String image;
     private String productName;
     private String priority;
     private Boolean exactBrand;
+    private ProductPackage productPackage;
+    private Integer quantity;
 
     public String getImage() {
         return image;
@@ -37,5 +41,23 @@ public class AddProductRequest {
 
     public void setExactBrand(Boolean exactBrand) {
         this.exactBrand = exactBrand;
+    }
+
+    public ProductPackage getProductPackage() {
+        return productPackage;
+    }
+
+    public AddPurchaseAndProductRequest setProductPackage(ProductPackage productPackage) {
+        this.productPackage = productPackage;
+        return this;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public AddPurchaseAndProductRequest setQuantity(Integer quantity) {
+        this.quantity = quantity;
+        return this;
     }
 }
