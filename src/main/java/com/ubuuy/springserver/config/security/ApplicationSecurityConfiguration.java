@@ -54,7 +54,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
         /* Filters application */
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(csrfAuthenticationFilter, JwtAuthenticationFilter.class);
+//        http.addFilterAfter(csrfAuthenticationFilter, JwtAuthenticationFilter.class);
 
         http
                 .exceptionHandling()

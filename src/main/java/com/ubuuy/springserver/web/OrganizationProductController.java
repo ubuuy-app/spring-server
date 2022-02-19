@@ -52,7 +52,7 @@ public class OrganizationProductController {
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .body(responseBuilder
                             .buildErrorObject(true)
-                            .setType(ResponseBuilder.Type.ADD_PRODUCT)
+                            .setType(ResponseBuilder.Type.PRODUCTS)
                             .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
                             .setMessage("Server could not process the request")
                             .setErrors(new ArrayList<>()));

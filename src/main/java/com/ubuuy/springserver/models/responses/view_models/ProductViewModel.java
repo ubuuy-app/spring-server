@@ -1,6 +1,7 @@
 package com.ubuuy.springserver.models.responses.view_models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ubuuy.springserver.models.enums.ProductPackage;
 
 public class ProductViewModel {
 
@@ -8,6 +9,7 @@ public class ProductViewModel {
     private String image;
     private String productName;
     private Double price;
+    private ProductPackage productPackage;
 
     public ProductViewModel() {
     }
@@ -46,6 +48,15 @@ public class ProductViewModel {
 
     public ProductViewModel setPrice(Double price) {
         this.price = price;
+        return this;
+    }
+
+    public ProductPackage getProductPackage() {
+        return productPackage;
+    }
+
+    public ProductViewModel setProductPackage(ProductPackage productPackage) {
+        this.productPackage = productPackage;
         return this;
     }
 }

@@ -1,6 +1,5 @@
 package com.ubuuy.springserver.models.entities;
 
-import com.ubuuy.springserver.models.enums.ProductPackage;
 import com.ubuuy.springserver.models.meta_data.MetaData;
 
 import javax.persistence.*;
@@ -14,7 +13,6 @@ public class PurchaseEntity extends BaseEntity{
     private MetaData metaData;
     private ProductEntity product;
     private Integer quantity;
-    private ProductPackage productPackage;
     private String priority;
     private StoreEntity store;
     private Boolean exactBrand;
@@ -49,16 +47,6 @@ public class PurchaseEntity extends BaseEntity{
 
     public PurchaseEntity setQuantity(Integer quantity) {
         this.quantity = quantity;
-        return this;
-    }
-
-    @Enumerated(EnumType.STRING)
-    public ProductPackage getProductPackage() {
-        return productPackage;
-    }
-
-    public PurchaseEntity setProductPackage(ProductPackage productPackage) {
-        this.productPackage = productPackage;
         return this;
     }
 

@@ -1,8 +1,7 @@
 package com.ubuuy.springserver.web;
 
 
-import com.ubuuy.springserver.models.requests.AddProductRequest;
-import com.ubuuy.springserver.models.responses.api_responses.AddProductAndPurchaseResponse;
+import com.ubuuy.springserver.models.requests.AddPurchaseAndProductRequest;
 import com.ubuuy.springserver.models.responses.view_models.PurchaseViewModel;
 import com.ubuuy.springserver.services.OrganizationService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
@@ -35,15 +34,16 @@ public class OrganizationPurchaseController {
     @PostMapping
     public ResponseEntity<?> addPurchaseToOrganization(
             @PathVariable("organizationId") Long organizationId,
-            @RequestBody AddProductRequest addProductRequest) {
+            @RequestBody AddPurchaseAndProductRequest addPurchaseAndProductRequest) {
 
         try {
-            AddProductAndPurchaseResponse addProductAndPurchaseResponse =
-                    organizationService.addNewPurchaseAndProduct(addProductRequest, organizationId);
+            PurchaseViewModel purchaseViewModel =
+                    organizationService
+                            .addNewPurchaseAndProductFullDataResponse(addPurchaseAndProductRequest, organizationId);
 
             return ResponseEntity
                     .ok()
-                    .body(addProductAndPurchaseResponse);
+                    .body(purchaseViewModel);
 
         } catch (Exception ex) {
             logger.log(Level.WARNING, ex.getMessage());
@@ -51,7 +51,7 @@ public class OrganizationPurchaseController {
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .body(responseBuilder
                             .buildErrorObject(true)
-                            .setType(ResponseBuilder.Type.ADD_PRODUCT)
+                            .setType(ResponseBuilder.Type.PRODUCTS)
                             .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
                             .setMessage("Server could not process the request")
                             .setErrors(new ArrayList<>()));
@@ -63,7 +63,6 @@ public class OrganizationPurchaseController {
     ResponseEntity<?> getOrganizationPurchases(@PathVariable("organizationId") Long organizationId) {
 
         try {
-            System.out.println(6);
             List<PurchaseViewModel> purchaseViewModelList =
                     organizationService.getOrganizationPurchases(organizationId);
 
@@ -77,7 +76,7 @@ public class OrganizationPurchaseController {
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .body(responseBuilder
                             .buildErrorObject(true)
-                            .setType(ResponseBuilder.Type.ADD_PRODUCT)
+                            .setType(ResponseBuilder.Type.PRODUCTS)
                             .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
                             .setMessage("Server could not process the request")
                             .setErrors(new ArrayList<>()));

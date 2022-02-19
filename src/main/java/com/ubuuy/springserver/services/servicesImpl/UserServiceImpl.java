@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Async
-    public CompletableFuture<List<UserServiceModel>> getAll() throws Exception {
+    public CompletableFuture<List<UserServiceModel>> getAll() throws SQLException {
         try {
             return CompletableFuture
                     .supplyAsync(() -> mapper.toModel(userRepository.findAll(), UserServiceModel.class))
