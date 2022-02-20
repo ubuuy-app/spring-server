@@ -87,7 +87,7 @@ public class AuthController {
             /* GENERATE LOGIN RESPONSE ( JWT AND CUSTOM CLAIMS ) */
             LoginResponse loginResponse = authService.generateLoginResponse(loginRequest.email());
 
-            /* GENERATE DOUBLE SUBMIT COOKIE (WITH CSRF TOKEN) HEADER */
+            /* GENERATE DOUBLE SUBMIT COOKIE ( WITH CSRF TOKEN )  HEADER */
             HttpHeaders responseHeaders = authService.generateDoubleSubmitCookieHeader();
 
             /* ADD LOGIN TO USER HISTORY */

@@ -209,14 +209,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public HttpHeaders generateDoubleSubmitCookieHeader() {
-        /* GENERATE CSRF TOKEN */
+        /* GENERATE CSRF TOKEN (RANDOM STRING) */
         String csrfToken = UUID.randomUUID().toString();
 
         /* ADD CSRF TOKEN IN COOKIE, IT WILL TRAVEL BACK WITH THE OTHER REQUESTS FROM CLIENT */
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add(
                 "Set-Cookie",
-                "CSRF-TOKEN=" + csrfToken + "; Max-Age=604800; Path=/; Secure; SameSite=None; SameParty; HttpOnly"
+                "CSRF-TOKEN=" + csrfToken + "; Path=/; Secure; SameSite=None; SameParty; HttpOnly"
+//                "CSRF-TOKEN=" + csrfToken + "; Max-Age=604800; Path=/; Secure; SameSite=None; SameParty; HttpOnly"
         );
         /* ADD CSRF TOKEN IN HEADER, IT WILL BE STORED IN SESSION STORAGE AND ATTACHED TO FURTHER REQUESTS*/
         responseHeaders.set("X-CSRF-TOKEN", csrfToken);
