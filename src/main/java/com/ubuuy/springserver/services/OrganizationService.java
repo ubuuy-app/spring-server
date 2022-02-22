@@ -25,5 +25,4 @@ public interface OrganizationService {
 
     List<ProductServiceModel> getOrganizationProducts(Long organizationId) throws SQLException;
 
-
 }
