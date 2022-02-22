@@ -13,6 +13,7 @@ import com.ubuuy.springserver.repositories.OrganizationRepository;
 import com.ubuuy.springserver.services.MetaService;
 import com.ubuuy.springserver.services.OrganizationService;
 import com.ubuuy.springserver.services.ProductService;
+import com.ubuuy.springserver.services.PurchaseService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,15 +27,17 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository organizationRepository;
     private final ProductService productService;
+    private final PurchaseService purchaseService;
     private final MetaService metaService;
     private final Mapper mapper;
 
 
     public OrganizationServiceImpl(OrganizationRepository organizationRepository,
-                                   ProductService productService, MetaService metaService,
+                                   ProductService productService, PurchaseService purchaseService, MetaService metaService,
                                    Mapper mapper) {
         this.organizationRepository = organizationRepository;
         this.productService = productService;
+        this.purchaseService = purchaseService;
         this.metaService = metaService;
         this.mapper = mapper;
     }
@@ -135,7 +138,11 @@ public class OrganizationServiceImpl implements OrganizationService {
 
             this.organizationRepository.save(organizationInDb);
 
-            return mapper.toModel(purchaseEntity, PurchaseViewModel.class);
+            OrganizationEntity savedOrganization = this.organizationRepository.getById(organizationId);
+            PurchaseEntity savedPurchase
+                    = savedOrganization.getPurchases().get(savedOrganization.getPurchases().size() - 1);
+
+            return mapper.toModel(savedPurchase, PurchaseViewModel.class);
 
         } catch (Exception ex) {
             throw new SQLException(ExceptionMessages.ENTITY_DATABASE_SAVE_FAIL);

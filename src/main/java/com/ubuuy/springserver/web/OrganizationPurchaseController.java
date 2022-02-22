@@ -4,6 +4,7 @@ package com.ubuuy.springserver.web;
 import com.ubuuy.springserver.models.requests.AddPurchaseAndProductRequest;
 import com.ubuuy.springserver.models.responses.view_models.PurchaseViewModel;
 import com.ubuuy.springserver.services.OrganizationService;
+import com.ubuuy.springserver.services.PurchaseService;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import com.ubuuy.springserver.utils.response_builder.ResponseBuilder;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,14 @@ public class OrganizationPurchaseController {
 
     private static final Logger logger = Logger.getLogger("OrganizationPurchaseController");
     private final OrganizationService organizationService;
+    private final PurchaseService purchaseService;
     private final Mapper mapper;
     private final ResponseBuilder responseBuilder;
 
     public OrganizationPurchaseController(
-            OrganizationService organizationService, Mapper mapper, ResponseBuilder responseBuilder) {
+            OrganizationService organizationService, PurchaseService purchaseService, Mapper mapper, ResponseBuilder responseBuilder) {
         this.organizationService = organizationService;
+        this.purchaseService = purchaseService;
         this.mapper = mapper;
         this.responseBuilder = responseBuilder;
     }
@@ -90,12 +93,12 @@ public class OrganizationPurchaseController {
             @RequestParam("action") String action) {
 
         try {
-            List<PurchaseViewModel> purchaseViewModelList =
-                    organizationService.getOrganizationPurchases(organizationId);
+            PurchaseViewModel purchaseViewModel =
+                    this.purchaseService.doPurchaseAction(organizationId, purchaseId, action);
 
             return ResponseEntity
                     .ok()
-                    .body(purchaseViewModelList);
+                    .body(purchaseViewModel);
 
         } catch (Exception ex) {
             logger.log(Level.WARNING, ex.getMessage());

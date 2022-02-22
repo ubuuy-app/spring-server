@@ -2,10 +2,12 @@ package com.ubuuy.springserver.models.responses.view_models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ubuuy.springserver.models.entities.StoreEntity;
+import com.ubuuy.springserver.models.meta_data.MetaData;
 
 public class PurchaseViewModel {
 
     private Long id;
+    private MetaData metaData;
     private ProductViewModel product;
     private Integer quantity;
     private String priority;
@@ -23,6 +25,15 @@ public class PurchaseViewModel {
 
     public PurchaseViewModel setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public MetaData getMetaData() {
+        return metaData;
+    }
+
+    public PurchaseViewModel setMetaData(MetaData metaData) {
+        this.metaData = metaData;
         return this;
     }
 
