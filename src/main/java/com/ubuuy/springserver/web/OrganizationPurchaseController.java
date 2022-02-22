@@ -51,7 +51,7 @@ public class OrganizationPurchaseController {
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .body(responseBuilder
                             .buildErrorObject(true)
-                            .setType(ResponseBuilder.Type.PRODUCTS)
+                            .setType(ResponseBuilder.Type.PURCHASES)
                             .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
                             .setMessage("Server could not process the request")
                             .setErrors(new ArrayList<>()));
@@ -76,10 +76,39 @@ public class OrganizationPurchaseController {
                     .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
                     .body(responseBuilder
                             .buildErrorObject(true)
-                            .setType(ResponseBuilder.Type.PRODUCTS)
+                            .setType(ResponseBuilder.Type.PURCHASES)
                             .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
                             .setMessage("Server could not process the request")
                             .setErrors(new ArrayList<>()));
         }
     }
+
+    @PatchMapping("/{purchaseId}/")
+    ResponseEntity<?> organizationPurchaseAction(
+            @PathVariable("organizationId") Long organizationId,
+            @PathVariable("purchaseId") Long purchaseId,
+            @RequestParam("action") String action) {
+
+        try {
+            List<PurchaseViewModel> purchaseViewModelList =
+                    organizationService.getOrganizationPurchases(organizationId);
+
+            return ResponseEntity
+                    .ok()
+                    .body(purchaseViewModelList);
+
+        } catch (Exception ex) {
+            logger.log(Level.WARNING, ex.getMessage());
+            return ResponseEntity
+                    .badRequest() //todo - revise message or implement ErrorBuilder via method or interceptor
+                    .body(responseBuilder
+                            .buildErrorObject(true)
+                            .setType(ResponseBuilder.Type.PURCHASES)
+                            .setStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .setMessage("Server could not process the request")
+                            .setErrors(new ArrayList<>()));
+        }
+    }
+
+
 }

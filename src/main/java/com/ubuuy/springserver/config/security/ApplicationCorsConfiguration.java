@@ -13,9 +13,9 @@ public class ApplicationCorsConfiguration implements WebMvcConfigurer {
                 .addMapping("/**")
                 .allowedOrigins("http://localhost:3000", "https://ubuuy-53992.web.app", "https://ubuuy-53992.firebaseapp.com")
                 .allowCredentials(true)
-                .allowedHeaders("Authorization", "Cache-Control", "Content-Type","X-CSRF-TOKEN", "x-forwarded-for")
+                .allowedHeaders("Authorization", "Cache-Control", "Content-Type", "X-CSRF-TOKEN", "x-forwarded-for")
                 .exposedHeaders("X-CSRF-TOKEN")
-                .allowedMethods("OPTIONS", "GET", "POST");
+                .allowedMethods("OPTIONS", "GET", "POST", "PATCH");
     }
 }
 

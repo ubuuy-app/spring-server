@@ -19,8 +19,10 @@ public interface ResponseBuilder {
 
     enum Type {
         AUTH("Authentication processing."),
-        REGISTER("Register request"),
-        PRODUCTS("Product(s) request");
+        REGISTER("Register request."),
+        PRODUCTS("Product(s) request."),
+        PURCHASES("Purchase(s) request.");
+
 
         public final String detailedType;
 
