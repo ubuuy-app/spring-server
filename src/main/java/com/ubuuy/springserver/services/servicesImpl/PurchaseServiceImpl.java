@@ -55,4 +55,5 @@ public class PurchaseServiceImpl implements PurchaseService {
             throw new SQLException(ExceptionMessages.ENTITY_DATABASE_SAVE_FAIL);
         }
     }
+
 }
