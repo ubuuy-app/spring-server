@@ -65,11 +65,11 @@ public class CsrfAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
 
-//            if (csrfCookieToken == null || !csrfCookieToken.equals(csrfHeaderToken)) {
+//`            if (csrfCookieToken == null || !csrfCookieToken.equals(csrfHeaderToken)) {
 //                logger.error("Csrf double authentication fail!");
 //                sendCsrfErrorResponse(httpServletRequest,httpServletResponse, csrfCookieToken, csrfHeaderToken);
 //                return;
-//            }
+//            }`
         }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);
