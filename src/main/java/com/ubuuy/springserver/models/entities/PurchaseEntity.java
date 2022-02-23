@@ -17,6 +17,7 @@ public class PurchaseEntity extends BaseEntity{
     private StoreEntity store;
     private Boolean exactBrand;
     private Boolean isBought;
+    private String comment;
 
     public PurchaseEntity() {
     }
@@ -85,6 +86,15 @@ public class PurchaseEntity extends BaseEntity{
 
     public PurchaseEntity setBought(Boolean bought) {
         isBought = bought;
+        return this;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public PurchaseEntity setComment(String comment) {
+        this.comment = comment;
         return this;
     }
 }

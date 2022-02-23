@@ -15,6 +15,7 @@ public class PurchaseServiceModel extends BaseServiceModel {
     private StoreEntity store;
     private Boolean exactBrand;
     private Boolean isBought;
+    private String comment;
 
 
     public PurchaseServiceModel() {
@@ -89,6 +90,15 @@ public class PurchaseServiceModel extends BaseServiceModel {
 
     public PurchaseServiceModel setBought(Boolean bought) {
         isBought = bought;
+        return this;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public PurchaseServiceModel setComment(String comment) {
+        this.comment = comment;
         return this;
     }
 }
