@@ -60,7 +60,7 @@ public class PurchaseEntity extends BaseEntity{
         return this;
     }
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public StoreEntity getStore() {
         return store;
     }
