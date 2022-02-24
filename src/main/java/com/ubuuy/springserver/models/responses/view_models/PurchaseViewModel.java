@@ -14,6 +14,7 @@ public class PurchaseViewModel {
     private StoreEntity store;
     private Boolean exactBrand;
     private Boolean isBought;
+    private String comment;
 
     public PurchaseViewModel() {
     }
@@ -88,6 +89,15 @@ public class PurchaseViewModel {
 
     public PurchaseViewModel setBought(Boolean bought) {
         isBought = bought;
+        return this;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public PurchaseViewModel setComment(String comment) {
+        this.comment = comment;
         return this;
     }
 }

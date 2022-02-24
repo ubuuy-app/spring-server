@@ -21,7 +21,8 @@ public interface ResponseBuilder {
         AUTH("Authentication processing."),
         REGISTER("Register request."),
         PRODUCTS("Product(s) request."),
-        PURCHASES("Purchase(s) request.");
+        PURCHASES("Purchase(s) request."),
+        STORES("Store(s) request.");
 
 
         public final String detailedType;
