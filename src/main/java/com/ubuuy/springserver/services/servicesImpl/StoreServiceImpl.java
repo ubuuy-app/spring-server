@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -58,6 +59,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public StoreViewModel addNewStore(AddStoreRequest addStoreRequest) throws SQLException {
         try {
+            addStoreRequest.setName(addStoreRequest.getName().toLowerCase(Locale.ROOT));
             StoreEntity storeEntity =
                     this.storeRepository.saveAndFlush(mapper.toModel(addStoreRequest, StoreEntity.class));
 

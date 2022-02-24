@@ -4,16 +4,15 @@ import com.ubuuy.springserver.config.constants.ExceptionMessages;
 import com.ubuuy.springserver.models.entities.OrganizationEntity;
 import com.ubuuy.springserver.models.entities.ProductEntity;
 import com.ubuuy.springserver.models.entities.PurchaseEntity;
+import com.ubuuy.springserver.models.entities.StoreEntity;
+import com.ubuuy.springserver.models.enums.ProductPackage;
 import com.ubuuy.springserver.models.requests.AddPurchaseAndProductRequest;
 import com.ubuuy.springserver.models.responses.api_responses.AddProductAndPurchaseResponse;
 import com.ubuuy.springserver.models.responses.view_models.PurchaseViewModel;
 import com.ubuuy.springserver.models.service_models.OrganizationServiceModel;
 import com.ubuuy.springserver.models.service_models.ProductServiceModel;
 import com.ubuuy.springserver.repositories.OrganizationRepository;
-import com.ubuuy.springserver.services.MetaService;
-import com.ubuuy.springserver.services.OrganizationService;
-import com.ubuuy.springserver.services.ProductService;
-import com.ubuuy.springserver.services.PurchaseService;
+import com.ubuuy.springserver.services.*;
 import com.ubuuy.springserver.utils.mapper.Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,16 +27,18 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final ProductService productService;
     private final PurchaseService purchaseService;
+    private final StoreService storeService;
     private final MetaService metaService;
     private final Mapper mapper;
 
 
     public OrganizationServiceImpl(OrganizationRepository organizationRepository,
-                                   ProductService productService, PurchaseService purchaseService, MetaService metaService,
+                                   ProductService productService, PurchaseService purchaseService, StoreService storeService, MetaService metaService,
                                    Mapper mapper) {
         this.organizationRepository = organizationRepository;
         this.productService = productService;
         this.purchaseService = purchaseService;
+        this.storeService = storeService;
         this.metaService = metaService;
         this.mapper = mapper;
     }
@@ -77,7 +78,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                             .setProductName(addPurchaseAndProductRequest.getProductName())
                             .setImage(addPurchaseAndProductRequest.getImage())
                             .setPrice(0.0)
-                            .setProductPackage(addPurchaseAndProductRequest.getProductPackage());
+                            .setProductPackage(ProductPackage.OTHER);
 
             PurchaseEntity purchaseEntity =
                     new PurchaseEntity()
@@ -113,6 +114,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         try {
 
             OrganizationEntity organizationInDb = this.organizationRepository.getById(organizationId);
+            StoreEntity storeEntity =
+                    mapper.toModel(storeService
+                            .findByNameOrAddNew(addPurchaseAndProductRequest.getStore()), StoreEntity.class);
 
             ProductEntity productEntity =
                     new ProductEntity()
@@ -128,7 +132,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                             .setProduct(productEntity)
                             .setQuantity(1)
                             .setPriority(addPurchaseAndProductRequest.getPriority())
-                            .setStore(null)
+                            .setStore(storeEntity)
                             .setExactBrand(addPurchaseAndProductRequest.getExactBrand())
                             .setBought(false)
                             .setQuantity(addPurchaseAndProductRequest.getQuantity());

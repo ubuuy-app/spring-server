@@ -10,6 +10,7 @@ public class AddPurchaseAndProductRequest {
     private Boolean exactBrand;
     private ProductPackage productPackage;
     private Integer quantity;
+    private String store;
 
     public String getImage() {
         return image;
@@ -58,6 +59,15 @@ public class AddPurchaseAndProductRequest {
 
     public AddPurchaseAndProductRequest setQuantity(Integer quantity) {
         this.quantity = quantity;
+        return this;
+    }
+
+    public String getStore() {
+        return store;
+    }
+
+    public AddPurchaseAndProductRequest setStore(String store) {
+        this.store = store;
         return this;
     }
 }
