@@ -47,7 +47,7 @@ public class StoreServiceImpl implements StoreService {
             StoreEntity storeEntity = this
                     .storeRepository
                     .findByName(name)
-                    .orElse(new StoreEntity(name));
+                    .orElse(storeRepository.saveAndFlush(new StoreEntity(name)));
 
             return mapper.toModel(storeEntity, StoreServiceModel.class);
 
