@@ -8,11 +8,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "stores")
 @Access(AccessType.PROPERTY)
-public class StoreEntity  extends BaseEntity{
+public class StoreEntity extends BaseEntity {
 
     private String name;
 
     public StoreEntity() {
+    }
+
+    public StoreEntity(String name) {
+        this.name = name;
     }
 
     public String getName() {

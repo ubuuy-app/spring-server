@@ -16,6 +16,9 @@ public record LoggerMessages() {
     public static final String USERS_GET_ALL_FAIL = "USERS_GET_ALL_FAIL";
     public static final String USER_NOT_FOUND_IN_DATABASE_BY_EMAIL = "USER_FIND_BY_EMAIL_FAIL";
 
+    /* store */
+    public static final String STORES_GET_ALL_OK = "STORES_GET_ALL_OK";
+    public static final String STORES_GET_ALL_FAIL = "STORES_GET_ALL_FAIL";
 
 
 }
